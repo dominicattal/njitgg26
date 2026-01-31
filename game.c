@@ -38,6 +38,7 @@ static void render_screen_3(void)
 
 void game_init(void)
 {
+    game.in_menu = true;
     game.current_screen = SCREEN_1;
     game.screens = malloc(NUM_SCREENS * sizeof(Screen));
 
@@ -51,37 +52,53 @@ void game_init(void)
     game.screens[SCREEN_3].render = render_screen_3;
 }
 
-void game_render(void)
+static void render_menu_stuff(void)
 {
-    ScreenRenderFuncPtr render = game.screens[game.current_screen].render;
+    int window_width = GetScreenWidth();
+    //int window_height = GetScreenHeight();
+    Texture2D tex;
+    Rectangle src, dst;
+    //Vector2 origin;
+    bool pressed;
+
+    tex = get_texture_from_config("placeholder");
+
+    src = (Rectangle) { 0, 0, tex.width, tex.height };
+    dst = (Rectangle) { window_width/2-250, 100, 500, 200 };
+    //origin = (Vector2) { window_width/2-100, window_height/2-100 };
+
+    DrawTexturePro(tex, src, dst, ZERO_ZERO, 0.0, DEFAULT_TINT);
+
+    pressed = GuiButton((Rectangle){ window_width/2-50, 350, 100, 20}, "#191#Play");
+    if (pressed) {
+        game.in_menu = false;
+    }
+}
+
+static void render_game_stuff(void)
+{
+    ScreenRenderFuncPtr render_screen = game.screens[game.current_screen].render;
     const char* background_texture_name = game.screens[game.current_screen].background_texture_name;
     Texture2D texture = get_texture_from_config(background_texture_name);
     Rectangle src, dst;
-    src.x = 0;
-    src.y = 0;
-    src.width = texture.width;
-    src.height = texture.height;
-    dst.x = 0;
-    dst.y = 0;
-    dst.width = (float)GetScreenWidth();
-    dst.height = (float)GetScreenHeight();
 
-    Vector2 origin = (Vector2) { 0, 0 };
-    DrawTexturePro(texture, src, dst, origin, 0.0, DEFAULT_TINT);
+    src = (Rectangle) { 0, 0, texture.width, texture.height };
+    dst = (Rectangle) { 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
 
-    if (render == NULL)
+    DrawTexturePro(texture, src, dst, ZERO_ZERO, 0.0, DEFAULT_TINT);
+
+    if (render_screen == NULL)
         log_write(FATAL, "render fucntion for screen %d is null", game.current_screen);
 
-    render();
+    render_screen();
+}
 
-    //    showMessageBox = true;
-    //if (showMessageBox) 
-    //{
-    //    int result = GuiMessageBox((Rectangle){ 85, 70, 250, 100 },
-    //        "#191#Message Box", "Hi! This is a message!", "Nice;Cool");
-
-    //    if (result >= 0) showMessageBox = false;
-    //}
+void game_render(void)
+{
+    if (game.in_menu)
+        render_menu_stuff();
+    else
+        render_game_stuff();
 }
 
 void game_cleanup(void)

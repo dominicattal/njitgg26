@@ -6,6 +6,7 @@
 #include "json.h"
 #include "log.h"
 
+#define ZERO_ZERO ((Vector2) { 0, 0 })
 #define DEFAULT_TINT ((Color){ 255, 255, 255, 255 })
 
 typedef struct GlobalContext {

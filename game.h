@@ -21,8 +21,7 @@ typedef struct Screen {
 typedef struct GameState {
     ScreenEnum current_screen;
     Screen* screens;
-    bool event1;
-    bool event2;
+    bool in_menu;
 } GameState;
 
 extern GameState game;
