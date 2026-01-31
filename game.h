@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 typedef void (*ScreenRenderFuncPtr)(void);
+typedef void (*ScreenRenderGuiFuncPtr)(void);
 
 typedef enum ScreenEnum {
     SCREEN_LIVING_ROOM,
@@ -33,6 +34,7 @@ typedef enum TimerEnum {
 
 typedef struct Screen {
     ScreenRenderFuncPtr render;
+    ScreenRenderGuiFuncPtr render_gui;
     const char* background_texture_name;
 } Screen;
 
@@ -61,8 +63,10 @@ typedef struct GameState {
 extern GameState game;
 
 void game_init(void);
+void game_render_init(void);
 void game_update(float dt);
 void game_render(void);
+void game_render_gui(void);
 void game_cleanup(void);
 
 void timer_set(TimerEnum timer, float max_value);

@@ -4,6 +4,8 @@
 #include <string.h>
 #include "main.h"
 
+#define RESOLUTION_X 1920
+#define RESOLUTION_Y 1080
 #define DEFAULT_WINDOW_WIDTH (1920/2)
 #define DEFAULT_WINDOW_HEIGHT (1080/2)
 
@@ -116,8 +118,30 @@ static void window_key_callback(void)
     }
 }
 
+Vector2 get_scaled_mouse_position(void)
+{
+    Vector2 mouse_point = GetMousePosition();
+    mouse_point.x *= (float)ctx.resolution.x / GetScreenWidth();
+    mouse_point.y *= (float)ctx.resolution.y / GetScreenHeight();
+    return mouse_point;
+}
+
+Rectangle create_rect(float x, float y, float width, float height)
+{
+    return (Rectangle){x,y,width,height};
+}
+
+float lerp(float from, float to, float t, float max_t)
+{
+    return (to-from) * t / max_t + from;
+}
+
 int main(void)
 {
+    RenderTexture2D framebuffer;
+
+    ctx.resolution.x = RESOLUTION_X;
+    ctx.resolution.y = RESOLUTION_Y;
     ctx.window_exited = false;
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
@@ -130,6 +154,8 @@ int main(void)
     //PlayMusicStream(music);
     SetMusicVolume(music, 0.1f);
 
+    framebuffer = LoadRenderTexture(RESOLUTION_X, RESOLUTION_Y);
+
     state_init();
     game_init();
 
@@ -140,9 +166,20 @@ int main(void)
         window_key_callback();
         UpdateMusicStream(music);
         game_update(GetFrameTime());
-        BeginDrawing();
+        BeginTextureMode(framebuffer);
             ClearBackground(RAYWHITE);
             game_render();
+        EndTextureMode();
+        BeginDrawing();
+            ClearBackground(BLUE);
+
+            Rectangle src, dst;
+            src = (Rectangle) { 0, 0, framebuffer.texture.width, -framebuffer.texture.height };
+            dst = (Rectangle) { 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
+            DrawTexturePro(framebuffer.texture, src, dst, (Vector2) {0,0}, 0, (Color){255,255,255,255});
+
+            game_render_gui();
+
         EndDrawing();
 
         if (WindowShouldClose())
@@ -151,6 +188,8 @@ int main(void)
 
     game_cleanup();
     state_cleanup();
+
+    UnloadRenderTexture(framebuffer);
 
     UnloadMusicStream(music);
     CloseAudioDevice();
