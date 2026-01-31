@@ -68,6 +68,7 @@ void game_update(float dt);
 void game_render(void);
 void game_render_gui(void);
 void game_cleanup(void);
+void screen_transition(ScreenEnum screen);
 
 void timer_set(TimerEnum timer, float max_value);
 void timer_unset(TimerEnum timer);

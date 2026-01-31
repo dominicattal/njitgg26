@@ -117,11 +117,10 @@ static void render_game_gui(void)
 
 static void render_game_objects(void)
 {
-    //ScreenRenderFuncPtr render_screen = game.screens[game.current_screen].render;
     const char* background_texture_name = game.screens[game.current_screen].background_texture_name;
     Texture2D texture = get_texture_from_config(background_texture_name);
     draw_texture(texture, 0, 0, ctx.resolution.x, ctx.resolution.y);
-    //render_screen();
+    game.screens[game.current_screen].render();
 }
 
 static void key_callback(void)
@@ -129,6 +128,11 @@ static void key_callback(void)
     if (!game.in_menu && IsKeyPressed(KEY_ESCAPE)) {
         game.menu_overlay = !game.menu_overlay;
     }
+}
+
+void screen_transition(ScreenEnum screen)
+{
+    game.current_screen = screen;
 }
 
 void timer_set(TimerEnum timer, float max_value)

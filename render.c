@@ -5,42 +5,200 @@
 
 static void render_attic(void)
 {
+    Rectangle hitbox;
+    Vector2 mouse_position;
+    hitbox = create_rect2(275, 557, 550, 760);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_MASTER_BEDROOM);
+    }
 }
 
 static void render_bathroom(void)
 {
+    Rectangle hitbox;
+    Vector2 mouse_position;
+    hitbox = create_rect2(1000, 1000, 1300, 1080);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_HALLWAY);
+    }
 }
 
 static void render_guest_bedroom(void)
 {
+    Rectangle hitbox;
+    Vector2 mouse_position;
+    hitbox = create_rect2(1700, 300, 1750, 670);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_HALLWAY);
+    }
 }
 
 static void render_hallway(void)
 {
+    Rectangle hitbox;
+    Vector2 mouse_position;
+    hitbox = create_rect2(70, 330, 235, 615);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_GUEST_BEDROOM);
+    }
+    hitbox = create_rect2(730, 60, 1000, 373);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_BATHROOM);
+    }
+    hitbox = create_rect2(1670, 250, 1756, 600);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_MASTER_BEDROOM);
+    }
+    hitbox = create_rect2(730, 1000, 1030, 1080);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_FOYER);
+    }
 }
 
 static void render_master_bedroom(void)
 {
+    Rectangle hitbox;
+    Vector2 mouse_position;
+    hitbox = create_rect2(202, 418, 450, 700);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_ATTIC);
+    }
+    hitbox = create_rect2(450, 1000, 750, 1080);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_HALLWAY);
+    }
 }
 
 static void render_basement(void)
 {
+    Rectangle hitbox;
+    Vector2 mouse_position;
+    hitbox = create_rect2(0, 200, 270, 612);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_KITCHEN);
+    }
 }
 
 static void render_kitchen(void)
 {
+    Rectangle hitbox;
+    Vector2 mouse_position;
+    hitbox = create_rect2(111, 400, 243, 700);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_FOYER);
+    }
+    hitbox = create_rect2(1534, 70, 1792, 403);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_BASEMENT);
+    }
+    hitbox = create_rect2(329, 978, 619, 1080);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_DINING_ROOM);
+    }
 }
 
 static void render_dining(void)
 {
+    Rectangle hitbox;
+    Vector2 mouse_position;
+    hitbox = create_rect2(370, 150, 600, 490);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_KITCHEN);
+    }
+    hitbox = create_rect2(13, 391, 186, 682);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_LIVING_ROOM);
+    }
 }
 
 static void render_foyer(void)
 {
+    Rectangle hitbox = create_rect(636, 428, 945-636, 862-428);
+    Vector2 mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_HALLWAY);
+    }
+    hitbox = create_rect(1800, 519, 1920-1800, 1000-519);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_KITCHEN);
+    }
+    hitbox = create_rect(427, 990, 800-427, 1080-990);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_LIVING_ROOM);
+    }
 }
 
 static void render_living_room(void)
 {
+    Rectangle hitbox;
+    Vector2 mouse_position;
+    hitbox = create_rect2(112, 185, 381, 483);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_FOYER);
+    }
+    hitbox = create_rect2(1700, 330, 1792, 798);
+    mouse_position = get_scaled_mouse_position();
+    DrawRectangleRec(hitbox, (Color){255,255,0,100});
+    if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            screen_transition(SCREEN_DINING_ROOM);
+    }
 }
 
 static void render_attic_gui(void)
@@ -48,7 +206,7 @@ static void render_attic_gui(void)
     bool pressed;
     pressed = GuiButton((Rectangle){ 24, 24, 120, 50 }, "#191#Go To Master Bedroom");
     if (pressed) {
-        game.current_screen = SCREEN_MASTER_BEDROOM;
+        screen_transition(SCREEN_MASTER_BEDROOM);
     }
 }
 
@@ -57,7 +215,7 @@ static void render_bathroom_gui(void)
     bool pressed;
     pressed = GuiButton((Rectangle){ 24, 24, 120, 50 }, "#191#Go To Hallway");
     if (pressed) {
-        game.current_screen = SCREEN_HALLWAY;
+        screen_transition(SCREEN_HALLWAY);
     }
 }
 
@@ -66,7 +224,7 @@ static void render_guest_bedroom_gui(void)
     bool pressed;
     pressed = GuiButton((Rectangle){ 24, 24, 120, 50 }, "#191#Go To Hallway");
     if (pressed) {
-        game.current_screen = SCREEN_HALLWAY;
+        screen_transition(SCREEN_HALLWAY);
     }
 }
 
@@ -75,19 +233,19 @@ static void render_hallway_gui(void)
     bool pressed;
     pressed = GuiButton((Rectangle){ 24, 24, 120, 50 }, "#191#Go To Foyer");
     if (pressed) {
-        game.current_screen = SCREEN_FOYER;
+        screen_transition(SCREEN_FOYER);
     }
     pressed = GuiButton((Rectangle){ 24, 84, 120, 50 }, "#191#Go To Guest Room");
     if (pressed) {
-        game.current_screen = SCREEN_GUEST_BEDROOM;
+        screen_transition(SCREEN_GUEST_BEDROOM);
     }
     pressed = GuiButton((Rectangle){ 24, 144, 120, 50 }, "#191#Go To Master Bedroom");
     if (pressed) {
-        game.current_screen = SCREEN_MASTER_BEDROOM;
+        screen_transition(SCREEN_MASTER_BEDROOM);
     }
     pressed = GuiButton((Rectangle){ 24, 204, 120, 50 }, "#191#Go To Bathroom");
     if (pressed) {
-        game.current_screen = SCREEN_BATHROOM;
+        screen_transition(SCREEN_BATHROOM);
     }
 }
 
@@ -96,11 +254,11 @@ static void render_master_bedroom_gui(void)
     bool pressed;
     pressed = GuiButton((Rectangle){ 24, 24, 120, 50 }, "#191#Go To Hallway");
     if (pressed) {
-        game.current_screen = SCREEN_HALLWAY;
+        screen_transition(SCREEN_HALLWAY);
     }
     pressed = GuiButton((Rectangle){ 24, 84, 120, 50 }, "#191#Go To Attic");
     if (pressed) {
-        game.current_screen = SCREEN_ATTIC;
+        screen_transition(SCREEN_ATTIC);
     }
 }
 
@@ -109,7 +267,7 @@ static void render_basement_gui(void)
     bool pressed;
     pressed = GuiButton((Rectangle){ 24, 24, 120, 50 }, "#191#Go To Kitchen");
     if (pressed) {
-        game.current_screen = SCREEN_KITCHEN;
+        screen_transition(SCREEN_KITCHEN);
     }
 }
 
@@ -118,15 +276,15 @@ static void render_kitchen_gui(void)
     bool pressed;
     pressed = GuiButton((Rectangle){ 24, 24, 120, 50 }, "#191#Go To Foyer");
     if (pressed) {
-        game.current_screen = SCREEN_FOYER;
+        screen_transition(SCREEN_FOYER);
     }
     pressed = GuiButton((Rectangle){ 24, 84, 120, 50 }, "#191#Go To Basement");
     if (pressed) {
-        game.current_screen = SCREEN_BASEMENT;
+        screen_transition(SCREEN_BASEMENT);
     }
     pressed = GuiButton((Rectangle){ 24, 144, 120, 50 }, "#191#Go To Dining Room");
     if (pressed) {
-        game.current_screen = SCREEN_DINING_ROOM;
+        screen_transition(SCREEN_DINING_ROOM);
     }
 }
 
@@ -135,11 +293,11 @@ static void render_dining_gui(void)
     bool pressed;
     pressed = GuiButton((Rectangle){ 24, 24, 120, 50 }, "#191#Go To Living Room");
     if (pressed) {
-        game.current_screen = SCREEN_LIVING_ROOM;
+        screen_transition(SCREEN_LIVING_ROOM);
     }
     pressed = GuiButton((Rectangle){ 24, 84, 120, 50 }, "#191#Go To Kitchen");
     if (pressed) {
-        game.current_screen = SCREEN_KITCHEN;
+        screen_transition(SCREEN_KITCHEN);
     }
 }
 
@@ -148,15 +306,15 @@ static void render_foyer_gui(void)
     bool pressed;
     pressed = GuiButton((Rectangle){ 24, 24, 120, 50 }, "#191#Go To Hallway");
     if (pressed) {
-        game.current_screen = SCREEN_HALLWAY;
+        screen_transition(SCREEN_HALLWAY);
     }
     pressed = GuiButton((Rectangle){ 24, 84, 120, 50 }, "#191#Go To Kitchen");
     if (pressed) {
-        game.current_screen = SCREEN_KITCHEN;
+        screen_transition(SCREEN_KITCHEN);
     }
     pressed = GuiButton((Rectangle){ 24, 144, 120, 50 }, "#191#Go To Living Room");
     if (pressed) {
-        game.current_screen = SCREEN_LIVING_ROOM;
+        screen_transition(SCREEN_LIVING_ROOM);
     }
 }
 
@@ -165,11 +323,11 @@ static void render_living_room_gui(void)
     bool pressed;
     pressed = GuiButton((Rectangle){ 24, 24, 120, 50 }, "#191#Go To Foyer");
     if (pressed) {
-        game.current_screen = SCREEN_FOYER;
+        screen_transition(SCREEN_FOYER);
     }
     pressed = GuiButton((Rectangle){ 24, 84, 120, 50 }, "#191#Go To Dining Room");
     if (pressed) {
-        game.current_screen = SCREEN_DINING_ROOM;
+        screen_transition(SCREEN_DINING_ROOM);
     }
 }
 

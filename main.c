@@ -128,7 +128,14 @@ Vector2 get_scaled_mouse_position(void)
 
 Rectangle create_rect(float x, float y, float width, float height)
 {
+    if (x < 0) x = ctx.resolution.x - x - width + 1;
+    if (y < 0) y = ctx.resolution.y - y - height + 1;
     return (Rectangle){x,y,width,height};
+}
+
+Rectangle create_rect2(float x1, float y1, float x2, float y2)
+{
+    return (Rectangle){x1,y1,x2-x1+1,y2-y1+1};
 }
 
 float lerp(float from, float to, float t, float max_t)

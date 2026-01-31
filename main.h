@@ -23,6 +23,7 @@ Texture2D get_texture_from_config(const char* name);
 void close_window_safely(void);
 Vector2 get_scaled_mouse_position(void);
 Rectangle create_rect(float x, float y, float width, float height);
+Rectangle create_rect2(float x1, float y1, float x2, float y2);
 float lerp(float from, float to, float t, float max_t);
 
 #endif
