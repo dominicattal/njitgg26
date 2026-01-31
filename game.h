@@ -21,6 +21,7 @@ typedef enum ScreenEnum {
 } ScreenEnum;
 
 typedef enum ItemEnum {
+    ITEM_FOYER,
     ITEM_1,
     ITEM_2,
     ITEM_3,
@@ -31,6 +32,16 @@ typedef enum TimerEnum {
     TIMER_MENU_CAR,
     NUM_TIMERS
 } TimerEnum;
+
+typedef enum FlagEnum {
+    FLAG_IN_MENU,
+    FLAG_MENU_OVERLAY,
+
+    // flags related to game state
+    FLAG_PICKED_UP_FOYER_ITEM,
+
+    NUM_FLAGS
+} FlagEnum;
 
 typedef struct Screen {
     ScreenRenderFuncPtr render;
@@ -55,9 +66,8 @@ typedef struct GameState {
     Item items[NUM_ITEMS];
     Screen screens[NUM_SCREENS];
     Timer timers[NUM_TIMERS];
+    bool flags[NUM_FLAGS];
     ScreenEnum current_screen;
-    bool menu_overlay;
-    bool in_menu;
 } GameState;
 
 extern GameState game;
@@ -72,5 +82,12 @@ void screen_transition(ScreenEnum screen);
 
 void timer_set(TimerEnum timer, float max_value);
 void timer_unset(TimerEnum timer);
+
+void set_flag(FlagEnum flag, bool val);
+bool toggle_flag(FlagEnum flag);
+bool get_flag(FlagEnum flag);
+
+void give_item(ItemEnum item);
+void take_item(ItemEnum item);
 
 #endif

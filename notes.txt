@@ -1,6 +1,14 @@
 core goals
 moving between screens (done)
+item pickups
+notifications
 
 stretch goals
 arrows keys / mouse dual functionality
 tint for screen when menu overlaid
+make item textures pointers instead of searching name
+
+
+ideas
+ultraviolet
+vegetable ingredients

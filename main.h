@@ -13,8 +13,13 @@ typedef enum CursorEnum {
 
 typedef struct GlobalContext {
     JsonObject* texture_config;
+    JsonObject* text_config;
+    JsonObject* font_config;
     GameState* game_state;
     Texture2D* textures;
+    const char** font_names;
+    Font* fonts;
+    int num_fonts;
     const char** texture_names;
     int num_textures;
     bool window_exited;
@@ -23,11 +28,11 @@ typedef struct GlobalContext {
     } resolution;
     Texture cursor_textures[NUM_CURSORS];
     CursorEnum current_cursor;
+    Font font;
 } GlobalContext;
 
 extern GlobalContext ctx;
 
-Texture2D get_texture_from_config(const char* name);
 void close_window_safely(void);
 Vector2 get_scaled_mouse_position(void);
 Rectangle create_rect(float x, float y, float width, float height);

@@ -1,27 +1,57 @@
 #include <stdlib.h>
 #include "game.h"
 #include "main.h"
+#include "config.h"
 #include "gui.h"
 #include "raygui.h"
 
 GameState game;
 
+void set_flag(FlagEnum flag, bool val)
+{
+    game.flags[flag] = val;
+}
+
+bool toggle_flag(FlagEnum flag)
+{
+    return game.flags[flag] = !game.flags[flag];
+}
+
+bool get_flag(FlagEnum flag)
+{
+    return game.flags[flag];
+}
+
+void give_item(ItemEnum item)
+{
+    game.items[item].held = true;
+}
+
+void take_item(ItemEnum item)
+{
+    game.items[item].held = false;
+}
+
 void game_init(void)
 {
-    game.in_menu = true;
+    set_flag(FLAG_IN_MENU, true);
     game.current_screen = SCREEN_FOYER;
 
     game_render_init();
 
     game.items[ITEM_1].texture_name = "item1";
-    game.items[ITEM_1].held = false;
     game.items[ITEM_2].texture_name = "item2";
-    game.items[ITEM_2].held = false;
     game.items[ITEM_3].texture_name = "item3";
-    game.items[ITEM_3].held = false;
+    game.items[ITEM_FOYER].texture_name = "item_foyer";
+
+    for (int i = 0; i < NUM_ITEMS; i++) {
+        if (game.items[i].texture_name == NULL)
+            TraceLog(LOG_FATAL, "missing texture name for item %d", i);
+        game.items[i].held = false;
+    }
 
     // setting game state for testing
-    //game.in_menu = false;
+    set_flag(FLAG_IN_MENU, false);
 }
 
 static void draw_texture(Texture2D tex, float x, float y, float w, float h)
@@ -32,15 +62,22 @@ static void draw_texture(Texture2D tex, float x, float y, float w, float h)
     DrawTexturePro(tex, src, dst, (Vector2) {0,0}, 0, (Color){255,255,255,255});
 }
 
+static void draw_texture_rect(Texture2D tex, Rectangle rect)
+{
+    Rectangle src;
+    src = (Rectangle) { 0, 0, tex.width, tex.height };
+    DrawTexturePro(tex, src, rect, (Vector2) {0,0}, 0, (Color){255,255,255,255});
+}
+
 static void start_game(void)
 {
-    game.in_menu = false;
-    game.menu_overlay = false;
+    for (int flag = 0; flag < NUM_FLAGS; flag++)
+        set_flag(flag, false);
 }
 
 static void end_game(void)
 {
-    game.in_menu = true;
+    set_flag(FLAG_IN_MENU, true);
 }
 
 static void render_menu_gui(void)
@@ -65,11 +102,11 @@ static void render_menu_gui(void)
 
     draw_texture(tex, x, 100, tex.width, tex.height);
 
-    pressed = GuiButton(create_rect(window_width/2-50, 350, 100, 20), "#191#Play");
+    pressed = GuiButton(create_rect(window_width/2-50, 350, 100, 20), "Play");
     if (pressed && !timer->set)
         timer_set(TIMER_MENU_CAR, 2.0f);
 
-    pressed = GuiButton(create_rect(window_width/2-50, 390, 100, 20), "#191#Exit");
+    pressed = GuiButton(create_rect(window_width/2-50, 390, 100, 20), "Exit");
     if (pressed) {
         close_window_safely();
     }
@@ -80,15 +117,15 @@ static void render_menu_overlay(void)
     int window_width = GetScreenWidth();
     int window_height = GetScreenHeight();
     bool pressed;
-    pressed = GuiButton(create_rect(window_width/2-50, window_height/2-50, 100, 20), "#191#Continue");
+    pressed = GuiButton(create_rect(window_width/2-50, window_height/2-50, 100, 20), "Continue");
     if (pressed) {
-        game.menu_overlay = false;
+        set_flag(FLAG_MENU_OVERLAY, false);
     }
-    pressed = GuiButton(create_rect(window_width/2-50, window_height/2-10, 100, 20), "#191#Main Menu");
+    pressed = GuiButton(create_rect(window_width/2-50, window_height/2-10, 100, 20), "Main Menu");
     if (pressed) {
         end_game();
     }
-    pressed = GuiButton(create_rect(window_width/2-50, window_height/2+30, 100, 20), "#191#Exit");
+    pressed = GuiButton(create_rect(window_width/2-50, window_height/2+30, 100, 20), "Exit");
     if (pressed) {
         close_window_safely();
     }
@@ -102,17 +139,32 @@ static void render_game_gui(void)
     int dim = 50;
     Item* item;
     Texture2D tex;
+    Rectangle rect;
+    char* item_info = NULL;
     for (i = 0; i < NUM_ITEMS; i++) {
         item = &game.items[i];
         if (!item->held) continue;
         tex = get_texture_from_config(item->texture_name);
-        draw_texture(tex, window_width-dim-offset, 0, dim, dim);
+        rect = create_rect(window_width-dim-offset, 0, dim, dim);
+        //draw_texture(tex, window_width-dim-offset, 0, dim, dim);
+        draw_texture_rect(tex, rect);
+        // if hovered, display in textbox
+        if (CheckCollisionPointRec(GetMousePosition(), rect)) {
+            item_info = get_text_from_config("item_foyer");
+        }
         offset += 75;
     }
 
     game.screens[game.current_screen].render_gui();
-    if (game.menu_overlay)
+    if (get_flag(FLAG_MENU_OVERLAY))
         render_menu_overlay();
+
+    if (item_info != NULL) {
+        rect = create_rect(window_width-300, dim, 300, 100);
+        DrawRectangleRec(rect, PURPLE);
+        DrawTextBoxed(get_font_from_config("consolas_32"), item_info, rect, 32, 0, true, WHITE);
+        //DrawText(item_info, window_width-300, dim, 20, BLACK);
+    }
 }
 
 static void render_game_objects(void)
@@ -125,8 +177,8 @@ static void render_game_objects(void)
 
 static void key_callback(void)
 {
-    if (!game.in_menu && IsKeyPressed(KEY_ESCAPE)) {
-        game.menu_overlay = !game.menu_overlay;
+    if (!get_flag(FLAG_IN_MENU) && IsKeyPressed(KEY_ESCAPE)) {
+        toggle_flag(FLAG_MENU_OVERLAY);
     }
 }
 
@@ -171,13 +223,13 @@ void game_update(float dt)
 
 void game_render(void)
 {
-    if (!game.in_menu)
+    if (!get_flag(FLAG_IN_MENU))
         render_game_objects();
 }
 
 void game_render_gui(void)
 {
-    if (game.in_menu)
+    if (get_flag(FLAG_IN_MENU))
         render_menu_gui();
     else
         render_game_gui();
