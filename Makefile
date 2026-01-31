@@ -1,2 +1,20 @@
-all:
-	gcc core_basic_window.c -I../raylib/raylib/src -L../raylib/raylib/src -lraylib -lopengl32 -lgdi32 -lwinmm
+CC = gcc
+CFLAGS = -IC:/raylib/raylib/src -LC:/raylib/raylib/src -Wall -Wextra -Werror -Wfatal-errors -std=c11 -lraylib -lopengl32 -lgdi32 -lwinmm -Wno-unused-parameter
+SOURCES = core_basic_window.c \
+		  json.c
+OBJS_DEV = $(SOURCES:%.c=build/dev/%.o)
+
+all: dev
+
+dev: $(OBJS_DEV)
+	@mkdir -p bin/dev
+	@$(CC) $(OBJS_DEV) $(CFLAGS) -g3 -Og -o bin/dev.exe
+
+build/dev/%.o: %.c
+	@mkdir -p $(shell dirname $@)
+	@echo $<
+	@$(CC) $(CFLAGS) -g3 -Og -c -o $@ $<
+
+clean:
+	rm -rf build bin
+.PHONY: clean
