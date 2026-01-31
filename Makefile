@@ -1,13 +1,13 @@
 CC = gcc
 CFLAGS = -IC:/raylib/raylib/src -LC:/raylib/raylib/src -Wall -Wextra -Werror -Wfatal-errors -std=c11 -lraylib -lopengl32 -lgdi32 -lwinmm -Wno-unused-parameter
-SOURCES = core_basic_window.c \
+SOURCES = main.c \
 		  json.c
 OBJS_DEV = $(SOURCES:%.c=build/dev/%.o)
 
 all: dev
 
 dev: $(OBJS_DEV)
-	@mkdir -p bin/dev
+	@mkdir -p bin
 	@$(CC) $(OBJS_DEV) $(CFLAGS) -g3 -Og -o bin/dev.exe
 
 build/dev/%.o: %.c
