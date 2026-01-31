@@ -1,0 +1,95 @@
+[33mcommit 5217948e95d6eb38669bbcd81a87a34b881e5a9c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: dominicattal <attalientidominic@gmail.com>
+Date:   Sat Jan 31 10:56:37 2026 -0500
+
+    removed my logging, use raylib logging
+
+[33mcommit b56d824c5db23106dc0d15b46a45639f172edbdf[m
+Author: dominicattal <attalientidominic@gmail.com>
+Date:   Sat Jan 31 10:48:14 2026 -0500
+
+    placeholder rooms, toggle fullscreen
+
+[33mcommit bc6189b74ef3f7a95f52fc4e85a61286b9eb2d11[m
+Author: dominicattal <attalientidominic@gmail.com>
+Date:   Sat Jan 31 09:32:32 2026 -0500
+
+    rain background
+
+[33mcommit e75f8e9777ca28200a80da881a81be4514f77da5[m
+Author: dominicattal <attalientidominic@gmail.com>
+Date:   Sat Jan 31 09:11:53 2026 -0500
+
+    exit buttons and menu overlay
+
+[33mcommit e8edd3c2e1219f5d6dbb219a3abc67f77334f57a[m
+Author: dominicattal <attalientidominic@gmail.com>
+Date:   Sat Jan 31 08:17:33 2026 -0500
+
+    unload texture at the end of program, timers, menu animation
+
+[33mcommit a999d5d5e788fff0f957971b08e662ac47cfe837[m
+Author: dominicattal <attalientidominic@gmail.com>
+Date:   Sat Jan 31 00:46:42 2026 -0500
+
+    items
+
+[33mcommit 4e15db757c1d78ad4ac63c074eb22163d44686e3[m
+Author: dominicattal <attalientidominic@gmail.com>
+Date:   Sat Jan 31 00:16:25 2026 -0500
+
+    all the rooms
+
+[33mcommit 0d674cd5a60700e6434084d4fcc5db5bae07be64[m
+Author: dominicattal <attalientidominic@gmail.com>
+Date:   Fri Jan 30 23:29:33 2026 -0500
+
+    start menu
+
+[33mcommit 1c08c0c38b6553e7931d59c0918bc84829334666[m
+Author: dominicattal <attalientidominic@gmail.com>
+Date:   Fri Jan 30 23:10:07 2026 -0500
+
+    go to next/prev screen
+
+[33mcommit 64ac6fbc67bed4d20f87a5272a933881be9ffda1[m
+Author: dominicattal <attalientidominic@gmail.com>
+Date:   Fri Jan 30 22:30:29 2026 -0500
+
+    background texture
+
+[33mcommit d3d84a14455332317886bc2aa35cb78d3c196e36[m
+Author: dominicattal <attalientidominic@gmail.com>
+Date:   Fri Jan 30 22:24:55 2026 -0500
+
+    separated game, improved texture
+
+[33mcommit b00e25877df9db2ccdafa5c734ac3b3aa41f572b[m
+Author: dominicattal <attalientidominic@gmail.com>
+Date:   Fri Jan 30 21:46:52 2026 -0500
+
+    gui, load texture from config
+
+[33mcommit 26b040aada18acb9a81f5ddf54ca5846974460fa[m
+Author: dominicattal <attalientidominic@gmail.com>
+Date:   Fri Jan 30 20:23:34 2026 -0500
+
+    placeholder
+
+[33mcommit 1f56420dc9afcf442e99f8eb91595bf576cab48e[m
+Author: dominicattal <attalientidominic@gmail.com>
+Date:   Fri Jan 30 20:10:03 2026 -0500
+
+    first commit
+
+[33mcommit 1b79db14e3cf18ed56e30c799045fb274898781e[m
+Author: dominicattal <attalientidominic@gmail.com>
+Date:   Fri Jan 30 17:54:33 2026 -0500
+
+    test2
+
+[33mcommit a80addcb10c3cd1fdb4df0784c11ceb7ff07fcf3[m
+Author: dominicattal <attalientidominic@gmail.com>
+Date:   Fri Jan 30 17:53:47 2026 -0500
+
+    test
