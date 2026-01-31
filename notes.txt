@@ -1,0 +1,5 @@
+core goals
+moving between screens
+
+stretch goals
+arrows keys / mouse dual functionality
