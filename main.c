@@ -7,7 +7,7 @@
 GlobalContext ctx;
 
 bool showMessageBox = true;
-void draw_start_menu(void)
+static void draw_start_menu(void)
 {
     if (GuiButton((Rectangle){ 24, 24, 120, 30 }, "#191#Show Message"))
         showMessageBox = true;
@@ -20,19 +20,11 @@ void draw_start_menu(void)
     }
 }
 
-void init_global_state(void)
-{
-    ctx.texture_config = json_read("config/textures.json");
-    assert(ctx.texture_config);
-}
-
-Texture2D get_texture_from_config(const char* name)
+static Texture2D load_texture(const char* name, JsonValue* value)
 {
     Image image;
     Texture2D texture;
     const char* path;
-    JsonValue* value;
-    value = json_object_get_value(ctx.texture_config, name);
     if (value == NULL) {
         log_write(WARNING, "%s not found in texture config, defaulting to placeholder", name);
         goto return_placeholder;
@@ -69,16 +61,66 @@ return_placeholder:
     return texture;
 }
 
+static void state_init(void)
+{
+    JsonMember* member;
+    JsonIterator* it;
+    JsonValue* value;
+    const char* key;
+    int i;
+
+    ctx.texture_config = json_read("config/textures.json");
+    if (ctx.texture_config == NULL)
+        log_write(FATAL, "could not read texture config file, probably because of a syntax error");
+
+    ctx.num_textures = json_object_length(ctx.texture_config);
+    ctx.texture_names = malloc(ctx.num_textures * sizeof(const char*));
+    ctx.textures = malloc(ctx.num_textures * sizeof(Texture2D));
+    it = json_iterator_create(ctx.texture_config);
+    for (i = 0; i < ctx.num_textures; i++) {
+        member = json_iterator_get(it);
+        key = json_member_get_key(member);
+        value = json_member_get_value(member);
+        ctx.texture_names[i] = key;
+        ctx.textures[i] = load_texture(key, value);
+        json_iterator_increment(it); 
+    }
+    json_iterator_destroy(it);
+}
+
+static void state_cleanup(void)
+{
+    free(ctx.textures);
+    json_object_destroy(ctx.texture_config);
+}
+
+Texture2D get_texture_from_config(const char* name)
+{
+    int l, r, m, a;
+    l = 0;
+    r = ctx.num_textures-1;
+    while (l <= r) {
+        m = l + (r - l) / 2;
+        a = strcmp(name, ctx.texture_names[m]);
+        if (a > 0)
+            l = m + 1;
+        else if (a < 0)
+            r = m - 1;
+        else
+            return ctx.textures[m];
+    }
+    log_write(WARNING, "Could not get id for %s", name);
+    return ctx.textures[0];
+}
+
 int main(void)
 {
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    ctx.window_width = 800;
+    ctx.window_height = 450;
+    InitWindow(ctx.window_width, ctx.window_height, "njitgg26");
+    state_init();
 
-    init_global_state();
-
-    InitWindow(screenWidth, screenHeight, "njitgg26");
-
-    Texture2D texture = get_texture_from_config("placholder");
+    game_init();
 
     SetTargetFPS(60);
 
@@ -86,14 +128,16 @@ int main(void)
     {
         BeginDrawing();
             ClearBackground(RAYWHITE);
-            DrawTexture(texture, screenWidth/2 - texture.width/2, screenHeight/2 - texture.height/2, WHITE);
+            game_render();
             DrawText("FUCK YESSS", 190, 200, 20, LIGHTGRAY);
             draw_start_menu();
         EndDrawing();
     }
 
     CloseWindow();
-    UnloadTexture(texture);
+
+    game_cleanup();
+    state_cleanup();
 
     return 0;
 }
