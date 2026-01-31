@@ -186,8 +186,10 @@ void game_init(void)
     game.screens[SCREEN_ATTIC].render = render_attic;
 
     for (i = 0; i < NUM_SCREENS; i++) {
-        log_assert(game.screens[i].background_texture_name != NULL, "Missing background texture name for %d screen", i);
-        log_assert(game.screens[i].render != NULL, "Missing render function for %d screen", i);
+        if (game.screens[i].background_texture_name == NULL)
+            TraceLog(LOG_FATAL, "Missing background texture name for %d screen", i);
+        if (game.screens[i].render == NULL)
+            TraceLog(LOG_FATAL, "Missing render function for %d screen", i);
     }
 
     game.items[ITEM_1].texture_name = "item1";

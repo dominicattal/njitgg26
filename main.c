@@ -15,23 +15,23 @@ static Texture2D load_texture(const char* name, JsonValue* value)
     Texture2D texture;
     const char* path;
     if (value == NULL) {
-        log_write(WARNING, "%s not found in texture config, defaulting to placeholder", name);
+        TraceLog(LOG_WARNING, "%s not found in texture config, defaulting to placeholder", name);
         goto return_placeholder;
     }
     if (json_value_get_type(value) != JTYPE_STRING) {
-        log_write(WARNING, "%s wrong type, defaulting to placeholder", name);
+        TraceLog(LOG_WARNING, "%s wrong type, defaulting to placeholder", name);
         goto return_placeholder;
     }
     path = json_value_get_string(value);
     image = LoadImage(path);
     if (!IsImageValid(image)) {
-        log_write(WARNING, "path for texture %s (%s) not found in texture config, defaulting to placeholder", name, path);
+        TraceLog(LOG_WARNING, "path for texture %s (%s) not found in texture config, defaulting to placeholder", name, path);
         goto return_placeholder;
     }
     texture = LoadTextureFromImage(image);
     UnloadImage(image);
     if (!IsTextureValid(texture)) {
-        log_write(WARNING, "failed to create texture, returning placeholder");
+        TraceLog(LOG_WARNING, "failed to create texture, returning placeholder");
         goto return_placeholder;
     }
     return texture;
@@ -60,7 +60,7 @@ static void state_init(void)
 
     ctx.texture_config = json_read("config/textures.json");
     if (ctx.texture_config == NULL)
-        log_write(FATAL, "could not read texture config file, probably because of a syntax error");
+        TraceLog(LOG_FATAL, "could not read texture config file, probably because of a syntax error");
 
     ctx.num_textures = json_object_length(ctx.texture_config);
     ctx.texture_names = malloc(ctx.num_textures * sizeof(const char*));
@@ -92,7 +92,7 @@ Texture2D get_texture_from_config(const char* name)
         else
             return ctx.textures[m];
     }
-    log_write(WARNING, "Could not get id for %s", name);
+    TraceLog(LOG_WARNING, "Could not get id for %s", name);
     return ctx.textures[0];
 }
 

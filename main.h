@@ -4,7 +4,6 @@
 #include <raylib.h>
 #include "game.h"
 #include "json.h"
-#include "log.h"
 
 typedef struct GlobalContext {
     JsonObject* texture_config;
