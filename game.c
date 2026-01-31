@@ -277,9 +277,12 @@ static void render_ui(void)
     int offset = 0;
     int window_width = GetScreenWidth();
     int dim = 50;
+    Item* item;
     Texture2D tex;
     for (i = 0; i < NUM_ITEMS; i++) {
-        tex = get_texture_from_config(game.items[i].texture_name);
+        item = &game.items[i];
+        if (!item->held) continue;
+        tex = get_texture_from_config(item->texture_name);
         draw_texture(tex, window_width-dim-offset, 0, dim, dim);
         offset += 75;
     }

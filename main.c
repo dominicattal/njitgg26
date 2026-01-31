@@ -109,6 +109,13 @@ static void state_cleanup(void)
     json_object_destroy(ctx.texture_config);
 }
 
+static void window_key_callback(void)
+{
+    if (IsKeyPressed(KEY_F11)) {
+        ToggleBorderlessWindowed();
+    }
+}
+
 int main(void)
 {
     ctx.window_exited = false;
@@ -120,7 +127,7 @@ int main(void)
     InitAudioDevice();
 
     Music music = LoadMusicStream("assets/audio/rain.mp3");
-    PlayMusicStream(music);
+    //PlayMusicStream(music);
     SetMusicVolume(music, 0.1f);
 
     state_init();
@@ -130,6 +137,7 @@ int main(void)
 
     while (!ctx.window_exited)
     {
+        window_key_callback();
         UpdateMusicStream(music);
         game_update(GetFrameTime());
         BeginDrawing();
