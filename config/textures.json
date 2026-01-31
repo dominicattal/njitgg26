@@ -1,6 +1,13 @@
 {
     "placeholder": "assets/textures/placeholder.png",
-    "screen1": "assets/textures/screen1.png",
-    "screen2": "assets/textures/screen2.png",
-    "screen3": "assets/textures/screen3.png"
+    "living_room": "assets/textures/living_room.png",
+    "foyer": "assets/textures/foyer.png",
+    "dining": "assets/textures/dining.png",
+    "kitchen": "assets/textures/kitchen.png",
+    "basement": "assets/textures/basement.png",
+    "master_bedroom": "assets/textures/master_bedroom.png",
+    "hallway": "assets/textures/hallway.png",
+    "guest_bedroom": "assets/textures/guest_bedroom.png",
+    "bathroom": "assets/textures/bathroom.png",
+    "attic": "assets/textures/attic.png"
 }

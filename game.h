@@ -6,9 +6,16 @@
 typedef void (*ScreenRenderFuncPtr)(void);
 
 typedef enum ScreenEnum {
-    SCREEN_1,
-    SCREEN_2,
-    SCREEN_3,
+    SCREEN_LIVING_ROOM,
+    SCREEN_FOYER,
+    SCREEN_DINING_ROOM,
+    SCREEN_KITCHEN,
+    SCREEN_BASEMENT,
+    SCREEN_MASTER_BEDROOM,
+    SCREEN_HALLWAY,
+    SCREEN_GUEST_BEDROOM,
+    SCREEN_BATHROOM,
+    SCREEN_ATTIC,
     NUM_SCREENS
 } ScreenEnum;
 
