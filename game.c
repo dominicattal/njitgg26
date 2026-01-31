@@ -8,6 +8,17 @@
 
 GameState game;
 
+static Rectangle rect(float x, float y, float width, float height)
+{
+    return (Rectangle){x,y,width,height};
+}
+
+// linear interpolate
+static float lerp(float from, float to, float t, float max_t)
+{
+    return (to-from) * t / max_t + from;
+}
+
 static void render_attic(void)
 {
     bool pressed;
@@ -198,20 +209,25 @@ static void draw_texture(Texture2D tex, float x, float y, float w, float h)
 static void render_menu_stuff(void)
 {
     int window_width = GetScreenWidth();
-    //int window_height = GetScreenHeight();
     Texture2D tex;
-    //Vector2 origin;
     bool pressed;
+    float x;
+    Timer* timer = &game.timers[TIMER_MENU_CAR];
 
     tex = get_texture_from_config("placeholder");
-    //origin = (Vector2) { window_width/2-100, window_height/2-100 };
 
-    draw_texture(tex, window_width/2-250, 100, 500, 200);
-
-    pressed = GuiButton((Rectangle){ window_width/2-50, 350, 100, 20}, "#191#Play");
-    if (pressed) {
-        game.in_menu = false;
+    if (!timer->set) {
+        x = window_width/2-250;
+    } else {
+        x = lerp(window_width/2-250, window_width, timer->value, timer->max_value);
+        if (timer->done) game.in_menu = false;
     }
+
+    draw_texture(tex, x, 100, 500, 200);
+
+    pressed = GuiButton(rect(window_width/2-50, 350, 100, 20), "#191#Play");
+    if (pressed && !timer->set)
+        timer_set(TIMER_MENU_CAR, 2.0f);
 }
 
 static void render_ui(void)
@@ -236,6 +252,38 @@ static void render_game_stuff(void)
     draw_texture(texture, 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight());
     render_screen();
     render_ui();
+}
+
+void timer_set(TimerEnum timer, float max_value)
+{
+    game.timers[timer].value = 0;
+    game.timers[timer].max_value = max_value;
+    game.timers[timer].active = true;
+    game.timers[timer].set = true;
+    game.timers[timer].done = false;
+}
+
+void timer_unset(TimerEnum timer)
+{
+    game.timers[timer].value = 0;
+    game.timers[timer].max_value = 0;
+    game.timers[timer].active = false;
+    game.timers[timer].set = false;
+    game.timers[timer].done = false;
+}
+
+void game_update(float dt)
+{
+    for (int i = 0; i < NUM_TIMERS; i++) {
+        if (game.timers[i].active) {
+            game.timers[i].value += dt;
+            if (game.timers[i].value > game.timers[i].max_value) {
+                game.timers[i].value = game.timers[i].max_value;
+                game.timers[i].active = false;
+                game.timers[i].done = true;
+            }
+        }
+    }
 }
 
 void game_render(void)

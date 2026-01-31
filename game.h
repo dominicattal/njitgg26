@@ -26,6 +26,11 @@ typedef enum ItemEnum {
     NUM_ITEMS
 } ItemEnum;
 
+typedef enum TimerEnum {
+    TIMER_MENU_CAR,
+    NUM_TIMERS
+} TimerEnum;
+
 typedef struct Screen {
     ScreenRenderFuncPtr render;
     const char* background_texture_name;
@@ -36,9 +41,18 @@ typedef struct Item {
     bool held;
 } Item;
 
+typedef struct Timer {
+    float value;
+    float max_value;
+    bool active;
+    bool set;
+    bool done;
+} Timer;
+
 typedef struct GameState {
     Item items[NUM_ITEMS];
     Screen screens[NUM_SCREENS];
+    Timer timers[NUM_TIMERS];
     ScreenEnum current_screen;
     bool in_menu;
 } GameState;
@@ -46,7 +60,11 @@ typedef struct GameState {
 extern GameState game;
 
 void game_init(void);
+void game_update(float dt);
 void game_render(void);
 void game_cleanup(void);
+
+void timer_set(TimerEnum timer, float max_value);
+void timer_unset(TimerEnum timer);
 
 #endif

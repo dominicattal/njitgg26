@@ -79,6 +79,8 @@ static void state_init(void)
 
 static void state_cleanup(void)
 {
+    for (int i = 0; i < ctx.num_textures; i++)
+        UnloadTexture(ctx.textures[i]);
     free(ctx.textures);
     json_object_destroy(ctx.texture_config);
 }
@@ -104,6 +106,8 @@ Texture2D get_texture_from_config(const char* name)
 
 int main(void)
 {
+    float dt;
+
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, "njitgg26");
 
@@ -114,6 +118,8 @@ int main(void)
 
     while (!WindowShouldClose())
     {
+        dt = GetFrameTime();
+        game_update(dt);
         BeginDrawing();
             ClearBackground(RAYWHITE);
             game_render();
