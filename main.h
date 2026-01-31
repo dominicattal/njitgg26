@@ -5,6 +5,12 @@
 #include "game.h"
 #include "json.h"
 
+typedef enum CursorEnum {
+    CURSOR_NORMAL,
+    CURSOR_INTERACT,
+    NUM_CURSORS
+} CursorEnum;
+
 typedef struct GlobalContext {
     JsonObject* texture_config;
     GameState* game_state;
@@ -15,6 +21,8 @@ typedef struct GlobalContext {
     struct {
         int x, y;
     } resolution;
+    Texture cursor_textures[NUM_CURSORS];
+    CursorEnum current_cursor;
 } GlobalContext;
 
 extern GlobalContext ctx;
@@ -25,5 +33,6 @@ Vector2 get_scaled_mouse_position(void);
 Rectangle create_rect(float x, float y, float width, float height);
 Rectangle create_rect2(float x1, float y1, float x2, float y2);
 float lerp(float from, float to, float t, float max_t);
+void set_cursor(CursorEnum cursor);
 
 #endif

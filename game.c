@@ -21,7 +21,7 @@ void game_init(void)
     game.items[ITEM_3].held = false;
 
     // setting game state for testing
-    game.in_menu = false;
+    //game.in_menu = false;
 }
 
 static void draw_texture(Texture2D tex, float x, float y, float w, float h)
@@ -51,19 +51,19 @@ static void render_menu_gui(void)
     float x;
     Timer* timer = &game.timers[TIMER_MENU_CAR];
 
-    tex = get_texture_from_config("placeholder");
+    tex = get_texture_from_config("car");
 
     if (!timer->set) {
-        x = window_width/2-250;
+        x = (window_width-tex.width)/2;
     } else {
-        x = lerp(window_width/2-250, window_width, timer->value, timer->max_value);
+        x = lerp((window_width-tex.width)/2, window_width, timer->value, timer->max_value);
         if (timer->done) {
             timer_unset(TIMER_MENU_CAR);
             start_game();
         }
     }
 
-    draw_texture(tex, x, 100, 500, 200);
+    draw_texture(tex, x, 100, tex.width, tex.height);
 
     pressed = GuiButton(create_rect(window_width/2-50, 350, 100, 20), "#191#Play");
     if (pressed && !timer->set)

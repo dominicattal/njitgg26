@@ -12,5 +12,8 @@
     "attic": "assets/textures/attic.png",
     "item1": "assets/textures/item1.png",
     "item2": "assets/textures/item2.png",
-    "item3": "assets/textures/item3.png"
+    "item3": "assets/textures/item3.png",
+    "cursor_normal": "assets/textures/cursor.png",
+    "cursor_interact": "assets/textures/cursor_interact.png",
+    "car": "assets/textures/car.png"
 }

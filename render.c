@@ -11,6 +11,7 @@ static void render_attic(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_MASTER_BEDROOM);
     }
@@ -24,6 +25,7 @@ static void render_bathroom(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_HALLWAY);
     }
@@ -37,6 +39,7 @@ static void render_guest_bedroom(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_HALLWAY);
     }
@@ -50,6 +53,7 @@ static void render_hallway(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_GUEST_BEDROOM);
     }
@@ -57,6 +61,7 @@ static void render_hallway(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_BATHROOM);
     }
@@ -64,6 +69,7 @@ static void render_hallway(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_MASTER_BEDROOM);
     }
@@ -71,6 +77,7 @@ static void render_hallway(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_FOYER);
     }
@@ -84,6 +91,7 @@ static void render_master_bedroom(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_ATTIC);
     }
@@ -91,6 +99,7 @@ static void render_master_bedroom(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_HALLWAY);
     }
@@ -104,6 +113,7 @@ static void render_basement(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_KITCHEN);
     }
@@ -117,6 +127,7 @@ static void render_kitchen(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_FOYER);
     }
@@ -124,6 +135,7 @@ static void render_kitchen(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_BASEMENT);
     }
@@ -131,6 +143,7 @@ static void render_kitchen(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_DINING_ROOM);
     }
@@ -144,6 +157,7 @@ static void render_dining(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_KITCHEN);
     }
@@ -151,6 +165,7 @@ static void render_dining(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_LIVING_ROOM);
     }
@@ -162,6 +177,7 @@ static void render_foyer(void)
     Vector2 mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_HALLWAY);
     }
@@ -169,6 +185,7 @@ static void render_foyer(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_KITCHEN);
     }
@@ -176,6 +193,7 @@ static void render_foyer(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_LIVING_ROOM);
     }
@@ -189,6 +207,7 @@ static void render_living_room(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_FOYER);
     }
@@ -196,6 +215,7 @@ static void render_living_room(void)
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, (Color){255,255,0,100});
     if (CheckCollisionPointRec(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_DINING_ROOM);
     }

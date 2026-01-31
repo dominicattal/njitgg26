@@ -77,6 +77,9 @@ static void state_init(void)
         json_iterator_increment(it); 
     }
     json_iterator_destroy(it);
+
+    if (json_object_get_value(ctx.texture_config, "placeholder") == NULL)
+        TraceLog(LOG_FATAL, "couldn't get placeholder texture");
 }
 
 Texture2D get_texture_from_config(const char* name)
@@ -95,7 +98,7 @@ Texture2D get_texture_from_config(const char* name)
             return ctx.textures[m];
     }
     TraceLog(LOG_WARNING, "Could not get id for %s", name);
-    return ctx.textures[0];
+    return get_texture_from_config("placeholder");
 }
 
 void close_window_safely(void)
@@ -143,6 +146,11 @@ float lerp(float from, float to, float t, float max_t)
     return (to-from) * t / max_t + from;
 }
 
+void set_cursor(CursorEnum cursor)
+{
+    ctx.current_cursor = cursor;
+}
+
 int main(void)
 {
     RenderTexture2D framebuffer;
@@ -154,6 +162,7 @@ int main(void)
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, "njitgg26");
     SetExitKey(KEY_NULL);
+    HideCursor();
 
     InitAudioDevice();
 
@@ -168,8 +177,12 @@ int main(void)
 
     SetTargetFPS(60);
 
+    ctx.cursor_textures[CURSOR_NORMAL] = get_texture_from_config("cursor_normal");
+    ctx.cursor_textures[CURSOR_INTERACT] = get_texture_from_config("cursor_interact");
+
     while (!ctx.window_exited)
     {
+        ctx.current_cursor = CURSOR_NORMAL;
         window_key_callback();
         UpdateMusicStream(music);
         game_update(GetFrameTime());
@@ -186,6 +199,8 @@ int main(void)
             DrawTexturePro(framebuffer.texture, src, dst, (Vector2) {0,0}, 0, (Color){255,255,255,255});
 
             game_render_gui();
+
+            DrawTextureV(ctx.cursor_textures[ctx.current_cursor], GetMousePosition(), (Color){255,255,255,255});
 
         EndDrawing();
 
