@@ -77,14 +77,6 @@ static void state_init(void)
     json_iterator_destroy(it);
 }
 
-static void state_cleanup(void)
-{
-    for (int i = 0; i < ctx.num_textures; i++)
-        UnloadTexture(ctx.textures[i]);
-    free(ctx.textures);
-    json_object_destroy(ctx.texture_config);
-}
-
 Texture2D get_texture_from_config(const char* name)
 {
     int l, r, m, a;
@@ -109,6 +101,14 @@ void close_window_safely(void)
     ctx.window_exited = true;
 }
 
+static void state_cleanup(void)
+{
+    for (int i = 0; i < ctx.num_textures; i++)
+        UnloadTexture(ctx.textures[i]);
+    free(ctx.textures);
+    json_object_destroy(ctx.texture_config);
+}
+
 int main(void)
 {
     ctx.window_exited = false;
@@ -117,6 +117,12 @@ int main(void)
     InitWindow(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, "njitgg26");
     SetExitKey(KEY_NULL);
 
+    InitAudioDevice();
+
+    Music music = LoadMusicStream("assets/audio/rain.mp3");
+    PlayMusicStream(music);
+    SetMusicVolume(music, 0.1f);
+
     state_init();
     game_init();
 
@@ -124,6 +130,7 @@ int main(void)
 
     while (!ctx.window_exited)
     {
+        UpdateMusicStream(music);
         game_update(GetFrameTime());
         BeginDrawing();
             ClearBackground(RAYWHITE);
@@ -134,10 +141,12 @@ int main(void)
             ctx.window_exited = true;
     }
 
-    CloseWindow();
-
     game_cleanup();
     state_cleanup();
+
+    UnloadMusicStream(music);
+    CloseAudioDevice();
+    CloseWindow();
 
     return 0;
 }
