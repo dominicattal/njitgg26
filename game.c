@@ -143,7 +143,6 @@ void game_init(void)
     int i;
     game.in_menu = true;
     game.current_screen = SCREEN_FOYER;
-    game.screens = malloc(NUM_SCREENS * sizeof(Screen));
 
     game.screens[SCREEN_LIVING_ROOM].background_texture_name = "living_room";
     game.screens[SCREEN_LIVING_ROOM].render = render_living_room;
@@ -179,6 +178,21 @@ void game_init(void)
         log_assert(game.screens[i].background_texture_name != NULL, "Missing background texture name for %d screen", i);
         log_assert(game.screens[i].render != NULL, "Missing render function for %d screen", i);
     }
+
+    game.items[ITEM_1].texture_name = "item1";
+    game.items[ITEM_1].held = false;
+    game.items[ITEM_2].texture_name = "item2";
+    game.items[ITEM_2].held = false;
+    game.items[ITEM_3].texture_name = "item3";
+    game.items[ITEM_3].held = false;
+}
+
+static void draw_texture(Texture2D tex, float x, float y, float w, float h)
+{
+    Rectangle src, dst;
+    src = (Rectangle) { 0, 0, tex.width, tex.height };
+    dst = (Rectangle) { x, y, w, h };
+    DrawTexturePro(tex, src, dst, (Vector2) {0,0}, 0, (Color){255,255,255,255});
 }
 
 static void render_menu_stuff(void)
@@ -186,21 +200,31 @@ static void render_menu_stuff(void)
     int window_width = GetScreenWidth();
     //int window_height = GetScreenHeight();
     Texture2D tex;
-    Rectangle src, dst;
     //Vector2 origin;
     bool pressed;
 
     tex = get_texture_from_config("placeholder");
-
-    src = (Rectangle) { 0, 0, tex.width, tex.height };
-    dst = (Rectangle) { window_width/2-250, 100, 500, 200 };
     //origin = (Vector2) { window_width/2-100, window_height/2-100 };
 
-    DrawTexturePro(tex, src, dst, ZERO_ZERO, 0.0, DEFAULT_TINT);
+    draw_texture(tex, window_width/2-250, 100, 500, 200);
 
     pressed = GuiButton((Rectangle){ window_width/2-50, 350, 100, 20}, "#191#Play");
     if (pressed) {
         game.in_menu = false;
+    }
+}
+
+static void render_ui(void)
+{
+    int i;
+    int offset = 0;
+    int window_width = GetScreenWidth();
+    int dim = 50;
+    Texture2D tex;
+    for (i = 0; i < NUM_ITEMS; i++) {
+        tex = get_texture_from_config(game.items[i].texture_name);
+        draw_texture(tex, window_width-dim-offset, 0, dim, dim);
+        offset += 75;
     }
 }
 
@@ -209,14 +233,9 @@ static void render_game_stuff(void)
     ScreenRenderFuncPtr render_screen = game.screens[game.current_screen].render;
     const char* background_texture_name = game.screens[game.current_screen].background_texture_name;
     Texture2D texture = get_texture_from_config(background_texture_name);
-    Rectangle src, dst;
-
-    src = (Rectangle) { 0, 0, texture.width, texture.height };
-    dst = (Rectangle) { 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() };
-
-    DrawTexturePro(texture, src, dst, ZERO_ZERO, 0.0, DEFAULT_TINT);
-
+    draw_texture(texture, 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight());
     render_screen();
+    render_ui();
 }
 
 void game_render(void)
@@ -229,5 +248,4 @@ void game_render(void)
 
 void game_cleanup(void)
 {
-    free(game.screens);
 }

@@ -9,5 +9,8 @@
     "hallway": "assets/textures/hallway.png",
     "guest_bedroom": "assets/textures/guest_bedroom.png",
     "bathroom": "assets/textures/bathroom.png",
-    "attic": "assets/textures/attic.png"
+    "attic": "assets/textures/attic.png",
+    "item1": "assets/textures/item1.png",
+    "item2": "assets/textures/item2.png",
+    "item3": "assets/textures/item3.png"
 }
