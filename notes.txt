@@ -1,5 +1,6 @@
 core goals
-moving between screens
+moving between screens (done)
 
 stretch goals
 arrows keys / mouse dual functionality
+tint for screen when menu overlaid

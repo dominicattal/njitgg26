@@ -12,10 +12,12 @@ typedef struct GlobalContext {
     Texture2D* textures;
     const char** texture_names;
     int num_textures;
+    bool window_exited;
 } GlobalContext;
 
 extern GlobalContext ctx;
 
 Texture2D get_texture_from_config(const char* name);
+void close_window_safely(void);
 
 #endif

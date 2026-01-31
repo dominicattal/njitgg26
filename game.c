@@ -196,6 +196,9 @@ void game_init(void)
     game.items[ITEM_2].held = false;
     game.items[ITEM_3].texture_name = "item3";
     game.items[ITEM_3].held = false;
+
+    // setting game state for testing
+    game.in_menu = false;
 }
 
 static void draw_texture(Texture2D tex, float x, float y, float w, float h)
@@ -204,6 +207,17 @@ static void draw_texture(Texture2D tex, float x, float y, float w, float h)
     src = (Rectangle) { 0, 0, tex.width, tex.height };
     dst = (Rectangle) { x, y, w, h };
     DrawTexturePro(tex, src, dst, (Vector2) {0,0}, 0, (Color){255,255,255,255});
+}
+
+static void start_game(void)
+{
+    game.in_menu = false;
+    game.menu_overlay = false;
+}
+
+static void end_game(void)
+{
+    game.in_menu = true;
 }
 
 static void render_menu_stuff(void)
@@ -220,7 +234,10 @@ static void render_menu_stuff(void)
         x = window_width/2-250;
     } else {
         x = lerp(window_width/2-250, window_width, timer->value, timer->max_value);
-        if (timer->done) game.in_menu = false;
+        if (timer->done) {
+            timer_unset(TIMER_MENU_CAR);
+            start_game();
+        }
     }
 
     draw_texture(tex, x, 100, 500, 200);
@@ -228,6 +245,30 @@ static void render_menu_stuff(void)
     pressed = GuiButton(rect(window_width/2-50, 350, 100, 20), "#191#Play");
     if (pressed && !timer->set)
         timer_set(TIMER_MENU_CAR, 2.0f);
+
+    pressed = GuiButton(rect(window_width/2-50, 390, 100, 20), "#191#Exit");
+    if (pressed) {
+        close_window_safely();
+    }
+}
+
+static void render_menu_overlay(void)
+{
+    int window_width = GetScreenWidth();
+    int window_height = GetScreenHeight();
+    bool pressed;
+    pressed = GuiButton(rect(window_width/2-50, window_height/2-50, 100, 20), "#191#Continue");
+    if (pressed) {
+        game.menu_overlay = false;
+    }
+    pressed = GuiButton(rect(window_width/2-50, window_height/2-10, 100, 20), "#191#Main Menu");
+    if (pressed) {
+        end_game();
+    }
+    pressed = GuiButton(rect(window_width/2-50, window_height/2+30, 100, 20), "#191#Exit");
+    if (pressed) {
+        close_window_safely();
+    }
 }
 
 static void render_ui(void)
@@ -242,6 +283,9 @@ static void render_ui(void)
         draw_texture(tex, window_width-dim-offset, 0, dim, dim);
         offset += 75;
     }
+
+    if (game.menu_overlay)
+        render_menu_overlay();
 }
 
 static void render_game_stuff(void)
@@ -252,6 +296,13 @@ static void render_game_stuff(void)
     draw_texture(texture, 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight());
     render_screen();
     render_ui();
+}
+
+static void key_callback(void)
+{
+    if (!game.in_menu && IsKeyPressed(KEY_ESCAPE)) {
+        game.menu_overlay = !game.menu_overlay;
+    }
 }
 
 void timer_set(TimerEnum timer, float max_value)
@@ -284,6 +335,8 @@ void game_update(float dt)
             }
         }
     }
+
+    key_callback();
 }
 
 void game_render(void)

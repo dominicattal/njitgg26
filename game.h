@@ -54,6 +54,7 @@ typedef struct GameState {
     Screen screens[NUM_SCREENS];
     Timer timers[NUM_TIMERS];
     ScreenEnum current_screen;
+    bool menu_overlay;
     bool in_menu;
 } GameState;
 

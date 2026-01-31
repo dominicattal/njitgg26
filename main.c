@@ -104,26 +104,34 @@ Texture2D get_texture_from_config(const char* name)
     return ctx.textures[0];
 }
 
+void close_window_safely(void)
+{
+    ctx.window_exited = true;
+}
+
 int main(void)
 {
-    float dt;
+    ctx.window_exited = false;
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, "njitgg26");
+    SetExitKey(KEY_NULL);
 
     state_init();
     game_init();
 
     SetTargetFPS(60);
 
-    while (!WindowShouldClose())
+    while (!ctx.window_exited)
     {
-        dt = GetFrameTime();
-        game_update(dt);
+        game_update(GetFrameTime());
         BeginDrawing();
             ClearBackground(RAYWHITE);
             game_render();
         EndDrawing();
+
+        if (WindowShouldClose())
+            ctx.window_exited = true;
     }
 
     CloseWindow();
