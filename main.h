@@ -6,14 +6,14 @@
 #include "json.h"
 #include "log.h"
 
+#define DEFAULT_TINT ((Color){ 255, 255, 255, 255 })
+
 typedef struct GlobalContext {
     JsonObject* texture_config;
     GameState* game_state;
     Texture2D* textures;
     const char** texture_names;
     int num_textures;
-    int window_width;
-    int window_height;
 } GlobalContext;
 
 extern GlobalContext ctx;

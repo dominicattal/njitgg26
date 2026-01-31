@@ -1,24 +1,13 @@
 #include <stdio.h>
 #include <assert.h>
+#include <stdlib.h>
+#include <string.h>
 #include "main.h"
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
+
+#define DEFAULT_WINDOW_WIDTH 800
+#define DEFAULT_WINDOW_HEIGHT 600
 
 GlobalContext ctx;
-
-bool showMessageBox = true;
-static void draw_start_menu(void)
-{
-    if (GuiButton((Rectangle){ 24, 24, 120, 30 }, "#191#Show Message"))
-        showMessageBox = true;
-    if (showMessageBox) 
-    {
-        int result = GuiMessageBox((Rectangle){ 85, 70, 250, 100 },
-            "#191#Message Box", "Hi! This is a message!", "Nice;Cool");
-
-        if (result >= 0) showMessageBox = false;
-    }
-}
 
 static Texture2D load_texture(const char* name, JsonValue* value)
 {
@@ -115,11 +104,10 @@ Texture2D get_texture_from_config(const char* name)
 
 int main(void)
 {
-    ctx.window_width = 800;
-    ctx.window_height = 450;
-    InitWindow(ctx.window_width, ctx.window_height, "njitgg26");
-    state_init();
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    InitWindow(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, "njitgg26");
 
+    state_init();
     game_init();
 
     SetTargetFPS(60);
@@ -129,8 +117,6 @@ int main(void)
         BeginDrawing();
             ClearBackground(RAYWHITE);
             game_render();
-            DrawText("FUCK YESSS", 190, 200, 20, LIGHTGRAY);
-            draw_start_menu();
         EndDrawing();
     }
 

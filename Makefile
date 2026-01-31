@@ -3,7 +3,7 @@ CFLAGS = -IC:/raylib/raylib/src -LC:/raylib/raylib/src -Wall -Wextra -Werror -Wf
 SOURCES = main.c \
 		  json.c \
 		  log.c \
-		  game.c 
+		  game.c
 OBJS_DEV = $(SOURCES:%.c=build/dev/%.o)
 
 all: dev

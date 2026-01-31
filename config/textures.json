@@ -1,3 +1,6 @@
 {
-    "placeholder": "assets/textures/placeholder.png"
+    "placeholder": "assets/textures/placeholder.png",
+    "screen1": "assets/textures/screen1.png",
+    "screen2": "assets/textures/screen2.png",
+    "screen3": "assets/textures/screen3.png"
 }
