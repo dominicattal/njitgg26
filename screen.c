@@ -13,7 +13,7 @@ static bool check_collision_and_valid(Vector2 pos, Rectangle rect)
 {
     if (in_dialogue()) return false;
     if (game.queried_item != ITEM_NONE) return false;
-    if (get_flag(FLAG_IN_TRANSITION)) return false;
+    if (get_flag(IN_TRANSITION)) return false;
     //if (timer_isset(TIMER_SCREEN_TRANSITION)) return false;
     return CheckCollisionPointRec(pos, rect);
 }
@@ -108,8 +108,12 @@ static void render_hallway(void)
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-            screen_transition(SCREEN_MASTER_BEDROOM);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (get_flag(TALKED_TO_ALL) && get_flag(TALKED_TO_BEAR))
+                screen_transition(SCREEN_MASTER_BEDROOM);
+            else
+                create_dialogue(CROW, "I probably shouldn't go into my parent's room");
+        }
     }
     hitbox = create_rect2(730, 1000, 1030, 1080);
     mouse_position = get_scaled_mouse_position();
@@ -134,7 +138,7 @@ static void render_master_bedroom(void)
             screen_transition(SCREEN_HALLWAY);
     }
     hitbox = create_rect2(202, 418, 450, 700);
-    if (get_flag(FLAG_OPENED_ATTIC_DOOR)) {
+    if (get_flag(OPENED_ATTIC_DOOR)) {
         mouse_position = get_scaled_mouse_position();
         DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
         if (check_collision_and_valid(mouse_position, hitbox)) {
@@ -149,7 +153,7 @@ static void render_master_bedroom(void)
             set_cursor(CURSOR_INTERACT);
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 if (selected_item(ITEM_FOYER)) {
-                    set_flag(FLAG_OPENED_ATTIC_DOOR, true);
+                    set_flag(OPENED_ATTIC_DOOR, true);
                     take_item(ITEM_FOYER);
                 } else {
                     create_dialogue(CROW, "I need a key to open this");
@@ -209,7 +213,7 @@ static void render_kitchen_act1(void)
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            set_flag(FLAG_TALKED_TO_PIG, true);
+            set_flag(TALKED_TO_PIG, true);
             create_dialogue(CROW, get_text_from_config("crow_pig_intro_1"));
             create_dialogue(PIG, get_text_from_config("crow_pig_intro_2"));
         }
@@ -264,7 +268,7 @@ static void render_foyer(void)
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_LIVING_ROOM);
     }
-    if (!get_flag(FLAG_PICKED_UP_FOYER_ITEM)) {
+    if (!get_flag(PICKED_UP_FOYER_ITEM)) {
         hitbox = create_rect2(1576, 690, 1606, 719);
         mouse_position = get_scaled_mouse_position();
         DrawRectangleRec(hitbox, ITEM_HITBOX_COLOR);
@@ -272,7 +276,7 @@ static void render_foyer(void)
             set_cursor(CURSOR_INTERACT);
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 play_sound("interact");
-                set_flag(FLAG_PICKED_UP_FOYER_ITEM, true);
+                set_flag(PICKED_UP_FOYER_ITEM, true);
                 give_item(ITEM_FOYER);
             }
         }
@@ -287,8 +291,8 @@ static void render_foyer_act1(void)
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            set_flag(FLAG_TALKED_TO_BEAR, true);
-            if (!get_flag(FLAG_TALKED_TO_ALL)) {
+            set_flag(TALKED_TO_BEAR, true);
+            if (!get_flag(TALKED_TO_ALL)) {
                 create_dialogue(BEAR, get_text_from_config("bear_crow_intro_1"));
                 create_dialogue(CROW, get_text_from_config("crow_bear_intro_2"));
             } else {
@@ -301,7 +305,7 @@ static void render_foyer_act1(void)
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            set_flag(FLAG_TALKED_TO_FISH, true);
+            set_flag(TALKED_TO_FISH, true);
             create_dialogue(FISH, get_text_from_config("fish_crow_intro_1"));
             create_dialogue(CROW, get_text_from_config("crow_fish_intro_2"));
         }
@@ -310,7 +314,7 @@ static void render_foyer_act1(void)
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            set_flag(FLAG_TALKED_TO_OWL, true);
+            set_flag(TALKED_TO_OWL, true);
             create_dialogue(CROW, get_text_from_config("crow_owl_intro_1"));
             create_dialogue(OWL, get_text_from_config("owl_crow_intro_2"));
         }
@@ -347,7 +351,7 @@ static void render_living_room(void)
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            set_flag(FLAG_TALKED_TO_DOG, true);
+            set_flag(TALKED_TO_DOG, true);
             create_dialogue(DOG, get_text_from_config("dog_crow_intro_1"));
         }
     }
@@ -355,7 +359,7 @@ static void render_living_room(void)
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            set_flag(FLAG_TALKED_TO_SNAKE, true);
+            set_flag(TALKED_TO_SNAKE, true);
             create_dialogue(CROW, get_text_from_config("crow_snake_intro_1"));
             create_dialogue(SNAKE, get_text_from_config("snake_crow_intro_2"));
         }
@@ -364,7 +368,7 @@ static void render_living_room(void)
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            set_flag(FLAG_TALKED_TO_CAT, true);
+            set_flag(TALKED_TO_CAT, true);
             create_dialogue(CROW, get_text_from_config("crow_cat_intro_1"));
             create_dialogue(CAT, get_text_from_config("crow_cat_intro_2"));
         }

@@ -81,7 +81,7 @@ bool in_dialogue(void)
 
 void game_init(void)
 {
-    set_flag(FLAG_IN_MENU, true);
+    set_flag(IN_MENU, true);
     game.current_screen = SCREEN_FOYER;
     game.dialogue_head = NULL;
     game.dialogue_tail = NULL;
@@ -91,9 +91,10 @@ void game_init(void)
     character_init();
 
     // setting game state for testing
-    set_flag(FLAG_IN_MENU, false);
+    set_flag(IN_MENU, false);
     game.selected_item = ITEM_NONE;
     game.queried_item = ITEM_NONE;
+    set_flag(TALKED_TO_ALL, true);
 }
 
 static void draw_texture(Texture2D tex, float x, float y, float w, float h)
@@ -123,7 +124,7 @@ static void start_game(void)
 
 static void end_game(void)
 {
-    set_flag(FLAG_IN_MENU, true);
+    set_flag(IN_MENU, true);
 }
 
 static void render_menu_gui(void)
@@ -165,7 +166,7 @@ static void render_menu_overlay(void)
     bool pressed;
     pressed = GuiButton(create_rect(window_width/2-50, window_height/2-50, 100, 20), "Continue");
     if (pressed) {
-        set_flag(FLAG_MENU_OVERLAY, false);
+        set_flag(MENU_OVERLAY, false);
     }
     pressed = GuiButton(create_rect(window_width/2-50, window_height/2-10, 100, 20), "Main Menu");
     if (pressed) {
@@ -246,7 +247,7 @@ static void render_game_gui(void)
 
     if (game.screens[game.current_screen].render_gui != NULL)
         game.screens[game.current_screen].render_gui();
-    if (get_flag(FLAG_MENU_OVERLAY))
+    if (get_flag(MENU_OVERLAY))
         render_menu_overlay();
 
     if (item_info != NULL) {
@@ -302,8 +303,8 @@ static void render_game_objects(void)
 
 static void key_callback(void)
 {
-    if (!get_flag(FLAG_IN_MENU) && IsKeyPressed(KEY_ESCAPE))
-        toggle_flag(FLAG_MENU_OVERLAY);
+    if (!get_flag(IN_MENU) && IsKeyPressed(KEY_ESCAPE))
+        toggle_flag(MENU_OVERLAY);
     if (IsKeyPressed(KEY_Q))
         game.queried_item = ITEM_NONE;
 }
@@ -313,7 +314,7 @@ void screen_transition(ScreenEnum screen)
     //timer_set(TIMER_SCREEN_TRANSITION, 1.5);
     //play_sound("walk");
     game.current_screen = screen;
-    set_flag(FLAG_IN_TRANSITION, true);
+    set_flag(IN_TRANSITION, true);
 }
 
 void timer_set(TimerEnum timer, float max_value)
@@ -346,21 +347,29 @@ bool timer_isset(TimerEnum timer)
 
 static bool talked_to_all_characters(void)
 {
-    for (FlagEnum i = FLAG_TALKED_TO_BEAR; i <= FLAG_TALKED_TO_OWL; i++)
+    for (FlagEnum i = TALKED_TO_BEAR; i <= TALKED_TO_OWL; i++)
         if (!get_flag(i)) 
             return false;
     return true;
 }
 
+static void update_act1(void)
+{
+    if (!get_flag(TALKED_TO_ALL) && talked_to_all_characters()) {
+        set_flag(TALKED_TO_ALL, true);
+        create_dialogue(CROW, "I should talk to my father");
+        for (FlagEnum i = TALKED_TO_BEAR; i <= TALKED_TO_OWL; i++)
+            set_flag(i, false);
+    }
+}
+
 
 void game_update(float dt)
 {
-    set_flag(FLAG_IN_TRANSITION, false);
+    set_flag(IN_TRANSITION, false);
 
-    if (!get_flag(FLAG_TALKED_TO_ALL) && talked_to_all_characters()) {
-        set_flag(FLAG_TALKED_TO_ALL, true);
-        create_dialogue(CROW, "I should talk to my father");
-    }
+    if (game.act == ACT1)
+        update_act1();
 
     for (int i = 0; i < NUM_TIMERS; i++) {
         if (game.timers[i].active) {
@@ -381,13 +390,13 @@ void game_update(float dt)
 
 void game_render(void)
 {
-    if (!get_flag(FLAG_IN_MENU))
+    if (!get_flag(IN_MENU))
         render_game_objects();
 }
 
 void game_render_gui(void)
 {
-    if (get_flag(FLAG_IN_MENU))
+    if (get_flag(IN_MENU))
         render_menu_gui();
     else
         render_game_gui();
