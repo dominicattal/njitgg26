@@ -4,5 +4,13 @@
     "missing_desk": "There's nothing in here",
     "bear_crow_intro_1": "hello i like your costume",
     "crow_bear_intro_2": "thank you father",
-    "filler_book1": "This book is about blah blah blah"
+    "filler_book1": "This book is about blah blah blah",
+    "pickup_note": "What's this?",
+    "bear_note_crow_response": "OMG this crazy",
+    "crow_try_leave_master_bedroom": "I need to get the thing for my father first",
+    "should_examine_note": "I should read the note I picked up",
+    "bear_crow_get_note_1": "Can you get me the thing from my bedroom?",
+    "crow_bear_get_note_2": "Of course I can",
+    "crow_should_give_thing": "I should give my father the thing he asked for",
+    "bear_receive_thing": "Thanks"
 }

@@ -19,5 +19,8 @@
     "item_foyer": "assets/textures/item_foyer.png",
     "bear_portrait": "assets/textures/bearon_portrait.png",
     "right_arrow": "assets/textures/right_arrow.png",
-    "bookshelf": "assets/textures/bookshelf.png"
+    "bookshelf": "assets/textures/bookshelf.png",
+    "desk_with_drawers": "assets/textures/desk_with_drawers.png",
+    "item_bear_note": "assets/textures/bear_note.png",
+    "item_bear_thing": "assets/textures/bear_thing.png"
 }

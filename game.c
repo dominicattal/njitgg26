@@ -79,12 +79,18 @@ bool in_dialogue(void)
     return game.dialogue_head != NULL;
 }
 
+void act_transition(ActEnum act)
+{
+    game.act = act;
+}
+
 void game_init(void)
 {
     set_flag(IN_MENU, true);
     game.current_screen = SCREEN_FOYER;
     game.dialogue_head = NULL;
     game.dialogue_tail = NULL;
+    game.act_should_be = ACT_NONE;
 
     screen_init();
     item_init();
@@ -95,6 +101,10 @@ void game_init(void)
     game.selected_item = ITEM_NONE;
     game.queried_item = ITEM_NONE;
     set_flag(TALKED_TO_ALL, true);
+    set_flag(TALKED_TO_BEAR, true);
+    set_flag(PICKED_UP_BEAR_THING, true);
+    set_flag(BEAR_NOTE_RESPONSE, true);
+    give_item(ITEM_BEAR_THING);
 }
 
 void draw_texture(Texture2D tex, float x, float y, float w, float h)
@@ -120,6 +130,16 @@ Rectangle draw_texture_def(Texture2D tex, float x, float y)
     dst = (Rectangle) { x-tex.width/2, y-tex.height, tex.width, tex.height };
     DrawTexturePro(tex, src, dst, (Vector2) {0,0}, 0, (Color){255,255,255,255});
     return dst;
+}
+ 
+Rectangle hitbox_from_hitbox(Rectangle hitbox, float x1, float y1, float x2, float y2)
+{
+    Rectangle h;
+    h.x = hitbox.x + x1;
+    h.y = hitbox.y + y1;
+    h.width = (hitbox.x + x2) - h.x;
+    h.height = (hitbox.y + y2) - h.y;
+    return h;
 }
 
 static void start_game(void)
@@ -371,12 +391,24 @@ static void update_act1(void)
         for (FlagEnum i = TALKED_TO_BEAR; i <= TALKED_TO_OWL; i++)
             set_flag(i, false);
     }
-}
 
+    if (!get_flag(EXAMINED_BEAR_NOTE) && game.queried_item == ITEM_BEAR_NOTE) {
+        set_flag(EXAMINED_BEAR_NOTE, true);
+    }
+    if (!get_flag(BEAR_NOTE_RESPONSE) && get_flag(EXAMINED_BEAR_NOTE) && game.queried_item != ITEM_BEAR_NOTE) {
+        set_flag(BEAR_NOTE_RESPONSE, true);
+        create_dialogue(CROW, get_text_from_config("bear_note_crow_response"));
+    }
+}
 
 void game_update(float dt)
 {
     set_flag(IN_TRANSITION, false);
+
+    if (game.act_should_be != ACT_NONE && !in_dialogue()) {
+        act_transition(game.act_should_be);
+        game.act_should_be = ACT_NONE;
+    }
 
     if (game.act == ACT1)
         update_act1();

@@ -25,9 +25,8 @@ typedef enum ScreenEnum {
 
 typedef enum ItemEnum {
     ITEM_FOYER,
-    ITEM_1,
-    ITEM_2,
-    ITEM_3,
+    ITEM_BEAR_NOTE,
+    ITEM_BEAR_THING,
     NUM_ITEMS,
     ITEM_NONE
 } ItemEnum;
@@ -45,6 +44,8 @@ typedef enum FlagEnum {
 
     // flags related to game state
     PICKED_UP_FOYER_ITEM,
+    PICKED_UP_BEAR_NOTE,
+    PICKED_UP_BEAR_THING,
     OPENED_ATTIC_DOOR,
     TALKED_TO_BEAR,
     TALKED_TO_FISH,
@@ -54,6 +55,8 @@ typedef enum FlagEnum {
     TALKED_TO_CAT,
     TALKED_TO_OWL,
     TALKED_TO_ALL,
+    EXAMINED_BEAR_NOTE,
+    BEAR_NOTE_RESPONSE,
 
     NUM_FLAGS
 } FlagEnum;
@@ -75,7 +78,8 @@ typedef enum ActEnum {
     ACT1,
     ACT2,
     ACT3,
-    NUM_ACTS
+    NUM_ACTS,
+    ACT_NONE
 } ActEnum;
 
 typedef struct Screen {
@@ -125,6 +129,7 @@ typedef struct GameState {
     ItemEnum queried_item;
     DialogueNode* dialogue_head;
     DialogueNode* dialogue_tail;
+    ActEnum act_should_be;
     ActEnum act;
 } GameState;
 
@@ -138,6 +143,8 @@ void game_cleanup(void);
 
 void screen_init(void);
 void screen_transition(ScreenEnum screen);
+
+void act_transition(ActEnum act);
 
 void item_init(void);
 
@@ -169,5 +176,6 @@ bool in_dialogue(void);
 void draw_texture(Texture2D tex, float x, float y, float w, float h);
 void draw_texture_rect(Texture2D tex, Rectangle rect);
 Rectangle draw_texture_def(Texture2D tex, float x, float y);
+Rectangle hitbox_from_hitbox(Rectangle hitbox, float x1, float y1, float x2, float y2);
 
 #endif

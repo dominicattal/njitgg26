@@ -1,6 +1,8 @@
 #include "game.h"
 #include "main.h"
 #include "raylib.h"
+#include "gui.h"
+#include "config.h"
 #include <stdlib.h>
 
 static void render_item_foyer(void)
@@ -12,17 +14,28 @@ static void render_item_foyer(void)
     DrawRectangleRec(rect, (Color){255,100,255,100});
 }
 
+static void render_item_bear_note(void)
+{
+    Rectangle rect;
+    int window_width = GetScreenWidth();
+    int window_height = GetScreenHeight();
+    rect = create_rect((window_width-400)/2, (window_height-400)/2, 400, 400);
+    DrawRectangleRec(rect, (Color){255,100,255,100});
+    DrawTextBoxed(get_font_from_config("consolas_16"), game.items[ITEM_BEAR_NOTE].display_name, rect, 16, 0, true, GREEN);
+}
+
 void item_init(void)
 {
-    game.items[ITEM_1].texture_name = "item1";
-    game.items[ITEM_1].display_name = "item1";
-    game.items[ITEM_2].texture_name = "item2";
-    game.items[ITEM_2].display_name = "item2";
-    game.items[ITEM_3].texture_name = "item3";
-    game.items[ITEM_3].display_name = "item3";
     game.items[ITEM_FOYER].texture_name = "item_foyer";
     game.items[ITEM_FOYER].display_name = "Foy Cube";
     game.items[ITEM_FOYER].render_query = render_item_foyer;
+
+    game.items[ITEM_BEAR_NOTE].texture_name = "item_bear_note";
+    game.items[ITEM_BEAR_NOTE].display_name = "Note";
+    game.items[ITEM_BEAR_NOTE].render_query = render_item_bear_note;
+
+    game.items[ITEM_BEAR_THING].texture_name = "item_bear_thing";
+    game.items[ITEM_BEAR_THING].display_name = "Bear Thing";
 
     for (int i = 0; i < NUM_ITEMS; i++) {
         if (game.items[i].texture_name == NULL)

@@ -48,7 +48,8 @@ static void render_bathroom(void)
 
 static void render_guest_bedroom(void)
 {
-    Rectangle hitbox;
+    Texture2D tex;
+    Rectangle hitbox, hitbox2;
     Vector2 mouse_position = get_scaled_mouse_position();
     hitbox = create_rect2(1700, 300, 1750, 670);
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
@@ -57,28 +58,40 @@ static void render_guest_bedroom(void)
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_HALLWAY);
     }
-    hitbox = create_rect2(700, 355, 820, 377);
-    DrawRectangleRec(hitbox, MISC_HITBOX_COLOR);
+
+    tex = get_texture_from_config("bookshelf");
+    hitbox = draw_texture_def(tex, 1263, 600);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            create_dialogue(CROW, get_text_from_config("missing_desk"));
+            create_dialogue(CROW, get_text_from_config("filler_book1"));
         }
     }
-    hitbox = create_rect2(700, 411, 820, 443);
-    DrawRectangleRec(hitbox, MISC_HITBOX_COLOR);
+
+    tex = get_texture_from_config("desk_with_drawers");
+    hitbox = draw_texture_def(tex, 814, 600);
+    hitbox2 = hitbox_from_hitbox(hitbox, 34, 37, 128, 123);
+    DrawRectangleRec(hitbox2, MISC_HITBOX_COLOR);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            create_dialogue(CROW, get_text_from_config("missing_desk"));
+            create_dialogue(CROW, get_text_from_config("filler_desk1"));
         }
     }
-    hitbox = create_rect2(701, 459, 818, 498);
-    DrawRectangleRec(hitbox, MISC_HITBOX_COLOR);
+    hitbox2 = hitbox_from_hitbox(hitbox, 154, 40, 297, 123);
+    DrawRectangleRec(hitbox2, MISC_HITBOX_COLOR);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            create_dialogue(CROW, get_text_from_config("missing_desk"));
+            create_dialogue(CROW, get_text_from_config("filler_desk1"));
+        }
+    }
+    hitbox2 = hitbox_from_hitbox(hitbox, 324, 38, 417, 123);
+    DrawRectangleRec(hitbox2, MISC_HITBOX_COLOR);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            create_dialogue(CROW, get_text_from_config("filler_desk1"));
         }
     }
 }
@@ -127,16 +140,77 @@ static void render_hallway(void)
 
 static void render_master_bedroom(void)
 {
-    Rectangle hitbox;
+    Rectangle hitbox, hitbox2;
     Vector2 mouse_position;
+    Texture2D tex;
     hitbox = create_rect2(450, 1000, 750, 1080);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-            screen_transition(SCREEN_HALLWAY);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (get_flag(PICKED_UP_BEAR_THING)) {
+                screen_transition(SCREEN_HALLWAY);
+            } else {
+                create_dialogue(CROW, get_text_from_config("crow_try_leave_master_bedroom"));
+            }
+        }
     }
+
+    tex = get_texture_from_config("bookshelf");
+    hitbox = draw_texture_def(tex, 1630, 627);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            create_dialogue(CROW, get_text_from_config("filler_book1"));
+        }
+    }
+
+    tex = get_texture_from_config("desk_with_drawers");
+    hitbox = draw_texture_def(tex, 751, 625);
+    hitbox2 = hitbox_from_hitbox(hitbox, 34, 37, 128, 123);
+    DrawRectangleRec(hitbox2, MISC_HITBOX_COLOR);
+    if (check_collision_and_valid(mouse_position, hitbox2)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            create_dialogue(CROW, get_text_from_config("filler_desk1"));
+        }
+    }
+    hitbox2 = hitbox_from_hitbox(hitbox, 154, 40, 297, 123);
+    DrawRectangleRec(hitbox2, MISC_HITBOX_COLOR);
+    if (check_collision_and_valid(mouse_position, hitbox2)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            create_dialogue(CROW, get_text_from_config("filler_desk1"));
+        }
+    }
+    hitbox2 = hitbox_from_hitbox(hitbox, 324, 38, 417, 123);
+    DrawRectangleRec(hitbox2, MISC_HITBOX_COLOR);
+    if (check_collision_and_valid(mouse_position, hitbox2)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (!get_flag(PICKED_UP_BEAR_NOTE)) {
+                set_flag(PICKED_UP_BEAR_NOTE, true);
+                give_item(ITEM_BEAR_NOTE);
+                create_dialogue(CROW, get_text_from_config("pickup_note"));
+            } else if (!get_flag(BEAR_NOTE_RESPONSE)) {
+                create_dialogue(CROW, get_text_from_config("should_examine_note"));
+            } else if (!get_flag(PICKED_UP_BEAR_THING)) {
+                set_flag(PICKED_UP_BEAR_THING, true);
+                give_item(ITEM_BEAR_THING);
+            }
+        }
+    }
+
+    hitbox = create_rect2(1050, 920, 1450, 973);
+    DrawRectangleRec(hitbox, MISC_HITBOX_COLOR);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            create_dialogue(CROW, get_text_from_config("under_master_bed"));
+        }
+    }
+
     hitbox = create_rect2(202, 418, 450, 700);
     if (get_flag(OPENED_ATTIC_DOOR)) {
         mouse_position = get_scaled_mouse_position();
@@ -295,9 +369,15 @@ static void render_foyer_act1(void)
             if (!get_flag(TALKED_TO_ALL)) {
                 create_dialogue(BEAR, get_text_from_config("bear_crow_intro_1"));
                 create_dialogue(CROW, get_text_from_config("crow_bear_intro_2"));
-            } else {
+            } else if (!get_flag(BEAR_NOTE_RESPONSE)) {
                 create_dialogue(BEAR, get_text_from_config("bear_crow_get_note_1"));
                 create_dialogue(CROW, get_text_from_config("crow_bear_get_note_2"));
+            } else if (!selected_item(ITEM_BEAR_THING)) {
+                create_dialogue(CROW, get_text_from_config("crow_should_give_thing"));
+            } else {
+                take_item(ITEM_BEAR_THING);
+                create_dialogue(BEAR, get_text_from_config("bear_receive_thing"));
+                game.act_should_be = ACT2;
             }
         }
     }

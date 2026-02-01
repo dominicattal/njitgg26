@@ -8,6 +8,7 @@ arrows keys / mouse dual functionality
 tint for screen when menu overlaid
 make item textures pointers instead of searching name
 change cursor color
+stop gif recording
 
 title: masquerade macabre
 
