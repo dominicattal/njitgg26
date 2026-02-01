@@ -1,14 +1,51 @@
 core goals
 moving between screens (done)
-item pickups
-notifications
+item pickups (done)
+notifications (done)
 
 stretch goals
 arrows keys / mouse dual functionality
 tint for screen when menu overlaid
 make item textures pointers instead of searching name
+change cursor color
 
+title: masquerade macabre
 
-ideas
-ultraviolet
-vegetable ingredients
+characters:
+Crow: the player
+Bear: baron, Crow's father
+Fish: Bear's wife
+Pig: the chef for Bear and Fish
+Dog: the butler for Bear
+Snake: another baron lord invited to Bear's manor
+Cat: Snake's wife
+Owl: another baron lord
+
+Setting:
+Europe, 1800s
+
+Spoiler:
+Snake killed Bear because he was upset the King favored him.
+
+Act I
+Your family is hosting a masquerade party to celebrate a gift of land by the King. The chef
+and butler are in the kitchen preparing food for the party. After some socializing, your father asks
+you to fetch something from his room. In the master bedroom, against your better judgment you look 
+inside of a drawer. In it, you find a letter from Bear to Cat detailing the events
+of an affair. Bear felt remorseful for the affair and expressed desire to tell Fish and Snake. 
+In shock, you put the note pack, fetch the thing you needed, and go back downstairs.
+
+Act II
+It is now dinner time. The butler just finished setting the dining room table. Everyone, except for Bear, 
+take their seats at the table. A lethargic bear enters the dining room last and takes his seat at the
+head of the table. All of the attendees toast and begin their meal. Without eating much, Bear announces
+he will go back to his room to rest and to continue eating without him. You're left alone with Snake,
+Owl, and Cat as you all discuss politics. Suddenly, you hear a loud thump and a scream. All of the attendees,
+including Pig and Dog, rush up to the master bedroom, where Bear is on the floor next to Fish.
+
+Act III
+You announce to everyone that no one will leave until you determine the culprit. From here, the player can
+wander around the house looking for clues. You can also speak to all the characters to ascertain context
+around the murder. Once the player feels confident, they can choose a character to blame. Some text will
+appear for reasoning. The player is told if they were right or wrong, then the game ends.
+

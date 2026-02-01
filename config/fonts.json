@@ -1,3 +1,4 @@
 {
+    "consolas_16": ["assets/fonts/consola.ttf", 16],
     "consolas_32": ["assets/fonts/consola.ttf", 32]
 }

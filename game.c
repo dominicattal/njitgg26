@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "game.h"
 #include "main.h"
@@ -32,26 +33,67 @@ void take_item(ItemEnum item)
     game.items[item].held = false;
 }
 
+bool has_item(ItemEnum item)
+{
+    return game.items[item].held;
+}
+
+bool selected_item(ItemEnum item)
+{
+    return game.selected_item == item;
+}
+
+char* character_display_name(CharacterEnum character)
+{
+    return game.characters[character].display_name;
+}
+
+void create_dialogue(CharacterEnum character, const char* dialogue)
+{
+    DialogueNode* node = malloc(sizeof(DialogueNode));
+    node->character = character;
+    node->dialogue = dialogue;
+    node->next = NULL;
+    if (game.dialogue_tail == NULL) {
+        game.dialogue_head = node;
+        game.dialogue_tail = node;
+    } else {
+        game.dialogue_tail->next = node;
+        game.dialogue_tail = node;
+    }
+}
+
+void advance_dialogue(void)
+{
+    if (game.dialogue_head == NULL) return;
+    DialogueNode* node = game.dialogue_head;
+    if (node == game.dialogue_tail)
+        game.dialogue_head = game.dialogue_tail = NULL;
+    else
+        game.dialogue_head = node->next;
+    free(node);
+}
+
+bool in_dialogue(void)
+{
+    return game.dialogue_head != NULL;
+}
+
 void game_init(void)
 {
     set_flag(FLAG_IN_MENU, true);
     game.current_screen = SCREEN_FOYER;
+    game.dialogue_head = NULL;
+    game.dialogue_tail = NULL;
 
-    game_render_init();
-
-    game.items[ITEM_1].texture_name = "item1";
-    game.items[ITEM_2].texture_name = "item2";
-    game.items[ITEM_3].texture_name = "item3";
-    game.items[ITEM_FOYER].texture_name = "item_foyer";
-
-    for (int i = 0; i < NUM_ITEMS; i++) {
-        if (game.items[i].texture_name == NULL)
-            TraceLog(LOG_FATAL, "missing texture name for item %d", i);
-        game.items[i].held = false;
-    }
+    screen_init();
+    item_init();
+    character_init();
 
     // setting game state for testing
     set_flag(FLAG_IN_MENU, false);
+    game.selected_item = ITEM_NONE;
+    game.queried_item = ITEM_NONE;
 }
 
 static void draw_texture(Texture2D tex, float x, float y, float w, float h)
@@ -73,6 +115,10 @@ static void start_game(void)
 {
     for (int flag = 0; flag < NUM_FLAGS; flag++)
         set_flag(flag, false);
+
+    game.selected_item = ITEM_NONE;
+    game.queried_item = ITEM_NONE;
+    game.act = ACT1;
 }
 
 static void end_game(void)
@@ -133,37 +179,114 @@ static void render_menu_overlay(void)
 
 static void render_game_gui(void)
 {
-    int i;
-    int offset = 0;
-    int window_width = GetScreenWidth();
+    ItemEnum i;
+    int offset_x = 35;
+    int cur_offset_x = offset_x;
+    int offset_y = 20;
     int dim = 50;
     Item* item;
     Texture2D tex;
     Rectangle rect;
     char* item_info = NULL;
+    char* item_display_name = NULL;
+    int num_held_items = 0;
+    int window_width = GetScreenWidth();
+    int window_height = GetScreenHeight();
+    DialogueNode* node;
+    Character* character;
+    Vector2 mouse_position;
+
+    for (i = 0; i < NUM_ITEMS; i++)
+        if (game.items[i].held)
+            num_held_items++;
+
+    rect = create_rect(offset_x-10, offset_y-10, (num_held_items-1)*75+dim+20, dim+20);
+    DrawRectangleRec(rect, (Color){40,40,40,100});
     for (i = 0; i < NUM_ITEMS; i++) {
         item = &game.items[i];
         if (!item->held) continue;
         tex = get_texture_from_config(item->texture_name);
-        rect = create_rect(window_width-dim-offset, 0, dim, dim);
-        //draw_texture(tex, window_width-dim-offset, 0, dim, dim);
-        draw_texture_rect(tex, rect);
-        // if hovered, display in textbox
+        rect = create_rect(cur_offset_x, offset_y, dim, dim);
         if (CheckCollisionPointRec(GetMousePosition(), rect)) {
             item_info = get_text_from_config("item_foyer");
+            item_display_name = item->display_name;
+            set_cursor(CURSOR_INTERACT);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                if (i == game.queried_item)
+                    goto invalid_select;
+                if (i == game.selected_item) 
+                    game.selected_item = ITEM_NONE;
+                else
+                    game.selected_item = i;
+            }
+        invalid_select:
+            if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+                if (i == game.selected_item || item->render_query == NULL)
+                    goto invalid_query;
+                if (i == game.queried_item) 
+                    game.queried_item = ITEM_NONE;
+                else
+                    game.queried_item = i;
+            }
         }
-        offset += 75;
+        invalid_query:
+
+        if (i == game.selected_item)
+            DrawRectangleRec(rect, (Color){255,0,255,120});
+        if (i == game.queried_item)
+            DrawRectangleRec(rect, (Color){100,255,255,120});
+
+        draw_texture_rect(tex, rect);
+        cur_offset_x += 75;
+
+        if (i == game.queried_item) {
+            item->render_query();
+        }
     }
 
-    game.screens[game.current_screen].render_gui();
+    if (game.screens[game.current_screen].render_gui != NULL)
+        game.screens[game.current_screen].render_gui();
     if (get_flag(FLAG_MENU_OVERLAY))
         render_menu_overlay();
 
     if (item_info != NULL) {
-        rect = create_rect(window_width-300, dim, 300, 100);
+        rect = create_rect(offset_x-10, offset_y+dim+10, 300, 30);
+        DrawRectangleRec(rect, BLUE);
+        DrawTextBoxed(get_font_from_config("consolas_16"), item_display_name, rect, 16, 0, true, WHITE);
+        rect = create_rect(offset_x-10, offset_y+dim+40, 300, 100);
         DrawRectangleRec(rect, PURPLE);
-        DrawTextBoxed(get_font_from_config("consolas_32"), item_info, rect, 32, 0, true, WHITE);
+        DrawTextBoxed(get_font_from_config("consolas_16"), item_info, rect, 16, 0, true, WHITE);
         //DrawText(item_info, window_width-300, dim, 20, BLACK);
+    }
+
+    // total width = 960
+    const int TOTAL_WIDTH = 960;
+    if (in_dialogue()) {
+        node = game.dialogue_head;
+        character = &game.characters[node->character];
+
+        tex = get_texture_from_config(character->portrait_texture_name);
+        rect = create_rect((window_width-TOTAL_WIDTH)/2, window_height-220, 200, 200);
+        DrawRectangleRec(rect, ORANGE);
+        draw_texture_rect(tex, rect);
+
+        rect = create_rect((window_width-TOTAL_WIDTH)/2+200, window_height-220, 960-200, 30);
+        DrawRectangleRec(rect, MAROON);
+        DrawTextBoxed(get_font_from_config("consolas_16"), character->display_name, rect, 16, 0, true, WHITE);
+
+        rect = create_rect((window_width-TOTAL_WIDTH)/2+200, window_height-190, 960-200, 170);
+        DrawRectangleRec(rect, DARKGRAY);
+        DrawTextBoxed(get_font_from_config("consolas_16"), node->dialogue, rect, 16, 0, true, WHITE);
+
+        tex = get_texture_from_config("right_arrow");
+        rect = create_rect((window_width-TOTAL_WIDTH)/2+TOTAL_WIDTH-50, window_height-220, 50, 30);
+        draw_texture_rect(tex, rect);
+        mouse_position = GetMousePosition();
+        if (CheckCollisionPointRec(mouse_position, rect)) {
+            set_cursor(CURSOR_INTERACT);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+                advance_dialogue();
+        }
     }
 }
 
@@ -173,18 +296,24 @@ static void render_game_objects(void)
     Texture2D texture = get_texture_from_config(background_texture_name);
     draw_texture(texture, 0, 0, ctx.resolution.x, ctx.resolution.y);
     game.screens[game.current_screen].render();
+    if (game.screens[game.current_screen].render_act[game.act] != NULL)
+        game.screens[game.current_screen].render_act[game.act]();
 }
 
 static void key_callback(void)
 {
-    if (!get_flag(FLAG_IN_MENU) && IsKeyPressed(KEY_ESCAPE)) {
+    if (!get_flag(FLAG_IN_MENU) && IsKeyPressed(KEY_ESCAPE))
         toggle_flag(FLAG_MENU_OVERLAY);
-    }
+    if (IsKeyPressed(KEY_Q))
+        game.queried_item = ITEM_NONE;
 }
 
 void screen_transition(ScreenEnum screen)
 {
+    //timer_set(TIMER_SCREEN_TRANSITION, 1.5);
+    //play_sound("walk");
     game.current_screen = screen;
+    set_flag(FLAG_IN_TRANSITION, true);
 }
 
 void timer_set(TimerEnum timer, float max_value)
@@ -205,8 +334,34 @@ void timer_unset(TimerEnum timer)
     game.timers[timer].done = false;
 }
 
+bool timer_isdone(TimerEnum timer)
+{
+    return game.timers[timer].done;
+}
+
+bool timer_isset(TimerEnum timer)
+{
+    return game.timers[timer].set;
+}
+
+static bool talked_to_all_characters(void)
+{
+    for (FlagEnum i = FLAG_TALKED_TO_BEAR; i <= FLAG_TALKED_TO_OWL; i++)
+        if (!get_flag(i)) 
+            return false;
+    return true;
+}
+
+
 void game_update(float dt)
 {
+    set_flag(FLAG_IN_TRANSITION, false);
+
+    if (!get_flag(FLAG_TALKED_TO_ALL) && talked_to_all_characters()) {
+        set_flag(FLAG_TALKED_TO_ALL, true);
+        create_dialogue(CROW, "I should talk to my father");
+    }
+
     for (int i = 0; i < NUM_TIMERS; i++) {
         if (game.timers[i].active) {
             game.timers[i].value += dt;
@@ -217,6 +372,9 @@ void game_update(float dt)
             }
         }
     }
+
+    if (timer_isdone(TIMER_SCREEN_TRANSITION))
+        timer_unset(TIMER_SCREEN_TRANSITION);
 
     key_callback();
 }
@@ -237,4 +395,13 @@ void game_render_gui(void)
 
 void game_cleanup(void)
 {
+    DialogueNode* next;
+    DialogueNode* cur;
+    cur = game.dialogue_head;
+    while (cur != NULL) {
+        next = cur->next;
+        free(cur);
+        cur = next;
+    }
+
 }

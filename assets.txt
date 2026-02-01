@@ -3,4 +3,5 @@ external assets go here, everything else made by us
 audio
     rain: https://pixabay.com/sound-effects/nature-calming-rain-257596/
     gui sound effects (test.mp3): https://cyrex-studios.itch.io/universal-ui-soundpack
+    walk: https://pixabay.com/sound-effects/film-special-effects-walking-sound-effect-272246/
 

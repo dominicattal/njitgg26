@@ -124,7 +124,8 @@ void DrawTextBoxedSelectable(Font font, const char *text, Rectangle rec, float f
 
             if (wordWrap && (i == endLine))
             {
-                textOffsetY += (font.baseSize + (float)font.baseSize/2)*scaleFactor;
+                //textOffsetY += (font.baseSize + (float)font.baseSize/2)*scaleFactor;
+                textOffsetY += font.baseSize;
                 textOffsetX = 0;
                 startLine = endLine;
                 endLine = -1;
