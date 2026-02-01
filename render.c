@@ -370,50 +370,48 @@ void game_render_init(void)
 {
     game.screens[SCREEN_LIVING_ROOM].background_texture_name = "living_room";
     game.screens[SCREEN_LIVING_ROOM].render = render_living_room;
-    game.screens[SCREEN_LIVING_ROOM].render_gui = render_living_room_gui;
+    //game.screens[SCREEN_LIVING_ROOM].render_gui = render_living_room_gui;
 
     game.screens[SCREEN_FOYER].background_texture_name = "foyer";
     game.screens[SCREEN_FOYER].render = render_foyer;
-    game.screens[SCREEN_FOYER].render_gui = render_foyer_gui;
+    //game.screens[SCREEN_FOYER].render_gui = render_foyer_gui;
 
     game.screens[SCREEN_DINING_ROOM].background_texture_name = "dining";
     game.screens[SCREEN_DINING_ROOM].render = render_dining;
-    game.screens[SCREEN_DINING_ROOM].render_gui = render_dining_gui;
+    //game.screens[SCREEN_DINING_ROOM].render_gui = render_dining_gui;
 
     game.screens[SCREEN_KITCHEN].background_texture_name = "kitchen";
     game.screens[SCREEN_KITCHEN].render = render_kitchen;
-    game.screens[SCREEN_KITCHEN].render_gui = render_kitchen_gui;
+    //game.screens[SCREEN_KITCHEN].render_gui = render_kitchen_gui;
 
     game.screens[SCREEN_BASEMENT].background_texture_name = "basement";
     game.screens[SCREEN_BASEMENT].render = render_basement;
-    game.screens[SCREEN_BASEMENT].render_gui = render_basement_gui;
+    //game.screens[SCREEN_BASEMENT].render_gui = render_basement_gui;
 
     game.screens[SCREEN_MASTER_BEDROOM].background_texture_name = "master_bedroom";
     game.screens[SCREEN_MASTER_BEDROOM].render = render_master_bedroom;
-    game.screens[SCREEN_MASTER_BEDROOM].render_gui = render_master_bedroom_gui;
+    //game.screens[SCREEN_MASTER_BEDROOM].render_gui = render_master_bedroom_gui;
 
     game.screens[SCREEN_HALLWAY].background_texture_name = "hallway";
     game.screens[SCREEN_HALLWAY].render = render_hallway;
-    game.screens[SCREEN_HALLWAY].render_gui = render_hallway_gui;
+    //game.screens[SCREEN_HALLWAY].render_gui = render_hallway_gui;
 
     game.screens[SCREEN_GUEST_BEDROOM].background_texture_name = "guest_bedroom";
     game.screens[SCREEN_GUEST_BEDROOM].render = render_guest_bedroom;
-    game.screens[SCREEN_GUEST_BEDROOM].render_gui = render_guest_bedroom_gui;
+    //game.screens[SCREEN_GUEST_BEDROOM].render_gui = render_guest_bedroom_gui;
 
     game.screens[SCREEN_BATHROOM].background_texture_name = "bathroom";
     game.screens[SCREEN_BATHROOM].render = render_bathroom;
-    game.screens[SCREEN_BATHROOM].render_gui = render_bathroom_gui;
+    //game.screens[SCREEN_BATHROOM].render_gui = render_bathroom_gui;
 
     game.screens[SCREEN_ATTIC].background_texture_name = "attic";
     game.screens[SCREEN_ATTIC].render = render_attic;
-    game.screens[SCREEN_ATTIC].render_gui = render_attic_gui;
+    //game.screens[SCREEN_ATTIC].render_gui = render_attic_gui;
 
     for (int i = 0; i < NUM_SCREENS; i++) {
         if (game.screens[i].background_texture_name == NULL)
             TraceLog(LOG_FATAL, "Missing background texture name for %d screen", i);
         if (game.screens[i].render == NULL)
             TraceLog(LOG_FATAL, "Missing render function for %d screen", i);
-        if (game.screens[i].render_gui == NULL)
-            TraceLog(LOG_FATAL, "Missing render gui function for %d screen", i);
     }
 }

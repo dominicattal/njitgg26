@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -IC:/raylib/raylib/src -LC:/raylib/raylib/src -Wall -Wextra -Werror -Wfatal-errors -std=c11 -lraylib -lopengl32 -lgdi32 -lwinmm -Wno-unused-parameter
+CFLAGS = -IC:/raylib/raylib/src -LC:/raylib/raylib/src -Wall -Wextra -Werror -Wfatal-errors -std=c11 -lraylib -lopengl32 -lgdi32 -lwinmm -Wno-unused-parameter -Wno-unused-function
 SOURCES = main.c \
 		  json.c \
 		  game.c \

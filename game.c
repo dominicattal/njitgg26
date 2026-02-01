@@ -40,13 +40,19 @@ void game_init(void)
     game_render_init();
 
     game.items[ITEM_1].texture_name = "item1";
+    game.items[ITEM_1].display_name = "item1";
     game.items[ITEM_2].texture_name = "item2";
+    game.items[ITEM_2].display_name = "item2";
     game.items[ITEM_3].texture_name = "item3";
+    game.items[ITEM_3].display_name = "item3";
     game.items[ITEM_FOYER].texture_name = "item_foyer";
+    game.items[ITEM_FOYER].display_name = "Foy Cube";
 
     for (int i = 0; i < NUM_ITEMS; i++) {
         if (game.items[i].texture_name == NULL)
             TraceLog(LOG_FATAL, "missing texture name for item %d", i);
+        if (game.items[i].display_name == NULL)
+            TraceLog(LOG_FATAL, "missing display name for item %d", i);
         game.items[i].held = false;
     }
 
@@ -134,35 +140,49 @@ static void render_menu_overlay(void)
 static void render_game_gui(void)
 {
     int i;
-    int offset = 0;
-    int window_width = GetScreenWidth();
+    int offset_x = 35;
+    int cur_offset_x = offset_x;
+    int offset_y = 20;
     int dim = 50;
     Item* item;
     Texture2D tex;
     Rectangle rect;
     char* item_info = NULL;
+    char* item_display_name = NULL;
+    int num_held_items = 0;
+    for (i = 0; i < NUM_ITEMS; i++)
+        if (game.items[i].held)
+            num_held_items++;
+
+    rect = create_rect(offset_x-10, offset_y-10, (num_held_items-1)*75+dim+20, dim+20);
+    DrawRectangleRec(rect, (Color){40,40,40,100});
     for (i = 0; i < NUM_ITEMS; i++) {
         item = &game.items[i];
         if (!item->held) continue;
         tex = get_texture_from_config(item->texture_name);
-        rect = create_rect(window_width-dim-offset, 0, dim, dim);
+        rect = create_rect(cur_offset_x, offset_y, dim, dim);
         //draw_texture(tex, window_width-dim-offset, 0, dim, dim);
         draw_texture_rect(tex, rect);
         // if hovered, display in textbox
         if (CheckCollisionPointRec(GetMousePosition(), rect)) {
             item_info = get_text_from_config("item_foyer");
+            item_display_name = item->display_name;
         }
-        offset += 75;
+        cur_offset_x += 75;
     }
 
-    game.screens[game.current_screen].render_gui();
+    if (game.screens[game.current_screen].render_gui != NULL)
+        game.screens[game.current_screen].render_gui();
     if (get_flag(FLAG_MENU_OVERLAY))
         render_menu_overlay();
 
     if (item_info != NULL) {
-        rect = create_rect(window_width-300, dim, 300, 100);
+        rect = create_rect(offset_x-10, offset_y+dim+10, 300, 30);
+        DrawRectangleRec(rect, BLUE);
+        DrawTextBoxed(get_font_from_config("consolas_16"), item_display_name, rect, 16, 0, true, WHITE);
+        rect = create_rect(offset_x-10, offset_y+dim+40, 300, 100);
         DrawRectangleRec(rect, PURPLE);
-        DrawTextBoxed(get_font_from_config("consolas_32"), item_info, rect, 32, 0, true, WHITE);
+        DrawTextBoxed(get_font_from_config("consolas_16"), item_info, rect, 16, 0, true, WHITE);
         //DrawText(item_info, window_width-300, dim, 20, BLACK);
     }
 }

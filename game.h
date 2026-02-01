@@ -50,6 +50,7 @@ typedef struct Screen {
 } Screen;
 
 typedef struct Item {
+    char* display_name;
     const char* texture_name;
     bool held;
 } Item;

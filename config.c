@@ -143,6 +143,7 @@ Texture2D get_texture_from_config(const char* name)
     int l, r, m, a;
     l = 0;
     r = ctx.num_textures-1;
+    assert(name != NULL);
     while (l <= r) {
         m = l + (r - l) / 2;
         a = strcmp(name, ctx.texture_names[m]);
@@ -153,7 +154,7 @@ Texture2D get_texture_from_config(const char* name)
         else
             return ctx.textures[m];
     }
-    TraceLog(LOG_WARNING, "Could not get id for %s", name);
+    TraceLog(LOG_WARNING, "Could not get texture id for %s", name);
     return get_texture_from_config("placeholder");
 }
 
@@ -162,6 +163,7 @@ Font get_font_from_config(const char* name)
     int l, r, m, a;
     l = 0;
     r = ctx.num_fonts-1;
+    assert(name != NULL);
     while (l <= r) {
         m = l + (r - l) / 2;
         a = strcmp(name, ctx.font_names[m]);
@@ -172,7 +174,7 @@ Font get_font_from_config(const char* name)
         else
             return ctx.fonts[m];
     }
-    TraceLog(LOG_WARNING, "Could not get id for %s, returing default font", name);
+    TraceLog(LOG_WARNING, "Could not get font id for %s, returing default font", name);
     return GetFontDefault();
 }
 
