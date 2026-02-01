@@ -92,6 +92,7 @@ typedef struct GameState {
     Character characters[NUM_CHARACTERS];
     ScreenEnum current_screen;
     ItemEnum selected_item;
+    ItemEnum queried_item;
     DialogueNode* dialogue_head;
     DialogueNode* dialogue_tail;
 } GameState;

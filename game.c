@@ -116,6 +116,7 @@ void game_init(void)
     // setting game state for testing
     set_flag(FLAG_IN_MENU, false);
     game.selected_item = ITEM_NONE;
+    game.queried_item = ITEM_NONE;
 }
 
 static void draw_texture(Texture2D tex, float x, float y, float w, float h)
@@ -139,6 +140,7 @@ static void start_game(void)
         set_flag(flag, false);
 
     game.selected_item = ITEM_NONE;
+    game.queried_item = ITEM_NONE;
 }
 
 static void end_game(void)
@@ -232,16 +234,37 @@ static void render_game_gui(void)
             item_display_name = item->display_name;
             set_cursor(CURSOR_INTERACT);
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                if (i == game.queried_item)
+                    goto invalid_select;
                 if (i == game.selected_item) 
                     game.selected_item = ITEM_NONE;
                 else
                     game.selected_item = i;
             }
+        invalid_select:
+            if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+                if (i == game.selected_item)
+                    goto invalid_query;
+                if (i == game.queried_item) 
+                    game.queried_item = ITEM_NONE;
+                else
+                    game.queried_item = i;
+            }
+        invalid_query:
         }
+
         if (i == game.selected_item)
             DrawRectangleRec(rect, (Color){255,0,255,120});
+        if (i == game.queried_item)
+            DrawRectangleRec(rect, (Color){100,255,255,120});
+
         draw_texture_rect(tex, rect);
         cur_offset_x += 75;
+
+        if (i == game.queried_item) {
+            rect = create_rect((window_width-400)/2, (window_height-400)/2, 400, 400);
+            DrawRectangleRec(rect, (Color){255,100,255,100});
+        }
     }
 
     if (game.screens[game.current_screen].render_gui != NULL)
