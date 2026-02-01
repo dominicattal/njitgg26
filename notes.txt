@@ -9,6 +9,9 @@ tint for screen when menu overlaid
 make item textures pointers instead of searching name
 change cursor color
 stop gif recording
+knocking sound for bathroom door in act 2
+move text into text config since i left some around
+act 2 master bedroom rightmost drawer doesnt have text
 
 title: masquerade macabre
 

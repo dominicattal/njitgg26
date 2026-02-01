@@ -81,6 +81,8 @@ bool in_dialogue(void)
 
 void act_transition(ActEnum act)
 {
+    for (FlagEnum i = TALKED_TO_BEAR; i <= TALKED_TO_OWL; i++)
+        set_flag(i, false);
     game.act = act;
 }
 
@@ -100,11 +102,17 @@ void game_init(void)
     set_flag(IN_MENU, false);
     game.selected_item = ITEM_NONE;
     game.queried_item = ITEM_NONE;
-    set_flag(TALKED_TO_ALL, true);
-    set_flag(TALKED_TO_BEAR, true);
-    set_flag(PICKED_UP_BEAR_THING, true);
-    set_flag(BEAR_NOTE_RESPONSE, true);
-    give_item(ITEM_BEAR_THING);
+
+    // act1 testing
+    // set_flag(TALKED_TO_ALL, true);
+    // set_flag(TALKED_TO_BEAR, true);
+    // set_flag(PICKED_UP_BEAR_THING, true);
+    // set_flag(BEAR_NOTE_RESPONSE, true);
+    // give_item(ITEM_BEAR_THING);
+
+    // act2 testing
+    game.act = ACT2;
+    game.current_screen = SCREEN_DINING_ROOM;
 }
 
 void draw_texture(Texture2D tex, float x, float y, float w, float h)
@@ -401,6 +409,31 @@ static void update_act1(void)
     }
 }
 
+static void update_act2(void)
+{
+    if (!get_flag(FINISHED_BATHROOM_CONVO) && get_flag(KNOCKED_ON_BATHROOM_DOOR) && !in_dialogue()) {
+        set_flag(FINISHED_BATHROOM_CONVO, true);
+    }
+    if (!get_flag(FINISHED_POST_BATHROOM_CONVO) && get_flag(TALKED_TO_BEAR) && !in_dialogue()) {
+        set_flag(FINISHED_POST_BATHROOM_CONVO, true);
+        create_dialogue(FISH, get_text_from_config("fish_hallway_1"));
+        create_dialogue(BEAR, get_text_from_config("bear_hallway_2"));
+    }
+    if (!get_flag(FINISHED_HALLWAY_CONVO) && get_flag(FINISHED_POST_BATHROOM_CONVO) && !in_dialogue()) {
+        set_flag(FINISHED_HALLWAY_CONVO, true);
+    }
+    if (!get_flag(BEAR_WENT_TO_ROOM) 
+        && get_flag(TALKED_TO_BEAR)
+        && get_flag(TALKED_TO_FISH)
+        && get_flag(TALKED_TO_SNAKE)
+        && get_flag(TALKED_TO_OWL)
+        && get_flag(TALKED_TO_CAT)) {
+
+        set_flag(BEAR_WENT_TO_ROOM, true);
+        create_dialogue(BEAR, get_text_from_config("bear_leave_dining"));
+    }
+}
+
 void game_update(float dt)
 {
     set_flag(IN_TRANSITION, false);
@@ -412,6 +445,8 @@ void game_update(float dt)
 
     if (game.act == ACT1)
         update_act1();
+    else if (game.act == ACT2)
+        update_act2();
 
     for (int i = 0; i < NUM_TIMERS; i++) {
         if (game.timers[i].active) {

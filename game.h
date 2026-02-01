@@ -44,8 +44,6 @@ typedef enum FlagEnum {
 
     // flags related to game state
     PICKED_UP_FOYER_ITEM,
-    PICKED_UP_BEAR_NOTE,
-    PICKED_UP_BEAR_THING,
     OPENED_ATTIC_DOOR,
     TALKED_TO_BEAR,
     TALKED_TO_FISH,
@@ -55,8 +53,19 @@ typedef enum FlagEnum {
     TALKED_TO_CAT,
     TALKED_TO_OWL,
     TALKED_TO_ALL,
+
+    // act1 flags
     EXAMINED_BEAR_NOTE,
     BEAR_NOTE_RESPONSE,
+    PICKED_UP_BEAR_NOTE,
+    PICKED_UP_BEAR_THING,
+
+    // act2 flags
+    KNOCKED_ON_BATHROOM_DOOR,
+    FINISHED_BATHROOM_CONVO,
+    FINISHED_POST_BATHROOM_CONVO,
+    FINISHED_HALLWAY_CONVO,
+    BEAR_WENT_TO_ROOM,
 
     NUM_FLAGS
 } FlagEnum;

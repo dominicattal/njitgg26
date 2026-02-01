@@ -12,5 +12,13 @@
     "bear_crow_get_note_1": "Can you get me the thing from my bedroom?",
     "crow_bear_get_note_2": "Of course I can",
     "crow_should_give_thing": "I should give my father the thing he asked for",
-    "bear_receive_thing": "Thanks"
+    "bear_receive_thing": "Thanks",
+    "pig_crow_alcohol_1": "I'm getting wine for the party",
+    "crow_pig_alcohol_2": "sounds good",
+    "fish_wonder_about_bear": "Dinner will start soon, I wonder where your father is",
+    "crow_bear_bathroom_1": "Are you okay father?",
+    "bear_crow_bathroom_2": "Im feeling quite dizzy, but I think I can come out for dinner",
+    "crow_bear_bathroom_3": "I see. Anyways, father, when I was in your room, I fou-",
+    "fish_hallway_1": "There you are! Our guests our waiting, come",
+    "bear_hallway_2": "Coming"
 }

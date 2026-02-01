@@ -52,30 +52,35 @@ void character_init(void)
     game.characters[PIG].display_name = "Pig";
     game.characters[PIG].portrait_texture_name = "pig_portrait";
     game.characters[PIG].texture_name = "pig";
-    game.characters[PIG].width = 220;
-    game.characters[PIG].height = 300;
+    tex = get_texture_from_config(game.characters[PIG].texture_name);
+    game.characters[PIG].width = tex.width;
+    game.characters[PIG].height = tex.height;
 
     game.characters[DOG].display_name = "Dog";
     game.characters[DOG].portrait_texture_name = "dog_portrait";
     game.characters[DOG].texture_name = "dog";
-    game.characters[DOG].width = 220;
-    game.characters[DOG].height = 300;
+    tex = get_texture_from_config(game.characters[DOG].texture_name);
+    game.characters[DOG].width = tex.width;
+    game.characters[DOG].height = tex.height;
 
     game.characters[SNAKE].display_name = "Snake";
     game.characters[SNAKE].portrait_texture_name = "snake_portrait";
     game.characters[SNAKE].texture_name = "snake";
-    game.characters[SNAKE].width = 220;
-    game.characters[SNAKE].height = 300;
+    tex = get_texture_from_config(game.characters[SNAKE].texture_name);
+    game.characters[SNAKE].width = tex.width;
+    game.characters[SNAKE].height = tex.height;
 
     game.characters[CAT].display_name = "Cat";
     game.characters[CAT].portrait_texture_name = "cat_portrait";
     game.characters[CAT].texture_name = "cat";
-    game.characters[CAT].width = 220;
-    game.characters[CAT].height = 300;
+    tex = get_texture_from_config(game.characters[CAT].texture_name);
+    game.characters[CAT].width = tex.width;
+    game.characters[CAT].height = tex.height;
 
     game.characters[OWL].display_name = "Owl";
     game.characters[OWL].portrait_texture_name = "owl_portrait";
     game.characters[OWL].texture_name = "owl";
+    tex = get_texture_from_config(game.characters[OWL].texture_name);
     game.characters[OWL].width = 220;
     game.characters[OWL].height = 300;
 

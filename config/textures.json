@@ -24,5 +24,10 @@
     "item_bear_note": "assets/textures/bear_note.png",
     "item_bear_thing": "assets/textures/bear_thing.png",
     "bearon": "assets/textures/bearon.png",
-    "fish": "assets/textures/fish.png"
+    "fish": "assets/textures/fish.png",
+    "cat": "assets/textures/cat.png",
+    "owl": "assets/textures/owl.png",
+    "dog": "assets/textures/dog.png",
+    "snake": "assets/textures/snake.png",
+    "pig": "assets/textures/pig.png"
 }

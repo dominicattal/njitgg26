@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "game.h"
 #include "main.h"
@@ -113,8 +114,15 @@ static void render_hallway(void)
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-            screen_transition(SCREEN_BATHROOM);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (game.act == ACT2 && !get_flag(KNOCKED_ON_BATHROOM_DOOR)) {
+                set_flag(KNOCKED_ON_BATHROOM_DOOR, true);
+                create_dialogue(CROW, "Is someone in there?");
+                create_dialogue(BEAR, "Be right out");
+            } else {
+                screen_transition(SCREEN_BATHROOM);
+            }
+        }
     }
     hitbox = create_rect2(1670, 250, 1756, 600);
     mouse_position = get_scaled_mouse_position();
@@ -122,10 +130,10 @@ static void render_hallway(void)
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            if (get_flag(TALKED_TO_ALL) && get_flag(TALKED_TO_BEAR))
-                screen_transition(SCREEN_MASTER_BEDROOM);
-            else
+            if ((!get_flag(TALKED_TO_ALL) || !get_flag(TALKED_TO_BEAR)) && game.act == ACT1)
                 create_dialogue(CROW, "I probably shouldn't go into my parent's room");
+            else
+                screen_transition(SCREEN_MASTER_BEDROOM);
         }
     }
     hitbox = create_rect2(730, 1000, 1030, 1080);
@@ -133,8 +141,48 @@ static void render_hallway(void)
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-            screen_transition(SCREEN_FOYER);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (game.act == ACT2) {
+                if (!get_flag(KNOCKED_ON_BATHROOM_DOOR))
+                    create_dialogue(CROW, "I should go find my father");
+                else if (!get_flag(FINISHED_HALLWAY_CONVO))
+                    create_dialogue(CROW, "I should ask my father if he's okay, he doesn't look well");
+                else
+                    screen_transition(SCREEN_FOYER);
+            } else {
+                screen_transition(SCREEN_FOYER);
+            }
+        }
+    }
+}
+
+static void render_hallway_act2(void)
+{
+    Rectangle hitbox;
+    Vector2 mouse_position = get_scaled_mouse_position();
+    if (get_flag(FINISHED_BATHROOM_CONVO) && !get_flag(FINISHED_HALLWAY_CONVO)) {
+        hitbox = render_character(BEAR, 681, 469);
+        if (check_collision_and_valid(mouse_position, hitbox)) {
+            set_cursor(CURSOR_INTERACT);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                set_flag(TALKED_TO_BEAR, true);
+                create_dialogue(CROW, get_text_from_config("crow_bear_bathroom_1"));
+                create_dialogue(BEAR, get_text_from_config("bear_crow_bathroom_2"));
+                create_dialogue(CROW, get_text_from_config("crow_bear_bathroom_3"));
+            }
+        }
+    }
+    if (get_flag(FINISHED_POST_BATHROOM_CONVO) && !get_flag(FINISHED_HALLWAY_CONVO)) {
+        hitbox = render_character(FISH, 1276, 829);
+        if (check_collision_and_valid(mouse_position, hitbox)) {
+            set_cursor(CURSOR_INTERACT);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                set_flag(TALKED_TO_FISH, true);
+                create_dialogue(CROW, get_text_from_config("crow_bear_bathroom_1"));
+                create_dialogue(BEAR, get_text_from_config("bear_crow_bathroom_2"));
+                create_dialogue(CROW, get_text_from_config("crow_bear_bathroom_3"));
+            }
+        }
     }
 }
 
@@ -149,10 +197,10 @@ static void render_master_bedroom(void)
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            if (get_flag(PICKED_UP_BEAR_THING)) {
-                screen_transition(SCREEN_HALLWAY);
-            } else {
+            if (game.act == ACT1 && !get_flag(PICKED_UP_BEAR_THING)) {
                 create_dialogue(CROW, get_text_from_config("crow_try_leave_master_bedroom"));
+            } else {
+                screen_transition(SCREEN_HALLWAY);
             }
         }
     }
@@ -189,15 +237,17 @@ static void render_master_bedroom(void)
     if (check_collision_and_valid(mouse_position, hitbox2)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            if (!get_flag(PICKED_UP_BEAR_NOTE)) {
-                set_flag(PICKED_UP_BEAR_NOTE, true);
-                give_item(ITEM_BEAR_NOTE);
-                create_dialogue(CROW, get_text_from_config("pickup_note"));
-            } else if (!get_flag(BEAR_NOTE_RESPONSE)) {
-                create_dialogue(CROW, get_text_from_config("should_examine_note"));
-            } else if (!get_flag(PICKED_UP_BEAR_THING)) {
-                set_flag(PICKED_UP_BEAR_THING, true);
-                give_item(ITEM_BEAR_THING);
+            if (game.act == ACT1) {
+                if (!get_flag(PICKED_UP_BEAR_NOTE)) {
+                    set_flag(PICKED_UP_BEAR_NOTE, true);
+                    give_item(ITEM_BEAR_NOTE);
+                    create_dialogue(CROW, get_text_from_config("pickup_note"));
+                } else if (!get_flag(BEAR_NOTE_RESPONSE)) {
+                    create_dialogue(CROW, get_text_from_config("should_examine_note"));
+                } else if (!get_flag(PICKED_UP_BEAR_THING)) {
+                    set_flag(PICKED_UP_BEAR_THING, true);
+                    give_item(ITEM_BEAR_THING);
+                }
             }
         }
     }
@@ -248,6 +298,21 @@ static void render_basement(void)
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_KITCHEN);
+    }
+}
+
+static void render_basement_act2(void)
+{
+    Rectangle hitbox;
+    Vector2 mouse_position = get_scaled_mouse_position();
+    hitbox = render_character(PIG, 1530, 710);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            set_flag(TALKED_TO_PIG, true);
+            create_dialogue(PIG, get_text_from_config("pig_crow_alcohol_1"));
+            create_dialogue(CROW, get_text_from_config("crow_pig_alcohol_2"));
+        }
     }
 }
 
@@ -303,16 +368,106 @@ static void render_dining(void)
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-            screen_transition(SCREEN_KITCHEN);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (game.act == ACT2) {
+                if (get_flag(FINISHED_HALLWAY_CONVO) && !get_flag(BEAR_WENT_TO_ROOM))
+                    create_dialogue(CROW, get_text_from_config("shouldnt_exit_dining"));
+                else
+                    screen_transition(SCREEN_KITCHEN);
+            } else {
+                screen_transition(SCREEN_KITCHEN);
+            }
+        }
     }
     hitbox = create_rect2(13, 391, 186, 682);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-            screen_transition(SCREEN_LIVING_ROOM);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (game.act == ACT2) {
+                if (get_flag(FINISHED_HALLWAY_CONVO) && !get_flag(BEAR_WENT_TO_ROOM))
+                    create_dialogue(CROW, get_text_from_config("shouldnt_exit_dining"));
+                else
+                    screen_transition(SCREEN_LIVING_ROOM);
+            } else {
+                screen_transition(SCREEN_LIVING_ROOM);
+            }
+        }
+    }
+}
+
+static void render_dining_act2(void)
+{
+    Rectangle hitbox;
+    Vector2 mouse_position = get_scaled_mouse_position();
+    int y = 871;
+    hitbox = render_character(SNAKE, 900, y);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (get_flag(FINISHED_HALLWAY_CONVO)) {
+                create_dialogue(SNAKE, get_text_from_config("snake_dining"));
+                set_flag(TALKED_TO_SNAKE, true);
+            }
+        }
+    }
+    hitbox = render_character(CAT, 1200, y);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (get_flag(FINISHED_HALLWAY_CONVO)) {
+                create_dialogue(CAT, get_text_from_config("cat_dining"));
+                set_flag(TALKED_TO_CAT, true);
+            }
+        }
+    }
+    hitbox = render_character(OWL, 1500, y);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (get_flag(FINISHED_HALLWAY_CONVO)) {
+                create_dialogue(OWL, get_text_from_config("owl_dining"));
+                set_flag(TALKED_TO_OWL, true);
+            }
+        }
+    }
+    hitbox = render_character(DOG, 1634, 554);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (get_flag(FINISHED_HALLWAY_CONVO)) {
+                create_dialogue(DOG, get_text_from_config("dog_dining"));
+                set_flag(TALKED_TO_DOG, true);
+            }
+        }
+    }
+    if (!get_flag(FINISHED_HALLWAY_CONVO)) {
+        hitbox = render_character(FISH, 436, 868);
+        if (check_collision_and_valid(mouse_position, hitbox)) {
+            set_cursor(CURSOR_INTERACT);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                //set_flag(TALKED_TO_FISH, true);
+                create_dialogue(FISH, get_text_from_config("fish_wonder_about_bear"));
+            }
+        }
+    } else {
+        hitbox = render_character(FISH, 570, y);
+        if (check_collision_and_valid(mouse_position, hitbox)) {
+            set_cursor(CURSOR_INTERACT);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                create_dialogue(FISH, get_text_from_config("fish_dining_1"));
+                set_flag(TALKED_TO_FISH, true);
+            }
+        }
+        hitbox = render_character(BEAR, 340, y);
+        if (check_collision_and_valid(mouse_position, hitbox)) {
+            set_cursor(CURSOR_INTERACT);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                create_dialogue(BEAR, get_text_from_config("bear_dining_1"));
+                set_flag(TALKED_TO_BEAR, true);
+            }
+        }
     }
 }
 
@@ -428,6 +583,12 @@ static void render_living_room(void)
             create_dialogue(CROW, get_text_from_config("filler_book1"));
         }
     }
+}
+
+void render_living_room_act1(void)
+{
+    Rectangle hitbox;
+    Vector2 mouse_position = get_scaled_mouse_position();
     hitbox = render_character(DOG, 1507, 585);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
@@ -460,6 +621,7 @@ void screen_init(void)
 {
     game.screens[SCREEN_LIVING_ROOM].background_texture_name = "living_room";
     game.screens[SCREEN_LIVING_ROOM].render = render_living_room;
+    game.screens[SCREEN_LIVING_ROOM].render_act[ACT1] = render_living_room_act1;
 
     game.screens[SCREEN_FOYER].background_texture_name = "foyer";
     game.screens[SCREEN_FOYER].render = render_foyer;
@@ -467,6 +629,7 @@ void screen_init(void)
 
     game.screens[SCREEN_DINING_ROOM].background_texture_name = "dining";
     game.screens[SCREEN_DINING_ROOM].render = render_dining;
+    game.screens[SCREEN_DINING_ROOM].render_act[ACT2] = render_dining_act2;
 
     game.screens[SCREEN_KITCHEN].background_texture_name = "kitchen";
     game.screens[SCREEN_KITCHEN].render = render_kitchen;
@@ -474,12 +637,14 @@ void screen_init(void)
 
     game.screens[SCREEN_BASEMENT].background_texture_name = "basement";
     game.screens[SCREEN_BASEMENT].render = render_basement;
+    game.screens[SCREEN_BASEMENT].render_act[ACT2] = render_basement_act2;
 
     game.screens[SCREEN_MASTER_BEDROOM].background_texture_name = "master_bedroom";
     game.screens[SCREEN_MASTER_BEDROOM].render = render_master_bedroom;
 
     game.screens[SCREEN_HALLWAY].background_texture_name = "hallway";
     game.screens[SCREEN_HALLWAY].render = render_hallway;
+    game.screens[SCREEN_HALLWAY].render_act[ACT2] = render_hallway_act2;
 
     game.screens[SCREEN_GUEST_BEDROOM].background_texture_name = "guest_bedroom";
     game.screens[SCREEN_GUEST_BEDROOM].render = render_guest_bedroom;
