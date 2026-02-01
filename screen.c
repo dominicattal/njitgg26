@@ -6,10 +6,12 @@
 #define ROOM_HITBOX_COLOR ((Color){255,255,0,100})
 #define ITEM_HITBOX_COLOR ((Color){255,0,255,100})
 #define CHARACTER_HITBOX_COLOR ((Color){0,255,255,100})
+#define MISC_HITBOX_COLOR ((Color){255,0,0,100})
 
 static bool check_collision_and_not_dialogue(Vector2 pos, Rectangle rect)
 {
     if (in_dialogue()) return false;
+    if (game.queried_item != ITEM_NONE) return false;
     return CheckCollisionPointRec(pos, rect);
 }
 
@@ -97,14 +99,6 @@ static void render_master_bedroom(void)
 {
     Rectangle hitbox;
     Vector2 mouse_position;
-    hitbox = create_rect2(202, 418, 450, 700);
-    mouse_position = get_scaled_mouse_position();
-    DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
-        set_cursor(CURSOR_INTERACT);
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-            screen_transition(SCREEN_ATTIC);
-    }
     hitbox = create_rect2(450, 1000, 750, 1080);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
@@ -112,6 +106,28 @@ static void render_master_bedroom(void)
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_HALLWAY);
+    }
+    hitbox = create_rect2(202, 418, 450, 700);
+    if (get_flag(FLAG_OPENED_ATTIC_DOOR)) {
+        mouse_position = get_scaled_mouse_position();
+        DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
+        if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+            set_cursor(CURSOR_INTERACT);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+                screen_transition(SCREEN_ATTIC);
+        }
+    } else {
+        mouse_position = get_scaled_mouse_position();
+        DrawRectangleRec(hitbox, MISC_HITBOX_COLOR);
+        if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+            set_cursor(CURSOR_INTERACT);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                if (selected_item(ITEM_FOYER)) {
+                    set_flag(FLAG_OPENED_ATTIC_DOOR, true);
+                    take_item(ITEM_FOYER);
+                }
+            }
+        }
     }
 }
 
@@ -385,7 +401,7 @@ static void render_living_room_gui(void)
     }
 }
 
-void game_render_init(void)
+void screen_init(void)
 {
     game.screens[SCREEN_LIVING_ROOM].background_texture_name = "living_room";
     game.screens[SCREEN_LIVING_ROOM].render = render_living_room;

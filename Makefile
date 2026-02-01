@@ -4,7 +4,8 @@ SOURCES = main.c \
 		  json.c \
 		  game.c \
 		  gui.c \
-		  render.c \
+		  screen.c \
+		  item.c \
 		  raygui.c \
 		  config.c
 

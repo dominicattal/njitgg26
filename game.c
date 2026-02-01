@@ -33,6 +33,16 @@ void take_item(ItemEnum item)
     game.items[item].held = false;
 }
 
+bool has_item(ItemEnum item)
+{
+    return game.items[item].held;
+}
+
+bool selected_item(ItemEnum item)
+{
+    return game.selected_item == item;
+}
+
 char* character_display_name(CharacterEnum character)
 {
     return game.characters[character].display_name;
@@ -76,24 +86,8 @@ void game_init(void)
     game.dialogue_head = NULL;
     game.dialogue_tail = NULL;
 
-    game_render_init();
-
-    game.items[ITEM_1].texture_name = "item1";
-    game.items[ITEM_1].display_name = "item1";
-    game.items[ITEM_2].texture_name = "item2";
-    game.items[ITEM_2].display_name = "item2";
-    game.items[ITEM_3].texture_name = "item3";
-    game.items[ITEM_3].display_name = "item3";
-    game.items[ITEM_FOYER].texture_name = "item_foyer";
-    game.items[ITEM_FOYER].display_name = "Foy Cube";
-
-    for (int i = 0; i < NUM_ITEMS; i++) {
-        if (game.items[i].texture_name == NULL)
-            TraceLog(LOG_FATAL, "missing texture name for item %d", i);
-        if (game.items[i].display_name == NULL)
-            TraceLog(LOG_FATAL, "missing display name for item %d", i);
-        game.items[i].held = false;
-    }
+    screen_init();
+    item_init();
 
     game.characters[PLAYER].display_name = "Player";
     game.characters[PLAYER].portrait_texture_name = "player_portrait";
@@ -141,6 +135,7 @@ static void start_game(void)
 
     game.selected_item = ITEM_NONE;
     game.queried_item = ITEM_NONE;
+    game.act = ACT1;
 }
 
 static void end_game(void)
@@ -243,15 +238,15 @@ static void render_game_gui(void)
             }
         invalid_select:
             if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-                if (i == game.selected_item)
+                if (i == game.selected_item || item->render_query == NULL)
                     goto invalid_query;
                 if (i == game.queried_item) 
                     game.queried_item = ITEM_NONE;
                 else
                     game.queried_item = i;
             }
-        invalid_query:
         }
+        invalid_query:
 
         if (i == game.selected_item)
             DrawRectangleRec(rect, (Color){255,0,255,120});
@@ -262,8 +257,7 @@ static void render_game_gui(void)
         cur_offset_x += 75;
 
         if (i == game.queried_item) {
-            rect = create_rect((window_width-400)/2, (window_height-400)/2, 400, 400);
-            DrawRectangleRec(rect, (Color){255,100,255,100});
+            item->render_query();
         }
     }
 
@@ -319,13 +313,16 @@ static void render_game_objects(void)
     Texture2D texture = get_texture_from_config(background_texture_name);
     draw_texture(texture, 0, 0, ctx.resolution.x, ctx.resolution.y);
     game.screens[game.current_screen].render();
+    if (game.screens[game.current_screen].render_act[game.act] != NULL)
+        game.screens[game.current_screen].render_act[game.act]();
 }
 
 static void key_callback(void)
 {
-    if (!get_flag(FLAG_IN_MENU) && IsKeyPressed(KEY_ESCAPE)) {
+    if (!get_flag(FLAG_IN_MENU) && IsKeyPressed(KEY_ESCAPE))
         toggle_flag(FLAG_MENU_OVERLAY);
-    }
+    if (IsKeyPressed(KEY_Q))
+        game.queried_item = ITEM_NONE;
 }
 
 void screen_transition(ScreenEnum screen)

@@ -5,6 +5,7 @@
 
 typedef void (*ScreenRenderFuncPtr)(void);
 typedef void (*ScreenRenderGuiFuncPtr)(void);
+typedef void (*ItemRenderQueryFuncPtr)(void);
 
 typedef enum ScreenEnum {
     SCREEN_LIVING_ROOM,
@@ -40,6 +41,7 @@ typedef enum FlagEnum {
 
     // flags related to game state
     FLAG_PICKED_UP_FOYER_ITEM,
+    FLAG_OPENED_ATTIC_DOOR,
 
     NUM_FLAGS
 } FlagEnum;
@@ -51,13 +53,22 @@ typedef enum CharacterEnum {
     NO_CHARACTER
 } CharacterEnum;
 
+typedef enum ActEnum {
+    ACT1,
+    ACT2,
+    ACT3,
+    NUM_ACTS
+} ActEnum;
+
 typedef struct Screen {
     ScreenRenderFuncPtr render;
     ScreenRenderGuiFuncPtr render_gui;
+    ScreenRenderFuncPtr render_act[NUM_ACTS];
     char* background_texture_name;
 } Screen;
 
 typedef struct Item {
+    ItemRenderQueryFuncPtr render_query;
     char* display_name;
     char* texture_name;
     bool held;
@@ -95,17 +106,21 @@ typedef struct GameState {
     ItemEnum queried_item;
     DialogueNode* dialogue_head;
     DialogueNode* dialogue_tail;
+    ActEnum act;
 } GameState;
 
 extern GameState game;
 
 void game_init(void);
-void game_render_init(void);
 void game_update(float dt);
 void game_render(void);
 void game_render_gui(void);
 void game_cleanup(void);
+
+void screen_init(void);
 void screen_transition(ScreenEnum screen);
+
+void item_init(void);
 
 void timer_set(TimerEnum timer, float max_value);
 void timer_unset(TimerEnum timer);
@@ -116,6 +131,8 @@ bool get_flag(FlagEnum flag);
 
 void give_item(ItemEnum item);
 void take_item(ItemEnum item);
+bool has_item(ItemEnum item);
+bool selected_item(ItemEnum item);
 
 char* character_display_name(CharacterEnum character);
 
