@@ -52,18 +52,26 @@ void character_init(void)
     game.characters[DOG].display_name = "Dog";
     game.characters[DOG].portrait_texture_name = "dog_portrait";
     game.characters[DOG].texture_name = "dog";
+    game.characters[DOG].width = 220;
+    game.characters[DOG].height = 300;
 
     game.characters[SNAKE].display_name = "Snake";
     game.characters[SNAKE].portrait_texture_name = "snake_portrait";
     game.characters[SNAKE].texture_name = "snake";
+    game.characters[SNAKE].width = 220;
+    game.characters[SNAKE].height = 300;
 
     game.characters[CAT].display_name = "Cat";
     game.characters[CAT].portrait_texture_name = "cat_portrait";
     game.characters[CAT].texture_name = "cat";
+    game.characters[CAT].width = 220;
+    game.characters[CAT].height = 300;
 
     game.characters[OWL].display_name = "Owl";
     game.characters[OWL].portrait_texture_name = "owl_portrait";
     game.characters[OWL].texture_name = "owl";
+    game.characters[OWL].width = 220;
+    game.characters[OWL].height = 300;
 
     for (int i = 0; i < NUM_CHARACTERS; i++) {
         if (game.characters[i].texture_name == NULL)

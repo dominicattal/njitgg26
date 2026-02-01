@@ -13,6 +13,7 @@ static bool check_collision_and_valid(Vector2 pos, Rectangle rect)
 {
     if (in_dialogue()) return false;
     if (game.queried_item != ITEM_NONE) return false;
+    if (get_flag(FLAG_IN_TRANSITION)) return false;
     //if (timer_isset(TIMER_SCREEN_TRANSITION)) return false;
     return CheckCollisionPointRec(pos, rect);
 }
@@ -285,7 +286,7 @@ static void render_foyer_act1(void)
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            create_dialogue(BEAR, get_text_from_config("crow_bear_intro_1"));
+            create_dialogue(BEAR, get_text_from_config("bear_crow_intro_1"));
             create_dialogue(CROW, get_text_from_config("crow_bear_intro_2"));
         }
     }
@@ -293,8 +294,16 @@ static void render_foyer_act1(void)
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            create_dialogue(FISH, get_text_from_config("crow_fish_intro_1"));
+            create_dialogue(FISH, get_text_from_config("fish_crow_intro_1"));
             create_dialogue(CROW, get_text_from_config("crow_fish_intro_2"));
+        }
+    }
+    hitbox = render_character(OWL, 427, 881);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            create_dialogue(CROW, get_text_from_config("crow_owl_intro_1"));
+            create_dialogue(OWL, get_text_from_config("owl_crow_intro_2"));
         }
     }
 }
@@ -302,9 +311,8 @@ static void render_foyer_act1(void)
 static void render_living_room(void)
 {
     Rectangle hitbox;
-    Vector2 mouse_position;
+    Vector2 mouse_position = get_scaled_mouse_position();
     hitbox = create_rect2(112, 185, 381, 483);
-    mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
@@ -312,12 +320,42 @@ static void render_living_room(void)
             screen_transition(SCREEN_FOYER);
     }
     hitbox = create_rect2(1700, 330, 1792, 798);
-    mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_DINING_ROOM);
+    }
+    hitbox = create_rect2(371, 133, 666, 520);
+    DrawRectangleRec(hitbox, MISC_HITBOX_COLOR);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            create_dialogue(CROW, get_text_from_config("filler_book1"));
+        }
+    }
+    hitbox = render_character(DOG, 1507, 585);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            create_dialogue(DOG, get_text_from_config("dog_crow_intro_1"));
+        }
+    }
+    hitbox = render_character(SNAKE, 728, 571);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            create_dialogue(CROW, get_text_from_config("crow_snake_intro_1"));
+            create_dialogue(SNAKE, get_text_from_config("snake_crow_intro_2"));
+        }
+    }
+    hitbox = render_character(CAT, 1054, 588);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            create_dialogue(CROW, get_text_from_config("crow_cat_intro_1"));
+            create_dialogue(CAT, get_text_from_config("crow_cat_intro_2"));
+        }
     }
 }
 

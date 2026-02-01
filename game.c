@@ -313,6 +313,7 @@ void screen_transition(ScreenEnum screen)
     //timer_set(TIMER_SCREEN_TRANSITION, 1.5);
     //play_sound("walk");
     game.current_screen = screen;
+    set_flag(FLAG_IN_TRANSITION, true);
 }
 
 void timer_set(TimerEnum timer, float max_value)
@@ -345,6 +346,8 @@ bool timer_isset(TimerEnum timer)
 
 void game_update(float dt)
 {
+    set_flag(FLAG_IN_TRANSITION, false);
+
     for (int i = 0; i < NUM_TIMERS; i++) {
         if (game.timers[i].active) {
             game.timers[i].value += dt;

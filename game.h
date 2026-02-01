@@ -41,6 +41,7 @@ typedef enum TimerEnum {
 typedef enum FlagEnum {
     FLAG_IN_MENU,
     FLAG_MENU_OVERLAY,
+    FLAG_IN_TRANSITION,
 
     // flags related to game state
     FLAG_PICKED_UP_FOYER_ITEM,
@@ -50,8 +51,8 @@ typedef enum FlagEnum {
 } FlagEnum;
 
 typedef enum CharacterEnum {
-    BEAR,
     CROW,
+    BEAR,
     FISH,
     PIG,
     DOG,
