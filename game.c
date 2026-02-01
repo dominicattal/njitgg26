@@ -111,16 +111,21 @@ void game_init(void)
     // give_item(ITEM_BEAR_THING);
 
     // act2 testing
-    game.act = ACT2;
-    //game.current_screen = SCREEN_HALLWAY;
-    //set_flag(KNOCKED_ON_BATHROOM_DOOR,true);
-    //set_flag(FINISHED_BATHROOM_CONVO,true);
-    //set_flag(FINISHED_POST_BATHROOM_CONVO,true);
-    //set_flag(FINISHED_HALLWAY_CONVO,true);
-    //set_flag(BEAR_ANNOUNCEMENT,true);
-    //set_flag(BEAR_WENT_TO_ROOM,true);
-    //set_flag(FISH_ANNOUNCEMENT,true);
-    //set_flag(FISH_WENT_TO_ROOM, true);
+    // game.act = ACT2;
+    // game.current_screen = SCREEN_HALLWAY;
+    // set_flag(KNOCKED_ON_BATHROOM_DOOR,true);
+    // set_flag(FINISHED_BATHROOM_CONVO,true);
+    // set_flag(FINISHED_POST_BATHROOM_CONVO,true);
+    // set_flag(FINISHED_HALLWAY_CONVO,true);
+    // set_flag(BEAR_ANNOUNCEMENT,true);
+    // set_flag(BEAR_WENT_TO_ROOM,true);
+    // set_flag(FISH_ANNOUNCEMENT,true);
+    // set_flag(FISH_WENT_TO_ROOM, true);
+
+    // act3 testing
+    game.act = ACT3;
+    //game.current_screen = SCREEN_LIVING_ROOM;
+    game.current_screen = NO_SCREEN;
 }
 
 void draw_texture(Texture2D tex, float x, float y, float w, float h)
@@ -160,6 +165,16 @@ Rectangle hitbox_from_hitbox(Rectangle hitbox, float x1, float y1, float x2, flo
 
 static void start_game(void)
 {
+    DialogueNode* next;
+    DialogueNode* cur;
+    cur = game.dialogue_head;
+    while (cur != NULL) {
+        next = cur->next;
+        free(cur);
+        cur = next;
+    }
+    game.dialogue_head = NULL;
+
     for (int flag = 0; flag < NUM_FLAGS; flag++)
         set_flag(flag, false);
 
@@ -243,6 +258,8 @@ static void render_game_gui(void)
     Character* character;
     Vector2 mouse_position;
 
+    mouse_position = GetMousePosition();
+
     for (i = 0; i < NUM_ITEMS; i++)
         if (game.items[i].held)
             num_held_items++;
@@ -280,7 +297,7 @@ static void render_game_gui(void)
 
         if (i == game.selected_item)
             DrawRectangleRec(rect, (Color){255,0,255,120});
-        if (i == game.queried_item)
+        if (i == game.queried_item && !get_flag(BLAMING))
             DrawRectangleRec(rect, (Color){100,255,255,120});
 
         draw_texture_rect(tex, rect);
@@ -293,6 +310,7 @@ static void render_game_gui(void)
 
     if (game.screens[game.current_screen].render_gui != NULL)
         game.screens[game.current_screen].render_gui();
+
     if (get_flag(MENU_OVERLAY))
         render_menu_overlay();
 
@@ -328,17 +346,92 @@ static void render_game_gui(void)
         tex = get_texture_from_config("right_arrow");
         rect = create_rect((window_width-TOTAL_WIDTH)/2+TOTAL_WIDTH-50, window_height-220, 50, 30);
         draw_texture_rect(tex, rect);
-        mouse_position = GetMousePosition();
         if (CheckCollisionPointRec(mouse_position, rect)) {
             set_cursor(CURSOR_INTERACT);
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
                 advance_dialogue();
         }
     }
+
+    Vector2 pos;
+    char buf[128];
+    if (game.act == ACT3 && game.current_screen == SCREEN_LIVING_ROOM) {
+        if (get_flag(BLAMING) && game.blamed_character != NO_CHARACTER) {
+            pos = (Vector2) {(window_width-400)/2, 100};
+            rect = create_rect((window_width-400)/2, 100, 400, 100);
+            sprintf(buf, "Blame the %s?", game.characters[game.blamed_character].display_name);
+            DrawRectangleRec(rect, BROWN);
+            DrawTextEx(get_font_from_config("consolas_32"), buf, pos, 32, 0, BLACK);
+            rect = create_rect((window_width-400)/2, 150, 100, 40);
+            DrawRectangleRec(rect, GREEN);
+            pos = (Vector2) {(window_width-400)/2, 150};
+            DrawTextEx(get_font_from_config("consolas_32"), "YES", pos, 32, 0, BLACK);
+            if (CheckCollisionPointRec(mouse_position, rect)) {
+                set_cursor(CURSOR_INTERACT);
+                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    game.blamed_character = NO_CHARACTER;
+                    set_flag(BLAMING, false);
+                }
+            }
+            rect = create_rect((window_width-400)/2+120, 150, 100, 40);
+            DrawRectangleRec(rect, RED);
+            pos = (Vector2) {(window_width-400)/2+120, 150};
+            DrawTextEx(get_font_from_config("consolas_32"), "NO", pos, 32, 0, BLACK);
+            if (CheckCollisionPointRec(mouse_position, rect)) {
+                set_cursor(CURSOR_INTERACT);
+                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                    game.blamed_character = NO_CHARACTER;
+                    set_flag(BLAMING, false);
+                }
+            }
+        }
+        pos = (Vector2) { window_width-200, 10 };
+        rect = create_rect(window_width-200, 10, 190, 40);
+        if (get_flag(BLAMING))
+            DrawRectangleRec(rect, GOLD);
+        else
+            DrawRectangleRec(rect, RED);
+        DrawTextEx(get_font_from_config("consolas_32"), "BLAME", pos, 32, 0, BLACK);
+        if (check_collision_and_valid(mouse_position, rect)) {
+            set_cursor(CURSOR_INTERACT);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                game.blamed_character = NO_CHARACTER;
+                toggle_flag(BLAMING);
+            }
+        }
+    }
+}
+
+static void render_game_over(void)
+{
+    int window_width = GetScreenWidth();
+    int window_height = GetScreenHeight();
+    int size_x = 400;
+    int size_y = 100;
+    char buf[100];
+    Vector2 pos = {(window_width-size_x)/2, (window_height-size_y)/2};
+    game.blamed_character = PIG;
+    if (game.blamed_character == SNAKE)
+        sprintf(buf, "Snake was the killer");
+    else
+        sprintf(buf, "%s was not the killer", game.characters[game.blamed_character].display_name);
+    DrawTextEx(get_font_from_config("consolas_32"), buf, pos, 32, 0, BLACK);
+    pos.y += 100;
+    Rectangle rect = create_rect(pos.x, pos.y, 100, 40);
+    DrawRectangleRec(rect, GOLD);
+    DrawTextEx(get_font_from_config("consolas_32"), "Back to menu", pos, 32, 0, BLACK);
+    Vector2 mouse_position = GetMousePosition();
+    if (CheckCollisionPointRec(mouse_position, rect)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            set_flag(IN_MENU, true);
+        }
+    }
 }
 
 static void render_game_objects(void)
 {
+    if (game.current_screen == NO_SCREEN) return;
     const char* background_texture_name = game.screens[game.current_screen].background_texture_name;
     Texture2D texture = get_texture_from_config(background_texture_name);
     draw_texture(texture, 0, 0, ctx.resolution.x, ctx.resolution.y);
@@ -462,6 +555,19 @@ static void update_act2(void)
     }
 }
 
+static void update_act3(void)
+{
+    if (!get_flag(CONFRONTATION)) {
+        set_flag(CONFRONTATION, true);
+        create_dialogue(CROW, get_text_from_config("confrontation_1"));
+    }
+    if (!get_flag(DOG_GIVE_ATTIC_KEY) && get_flag(CONFRONTATION) && !in_dialogue()) {
+        create_dialogue(DOG, get_text_from_config("dog_give_key"));
+        give_item(ITEM_ATTIC_KEY);
+        set_flag(DOG_GIVE_ATTIC_KEY, true);
+    }
+}
+
 void game_update(float dt)
 {
     set_flag(IN_TRANSITION, false);
@@ -475,6 +581,8 @@ void game_update(float dt)
         update_act1();
     else if (game.act == ACT2)
         update_act2();
+    else if (game.act == ACT3)
+        update_act3();
 
     for (int i = 0; i < NUM_TIMERS; i++) {
         if (game.timers[i].active) {
@@ -503,8 +611,11 @@ void game_render_gui(void)
 {
     if (get_flag(IN_MENU))
         render_menu_gui();
-    else
+    else if (game.current_screen != NO_SCREEN)
         render_game_gui();
+    else {
+        render_game_over();
+    }
 }
 
 void game_cleanup(void)
@@ -517,5 +628,4 @@ void game_cleanup(void)
         free(cur);
         cur = next;
     }
-
 }

@@ -37,6 +37,22 @@ void item_init(void)
     game.items[ITEM_BEAR_THING].texture_name = "item_bear_thing";
     game.items[ITEM_BEAR_THING].display_name = "Bear Thing";
 
+    game.items[ITEM_KNIFE].texture_name = "item_knife";
+    game.items[ITEM_KNIFE].display_name = "Knife";
+    //game.items[ITEM_KNIFE].render_query = render_item_bear_note;
+
+    game.items[ITEM_NEWSPAPER].texture_name = "item_newspaper";
+    game.items[ITEM_NEWSPAPER].display_name = "Note";
+    //game.items[ITEM_NEWSPAPER].render_query = render_item_bear_note;
+
+    game.items[ITEM_DEED].texture_name = "item_deed";
+    game.items[ITEM_DEED].display_name = "Deed";
+    //game.items[ITEM_DEED].render_query = render_item_bear_note;
+
+    game.items[ITEM_ATTIC_KEY].texture_name = "item_attic_key";
+    game.items[ITEM_ATTIC_KEY].display_name = "Attic Key";
+    //game.items[ITEM_ATTIC_KEY].render_query = render_item_bear_note;
+
     for (int i = 0; i < NUM_ITEMS; i++) {
         if (game.items[i].texture_name == NULL)
             TraceLog(LOG_FATAL, "missing texture name for item %d", i);

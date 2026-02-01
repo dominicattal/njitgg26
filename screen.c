@@ -10,7 +10,7 @@
 #define CHARACTER_HITBOX_COLOR ((Color){0,255,255,100})
 #define MISC_HITBOX_COLOR ((Color){255,0,0,100})
 
-static bool check_collision_and_valid(Vector2 pos, Rectangle rect)
+bool check_collision_and_valid(Vector2 pos, Rectangle rect)
 {
     if (in_dialogue()) return false;
     if (game.queried_item != ITEM_NONE) return false;
@@ -284,7 +284,7 @@ static void render_master_bedroom(void)
         if (check_collision_and_valid(mouse_position, hitbox)) {
             set_cursor(CURSOR_INTERACT);
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                if (selected_item(ITEM_FOYER)) {
+                if (selected_item(ITEM_ATTIC_KEY)) {
                     set_flag(OPENED_ATTIC_DOOR, true);
                     take_item(ITEM_FOYER);
                 } else {
@@ -377,6 +377,18 @@ static void render_kitchen(void)
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_DINING_ROOM);
+    }
+    if (!get_flag(PICKED_UP_KNIFE)) {
+        hitbox = create_rect2(476, 214, 612, 318);
+        DrawRectangleRec(hitbox, MISC_HITBOX_COLOR);
+        if (check_collision_and_valid(mouse_position, hitbox)) {
+            set_cursor(CURSOR_INTERACT);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                give_item(ITEM_KNIFE);
+                set_flag(PICKED_UP_KNIFE, true);
+                create_dialogue(CROW, get_text_from_config("crow_find_knife"));
+            }
+        }
     }
 }
 
@@ -627,7 +639,7 @@ static void render_living_room(void)
     }
     tex = get_texture_from_config("bookshelf");
     hitbox = draw_texture_def(tex, 527, 506);
-    if (check_collision_and_valid(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox) && !get_flag(BLAMING)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             create_dialogue(CROW, get_text_from_config("filler_book1"));
@@ -667,11 +679,79 @@ void render_living_room_act1(void)
     }
 }
 
+void render_living_room_act3(void)
+{
+    Rectangle hitbox;
+    int y = 900;
+    Vector2 mouse_position = get_scaled_mouse_position();
+    hitbox = render_character(DOG, 234, y);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (get_flag(BLAMING))
+                game.blamed_character = DOG;
+            else
+                create_dialogue(DOG, get_text_from_config("dog_act3"));
+        }
+    }
+    hitbox = render_character(SNAKE, 504, y);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (get_flag(BLAMING))
+                game.blamed_character = SNAKE;
+            else
+                create_dialogue(SNAKE, get_text_from_config("snake_act3"));
+        }
+    }
+    hitbox = render_character(CAT, 773, y);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (get_flag(BLAMING))
+                game.blamed_character = CAT;
+            else
+                create_dialogue(CAT, get_text_from_config("cat_act3"));
+        }
+    }
+    hitbox = render_character(FISH, 1000, y);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (get_flag(BLAMING))
+                game.blamed_character = FISH;
+            else
+                create_dialogue(FISH, get_text_from_config("fish_act3"));
+        }
+    }
+    hitbox = render_character(PIG, 1300, y);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (get_flag(BLAMING))
+                game.blamed_character = PIG;
+            else
+                create_dialogue(PIG, get_text_from_config("pig_act3"));
+        }
+    }
+    hitbox = render_character(OWL, 1570, y);
+    if (check_collision_and_valid(mouse_position, hitbox)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            if (get_flag(BLAMING))
+                game.blamed_character = OWL;
+            else
+                create_dialogue(OWL, get_text_from_config("owl_act3"));
+        }
+    }
+}
+
 void screen_init(void)
 {
     game.screens[SCREEN_LIVING_ROOM].background_texture_name = "living_room";
     game.screens[SCREEN_LIVING_ROOM].render = render_living_room;
     game.screens[SCREEN_LIVING_ROOM].render_act[ACT1] = render_living_room_act1;
+    game.screens[SCREEN_LIVING_ROOM].render_act[ACT3] = render_living_room_act3;
 
     game.screens[SCREEN_FOYER].background_texture_name = "foyer";
     game.screens[SCREEN_FOYER].render = render_foyer;
