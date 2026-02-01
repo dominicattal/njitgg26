@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
@@ -86,6 +87,37 @@ return_placeholder:
     return GetFontDefault();
 }
 
+static Sound load_sound(const char* name, const JsonValue* value)
+{
+    Sound sound;
+    const char* path;
+    if (value == NULL) {
+        TraceLog(LOG_WARNING, "%s not found in audio config", name);
+        goto return_placeholder;
+    }
+    if (json_value_get_type(value) != JTYPE_STRING) {
+        TraceLog(LOG_WARNING, "%s wrong type", name);
+        goto return_placeholder;
+    }
+    path = json_value_get_string(value);
+    sound = LoadSound(path);
+    if (!IsSoundValid(sound)) {
+        TraceLog(LOG_WARNING, "failed to create sound");
+        goto return_placeholder;
+    }
+    return sound;
+
+return_placeholder:
+    value = json_object_get_value(ctx.sound_config, "placeholder");
+    assert(value);
+    assert(json_value_get_type(value) == JTYPE_STRING);
+    path = json_value_get_string(value);
+    assert(path);
+    sound = LoadSound(path);
+    assert(IsSoundValid(sound));
+    return sound;
+}
+
 void config_init(void)
 {
     JsonMember* member;
@@ -97,6 +129,19 @@ void config_init(void)
     ctx.texture_config = json_read("config/textures.json");
     if (ctx.texture_config == NULL)
         TraceLog(LOG_FATAL, "could not read texture config file, probably because of a syntax error");
+
+    ctx.text_config = json_read("config/text.json");
+    if (ctx.text_config == NULL)
+        TraceLog(LOG_FATAL, "could not read text config file, probably because of a syntax error");
+
+    ctx.font_config = json_read("config/fonts.json");
+    if (ctx.font_config == NULL)
+        TraceLog(LOG_FATAL, "could not read font config file, probably because of a syntax error");
+
+    ctx.sound_config = json_read("config/sounds.json");
+    if (ctx.sound_config == NULL)
+        TraceLog(LOG_FATAL, "could not read sound config file, probably because of a syntax error");
+
 
     ctx.num_textures = json_object_length(ctx.texture_config);
     ctx.texture_names = malloc(ctx.num_textures * sizeof(const char*));
@@ -115,14 +160,6 @@ void config_init(void)
     if (json_object_get_value(ctx.texture_config, "placeholder") == NULL)
         TraceLog(LOG_FATAL, "couldn't get placeholder texture");
 
-    ctx.text_config = json_read("config/text.json");
-    if (ctx.text_config == NULL)
-        TraceLog(LOG_FATAL, "could not read text config file, probably because of a syntax error");
-
-    ctx.font_config = json_read("config/fonts.json");
-    if (ctx.font_config == NULL)
-        TraceLog(LOG_FATAL, "could not read font config file, probably because of a syntax error");
-
     ctx.num_fonts = json_object_length(ctx.font_config);
     ctx.font_names = malloc(ctx.num_fonts * sizeof(Font));
     ctx.fonts = malloc(ctx.num_fonts * sizeof(Font));
@@ -136,6 +173,21 @@ void config_init(void)
         json_iterator_increment(it); 
     }
     json_iterator_destroy(it);
+
+    ctx.num_sounds = json_object_length(ctx.sound_config);
+    ctx.sound_names = malloc(ctx.num_sounds * sizeof(const char*));
+    ctx.sounds = malloc(ctx.num_sounds * sizeof(Sound));
+    it = json_iterator_create(ctx.sound_config);
+    for (i = 0; i < ctx.num_sounds; i++) {
+        member = json_iterator_get(it);
+        key = json_member_get_key(member);
+        value = json_member_get_value(member);
+        ctx.sound_names[i] = key;
+        ctx.sounds[i] = load_sound(key, value);
+        json_iterator_increment(it); 
+    }
+    json_iterator_destroy(it);
+
 }
 
 Texture2D get_texture_from_config(const char* name)
@@ -197,17 +249,42 @@ return_placeholder:
     return json_value_get_string(value);
 }
 
+Sound get_sound_from_config(const char* name)
+{
+    int l, r, m, a;
+    l = 0;
+    r = ctx.num_sounds-1;
+    assert(name != NULL);
+    while (l <= r) {
+        m = l + (r - l) / 2;
+        a = strcmp(name, ctx.sound_names[m]);
+        if (a > 0)
+            l = m + 1;
+        else if (a < 0)
+            r = m - 1;
+        else
+            return ctx.sounds[m];
+    }
+    TraceLog(LOG_WARNING, "Could not get sound id for %s, returing default sound", name);
+    return get_sound_from_config("placeholder");
+}
+
 void config_cleanup(void)
 {
     for (int i = 0; i < ctx.num_textures; i++)
         UnloadTexture(ctx.textures[i]);
     for (int i = 0; i < ctx.num_fonts; i++)
         UnloadFont(ctx.fonts[i]);
+    //for (int i = 0; i < ctx.num_sounds; i++)
+    //    UnloadSound(ctx.sounds[i]);
     free(ctx.texture_names);
     free(ctx.textures);
     free(ctx.font_names);
     free(ctx.fonts);
+    //free(ctx.sound_names);
+    //free(ctx.sounds);
     json_object_destroy(ctx.texture_config);
     json_object_destroy(ctx.text_config);
     json_object_destroy(ctx.font_config);
+    json_object_destroy(ctx.sound_config);
 }

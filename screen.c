@@ -8,10 +8,11 @@
 #define CHARACTER_HITBOX_COLOR ((Color){0,255,255,100})
 #define MISC_HITBOX_COLOR ((Color){255,0,0,100})
 
-static bool check_collision_and_not_dialogue(Vector2 pos, Rectangle rect)
+static bool check_collision_and_valid(Vector2 pos, Rectangle rect)
 {
     if (in_dialogue()) return false;
     if (game.queried_item != ITEM_NONE) return false;
+    //if (timer_isset(TIMER_SCREEN_TRANSITION)) return false;
     return CheckCollisionPointRec(pos, rect);
 }
 
@@ -22,7 +23,7 @@ static void render_attic(void)
     hitbox = create_rect2(275, 557, 550, 760);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_MASTER_BEDROOM);
@@ -36,7 +37,7 @@ static void render_bathroom(void)
     hitbox = create_rect2(1000, 1000, 1300, 1080);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_HALLWAY);
@@ -50,7 +51,7 @@ static void render_guest_bedroom(void)
     hitbox = create_rect2(1700, 300, 1750, 670);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_HALLWAY);
@@ -64,7 +65,7 @@ static void render_hallway(void)
     hitbox = create_rect2(70, 330, 235, 615);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_GUEST_BEDROOM);
@@ -72,7 +73,7 @@ static void render_hallway(void)
     hitbox = create_rect2(730, 60, 1000, 373);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_BATHROOM);
@@ -80,7 +81,7 @@ static void render_hallway(void)
     hitbox = create_rect2(1670, 250, 1756, 600);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_MASTER_BEDROOM);
@@ -88,7 +89,7 @@ static void render_hallway(void)
     hitbox = create_rect2(730, 1000, 1030, 1080);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_FOYER);
@@ -102,7 +103,7 @@ static void render_master_bedroom(void)
     hitbox = create_rect2(450, 1000, 750, 1080);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_HALLWAY);
@@ -111,7 +112,7 @@ static void render_master_bedroom(void)
     if (get_flag(FLAG_OPENED_ATTIC_DOOR)) {
         mouse_position = get_scaled_mouse_position();
         DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-        if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+        if (check_collision_and_valid(mouse_position, hitbox)) {
             set_cursor(CURSOR_INTERACT);
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
                 screen_transition(SCREEN_ATTIC);
@@ -119,12 +120,14 @@ static void render_master_bedroom(void)
     } else {
         mouse_position = get_scaled_mouse_position();
         DrawRectangleRec(hitbox, MISC_HITBOX_COLOR);
-        if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+        if (check_collision_and_valid(mouse_position, hitbox)) {
             set_cursor(CURSOR_INTERACT);
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 if (selected_item(ITEM_FOYER)) {
                     set_flag(FLAG_OPENED_ATTIC_DOOR, true);
                     take_item(ITEM_FOYER);
+                } else {
+                    create_dialogue(PLAYER, "I need a key to open this");
                 }
             }
         }
@@ -138,7 +141,7 @@ static void render_basement(void)
     hitbox = create_rect2(0, 200, 270, 612);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_KITCHEN);
@@ -152,7 +155,7 @@ static void render_kitchen(void)
     hitbox = create_rect2(111, 400, 243, 700);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_FOYER);
@@ -160,7 +163,7 @@ static void render_kitchen(void)
     hitbox = create_rect2(1534, 70, 1792, 403);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_BASEMENT);
@@ -168,7 +171,7 @@ static void render_kitchen(void)
     hitbox = create_rect2(329, 978, 619, 1080);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_DINING_ROOM);
@@ -182,7 +185,7 @@ static void render_dining(void)
     hitbox = create_rect2(370, 150, 600, 490);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_KITCHEN);
@@ -190,7 +193,7 @@ static void render_dining(void)
     hitbox = create_rect2(13, 391, 186, 682);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_LIVING_ROOM);
@@ -202,7 +205,7 @@ static void render_foyer(void)
     Rectangle hitbox = create_rect2(636, 428, 945, 862);
     Vector2 mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_HALLWAY);
@@ -210,7 +213,7 @@ static void render_foyer(void)
     hitbox = create_rect2(1800, 519, 1920, 1000);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_KITCHEN);
@@ -218,7 +221,7 @@ static void render_foyer(void)
     hitbox = create_rect2(427, 990, 800, 1080);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_LIVING_ROOM);
@@ -227,9 +230,10 @@ static void render_foyer(void)
         hitbox = create_rect2(1576, 690, 1606, 719);
         mouse_position = get_scaled_mouse_position();
         DrawRectangleRec(hitbox, ITEM_HITBOX_COLOR);
-        if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+        if (check_collision_and_valid(mouse_position, hitbox)) {
             set_cursor(CURSOR_INTERACT);
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                play_sound("interact");
                 set_flag(FLAG_PICKED_UP_FOYER_ITEM, true);
                 give_item(ITEM_FOYER);
             }
@@ -238,7 +242,7 @@ static void render_foyer(void)
     hitbox = create_rect2(1183, 523, 1400, 825);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, CHARACTER_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             create_dialogue(BEARON, "hello player will you help me fuck my wife");
@@ -256,7 +260,7 @@ static void render_living_room(void)
     hitbox = create_rect2(112, 185, 381, 483);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_FOYER);
@@ -264,7 +268,7 @@ static void render_living_room(void)
     hitbox = create_rect2(1700, 330, 1792, 798);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
-    if (check_collision_and_not_dialogue(mouse_position, hitbox)) {
+    if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_DINING_ROOM);

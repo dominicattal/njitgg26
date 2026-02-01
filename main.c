@@ -52,6 +52,14 @@ void set_cursor(CursorEnum cursor)
     ctx.current_cursor = cursor;
 }
 
+void play_sound(const char* name)
+{
+    Sound sound = get_sound_from_config(name);
+    if (IsSoundPlaying(sound))
+        StopSound(sound);
+    PlaySound(sound);
+}
+
 int main(void)
 {
     RenderTexture2D framebuffer;
@@ -67,6 +75,7 @@ int main(void)
 
     InitAudioDevice();
 
+    // get rid of this
     ctx.font = LoadFontEx("assets/fonts/consola.ttf", 32, NULL, 250);
     if (!IsFontValid(ctx.font))
         TraceLog(LOG_FATAL, "couldn't load font");

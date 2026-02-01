@@ -32,6 +32,7 @@ typedef enum ItemEnum {
 
 typedef enum TimerEnum {
     TIMER_MENU_CAR,
+    TIMER_SCREEN_TRANSITION,
     NUM_TIMERS
 } TimerEnum;
 
@@ -124,6 +125,8 @@ void item_init(void);
 
 void timer_set(TimerEnum timer, float max_value);
 void timer_unset(TimerEnum timer);
+bool timer_isdone(TimerEnum timer);
+bool timer_isset(TimerEnum timer);
 
 void set_flag(FlagEnum flag, bool val);
 bool toggle_flag(FlagEnum flag);

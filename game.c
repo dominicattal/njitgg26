@@ -327,6 +327,8 @@ static void key_callback(void)
 
 void screen_transition(ScreenEnum screen)
 {
+    //timer_set(TIMER_SCREEN_TRANSITION, 1.5);
+    play_sound("walk");
     game.current_screen = screen;
 }
 
@@ -348,6 +350,16 @@ void timer_unset(TimerEnum timer)
     game.timers[timer].done = false;
 }
 
+bool timer_isdone(TimerEnum timer)
+{
+    return game.timers[timer].done;
+}
+
+bool timer_isset(TimerEnum timer)
+{
+    return game.timers[timer].set;
+}
+
 void game_update(float dt)
 {
     for (int i = 0; i < NUM_TIMERS; i++) {
@@ -360,6 +372,9 @@ void game_update(float dt)
             }
         }
     }
+
+    if (timer_isdone(TIMER_SCREEN_TRANSITION))
+        timer_unset(TIMER_SCREEN_TRANSITION);
 
     key_callback();
 }
