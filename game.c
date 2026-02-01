@@ -344,9 +344,23 @@ bool timer_isset(TimerEnum timer)
     return game.timers[timer].set;
 }
 
+static bool talked_to_all_characters(void)
+{
+    for (FlagEnum i = FLAG_TALKED_TO_BEAR; i <= FLAG_TALKED_TO_OWL; i++)
+        if (!get_flag(i)) 
+            return false;
+    return true;
+}
+
+
 void game_update(float dt)
 {
     set_flag(FLAG_IN_TRANSITION, false);
+
+    if (!get_flag(FLAG_TALKED_TO_ALL) && talked_to_all_characters()) {
+        set_flag(FLAG_TALKED_TO_ALL, true);
+        create_dialogue(CROW, "I should talk to my father");
+    }
 
     for (int i = 0; i < NUM_TIMERS; i++) {
         if (game.timers[i].active) {

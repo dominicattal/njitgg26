@@ -46,6 +46,14 @@ typedef enum FlagEnum {
     // flags related to game state
     FLAG_PICKED_UP_FOYER_ITEM,
     FLAG_OPENED_ATTIC_DOOR,
+    FLAG_TALKED_TO_BEAR,
+    FLAG_TALKED_TO_FISH,
+    FLAG_TALKED_TO_PIG,
+    FLAG_TALKED_TO_DOG,
+    FLAG_TALKED_TO_SNAKE,
+    FLAG_TALKED_TO_CAT,
+    FLAG_TALKED_TO_OWL,
+    FLAG_TALKED_TO_ALL,
 
     NUM_FLAGS
 } FlagEnum;

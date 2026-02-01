@@ -209,6 +209,7 @@ static void render_kitchen_act1(void)
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            set_flag(FLAG_TALKED_TO_PIG, true);
             create_dialogue(CROW, get_text_from_config("crow_pig_intro_1"));
             create_dialogue(PIG, get_text_from_config("crow_pig_intro_2"));
         }
@@ -286,14 +287,21 @@ static void render_foyer_act1(void)
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            create_dialogue(BEAR, get_text_from_config("bear_crow_intro_1"));
-            create_dialogue(CROW, get_text_from_config("crow_bear_intro_2"));
+            set_flag(FLAG_TALKED_TO_BEAR, true);
+            if (!get_flag(FLAG_TALKED_TO_ALL)) {
+                create_dialogue(BEAR, get_text_from_config("bear_crow_intro_1"));
+                create_dialogue(CROW, get_text_from_config("crow_bear_intro_2"));
+            } else {
+                create_dialogue(BEAR, get_text_from_config("bear_crow_get_note_1"));
+                create_dialogue(CROW, get_text_from_config("crow_bear_get_note_2"));
+            }
         }
     }
     hitbox = render_character(FISH, 1024, 856);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            set_flag(FLAG_TALKED_TO_FISH, true);
             create_dialogue(FISH, get_text_from_config("fish_crow_intro_1"));
             create_dialogue(CROW, get_text_from_config("crow_fish_intro_2"));
         }
@@ -302,6 +310,7 @@ static void render_foyer_act1(void)
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            set_flag(FLAG_TALKED_TO_OWL, true);
             create_dialogue(CROW, get_text_from_config("crow_owl_intro_1"));
             create_dialogue(OWL, get_text_from_config("owl_crow_intro_2"));
         }
@@ -338,6 +347,7 @@ static void render_living_room(void)
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            set_flag(FLAG_TALKED_TO_DOG, true);
             create_dialogue(DOG, get_text_from_config("dog_crow_intro_1"));
         }
     }
@@ -345,6 +355,7 @@ static void render_living_room(void)
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            set_flag(FLAG_TALKED_TO_SNAKE, true);
             create_dialogue(CROW, get_text_from_config("crow_snake_intro_1"));
             create_dialogue(SNAKE, get_text_from_config("snake_crow_intro_2"));
         }
@@ -353,6 +364,7 @@ static void render_living_room(void)
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            set_flag(FLAG_TALKED_TO_CAT, true);
             create_dialogue(CROW, get_text_from_config("crow_cat_intro_1"));
             create_dialogue(CAT, get_text_from_config("crow_cat_intro_2"));
         }
