@@ -20,8 +20,18 @@ static void render_item_bear_note(void)
     int window_width = GetScreenWidth();
     int window_height = GetScreenHeight();
     rect = create_rect((window_width-400)/2, (window_height-400)/2, 400, 400);
-    DrawRectangleRec(rect, (Color){255,100,255,100});
-    DrawTextBoxed(get_font_from_config("consolas_16"), game.items[ITEM_BEAR_NOTE].display_name, rect, 16, 0, true, GREEN);
+    DrawRectangleRec(rect, BLACK);
+    DrawTextBoxed(get_font_from_config("consolas_16"), get_text_from_config("bear_note_content"), rect, 16, 0, true, WHITE);
+}
+
+static void render_item_book(void)
+{
+    Rectangle rect;
+    int window_width = GetScreenWidth();
+    int window_height = GetScreenHeight();
+    rect = create_rect((window_width-400)/2, (window_height-400)/2, 400, 400);
+    DrawRectangleRec(rect, BLACK);
+    DrawTextBoxed(get_font_from_config("consolas_16"), get_text_from_config("book_content"), rect, 16, 0, true, WHITE);
 }
 
 void item_init(void)
@@ -41,9 +51,9 @@ void item_init(void)
     game.items[ITEM_KNIFE].display_name = "Knife";
     //game.items[ITEM_KNIFE].render_query = render_item_bear_note;
 
-    game.items[ITEM_NEWSPAPER].texture_name = "item_newspaper";
-    game.items[ITEM_NEWSPAPER].display_name = "Note";
-    //game.items[ITEM_NEWSPAPER].render_query = render_item_bear_note;
+    game.items[ITEM_BOOK].texture_name = "item_book";
+    game.items[ITEM_BOOK].display_name = "Book";
+    game.items[ITEM_BOOK].render_query = render_item_book;
 
     game.items[ITEM_DEED].texture_name = "item_deed";
     game.items[ITEM_DEED].display_name = "Deed";

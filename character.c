@@ -11,7 +11,7 @@ Rectangle render_character(CharacterEnum character, int x, int y)
 {
     Rectangle rect = character_hitbox(character, x, y);
     Texture2D tex = get_texture_from_config(game.characters[character].texture_name);
-    //DrawRectangleRec(rect, CHARACTER_HITBOX_COLOR);
+    DrawRectangleRec(rect, WHITE);
     draw_texture_rect(tex, rect);
     return rect;
 }

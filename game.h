@@ -29,7 +29,7 @@ typedef enum ItemEnum {
     ITEM_BEAR_NOTE,
     ITEM_BEAR_THING,
     ITEM_KNIFE,
-    ITEM_NEWSPAPER,
+    ITEM_BOOK,
     ITEM_DEED,
     ITEM_ATTIC_KEY,
     NUM_ITEMS,
@@ -50,6 +50,8 @@ typedef enum FlagEnum {
     // flags related to game state
     PICKED_UP_FOYER_ITEM,
     PICKED_UP_KNIFE,
+    PICKED_UP_BOOK,
+    PICKED_UP_DEED,
     OPENED_ATTIC_DOOR,
     TALKED_TO_BEAR,
     TALKED_TO_FISH,

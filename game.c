@@ -93,39 +93,40 @@ void game_init(void)
     game.dialogue_head = NULL;
     game.dialogue_tail = NULL;
     game.act_should_be = ACT_NONE;
+    game.selected_item = ITEM_NONE;
+    game.queried_item = ITEM_NONE;
 
     screen_init();
     item_init();
     character_init();
 
+    // act1 testing
     // setting game state for testing
     set_flag(IN_MENU, false);
-    game.selected_item = ITEM_NONE;
-    game.queried_item = ITEM_NONE;
 
-    // act1 testing
     // set_flag(TALKED_TO_ALL, true);
     // set_flag(TALKED_TO_BEAR, true);
     // set_flag(PICKED_UP_BEAR_THING, true);
     // set_flag(BEAR_NOTE_RESPONSE, true);
     // give_item(ITEM_BEAR_THING);
 
-    // act2 testing
-    // game.act = ACT2;
-    // game.current_screen = SCREEN_HALLWAY;
-    // set_flag(KNOCKED_ON_BATHROOM_DOOR,true);
-    // set_flag(FINISHED_BATHROOM_CONVO,true);
-    // set_flag(FINISHED_POST_BATHROOM_CONVO,true);
-    // set_flag(FINISHED_HALLWAY_CONVO,true);
-    // set_flag(BEAR_ANNOUNCEMENT,true);
-    // set_flag(BEAR_WENT_TO_ROOM,true);
-    // set_flag(FISH_ANNOUNCEMENT,true);
-    // set_flag(FISH_WENT_TO_ROOM, true);
+    //act2 testing
+    game.act = ACT2;
+    game.current_screen = SCREEN_HALLWAY;
+    set_flag(KNOCKED_ON_BATHROOM_DOOR,true);
+    set_flag(FINISHED_BATHROOM_CONVO,true);
+    set_flag(FINISHED_POST_BATHROOM_CONVO,true);
+    set_flag(FINISHED_HALLWAY_CONVO,true);
+    set_flag(BEAR_ANNOUNCEMENT,true);
+    set_flag(BEAR_WENT_TO_ROOM,true);
+    set_flag(FISH_ANNOUNCEMENT,true);
+    set_flag(FISH_WENT_TO_ROOM, true);
+    give_item(ITEM_BEAR_NOTE);
 
     // act3 testing
-    game.act = ACT3;
-    //game.current_screen = SCREEN_LIVING_ROOM;
-    game.current_screen = NO_SCREEN;
+    // game.act = ACT3;
+    // game.current_screen = SCREEN_LIVING_ROOM;
+    //game.current_screen = NO_SCREEN;
 }
 
 void draw_texture(Texture2D tex, float x, float y, float w, float h)
@@ -177,7 +178,10 @@ static void start_game(void)
 
     for (int flag = 0; flag < NUM_FLAGS; flag++)
         set_flag(flag, false);
+    for (int item = 0; item < NUM_ITEMS; item++)
+        game.items[item].held = false;
 
+    game.current_screen = SCREEN_FOYER;
     game.selected_item = ITEM_NONE;
     game.queried_item = ITEM_NONE;
     game.act = ACT1;
@@ -265,7 +269,7 @@ static void render_game_gui(void)
             num_held_items++;
 
     rect = create_rect(offset_x-10, offset_y-10, (num_held_items-1)*75+dim+20, dim+20);
-    DrawRectangleRec(rect, (Color){40,40,40,100});
+    DrawRectangleRec(rect, (Color){120,120,120,255});
     for (i = 0; i < NUM_ITEMS; i++) {
         item = &game.items[i];
         if (!item->held) continue;
@@ -308,9 +312,6 @@ static void render_game_gui(void)
         }
     }
 
-    if (game.screens[game.current_screen].render_gui != NULL)
-        game.screens[game.current_screen].render_gui();
-
     if (get_flag(MENU_OVERLAY))
         render_menu_overlay();
 
@@ -318,9 +319,9 @@ static void render_game_gui(void)
         rect = create_rect(offset_x-10, offset_y+dim+10, 300, 30);
         DrawRectangleRec(rect, BLUE);
         DrawTextBoxed(get_font_from_config("consolas_16"), item_display_name, rect, 16, 0, true, WHITE);
-        rect = create_rect(offset_x-10, offset_y+dim+40, 300, 100);
-        DrawRectangleRec(rect, PURPLE);
-        DrawTextBoxed(get_font_from_config("consolas_16"), item_info, rect, 16, 0, true, WHITE);
+        //rect = create_rect(offset_x-10, offset_y+dim+40, 300, 100);
+        //DrawRectangleRec(rect, PURPLE);
+        //DrawTextBoxed(get_font_from_config("consolas_16"), item_info, rect, 16, 0, true, WHITE);
         //DrawText(item_info, window_width-300, dim, 20, BLACK);
     }
 
@@ -369,8 +370,7 @@ static void render_game_gui(void)
             if (CheckCollisionPointRec(mouse_position, rect)) {
                 set_cursor(CURSOR_INTERACT);
                 if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                    game.blamed_character = NO_CHARACTER;
-                    set_flag(BLAMING, false);
+                    game.current_screen = NO_SCREEN;
                 }
             }
             rect = create_rect((window_width-400)/2+120, 150, 100, 40);
@@ -410,7 +410,6 @@ static void render_game_over(void)
     int size_y = 100;
     char buf[100];
     Vector2 pos = {(window_width-size_x)/2, (window_height-size_y)/2};
-    game.blamed_character = PIG;
     if (game.blamed_character == SNAKE)
         sprintf(buf, "Snake was the killer");
     else
@@ -492,13 +491,18 @@ static bool talked_to_all_characters(void)
     return true;
 }
 
+static void clear_talked_characters(void)
+{
+    for (FlagEnum i = TALKED_TO_BEAR; i <= TALKED_TO_OWL; i++)
+        set_flag(i, false);
+}
+
 static void update_act1(void)
 {
     if (!get_flag(TALKED_TO_ALL) && talked_to_all_characters()) {
         set_flag(TALKED_TO_ALL, true);
         create_dialogue(CROW, "I should talk to my father");
-        for (FlagEnum i = TALKED_TO_BEAR; i <= TALKED_TO_OWL; i++)
-            set_flag(i, false);
+        clear_talked_characters();
     }
 
     if (!get_flag(EXAMINED_BEAR_NOTE) && game.queried_item == ITEM_BEAR_NOTE) {
@@ -523,6 +527,7 @@ static void update_act2(void)
     }
     if (!get_flag(FINISHED_HALLWAY_CONVO) && get_flag(FINISHED_POST_BATHROOM_CONVO) && !in_dialogue()) {
         set_flag(FINISHED_HALLWAY_CONVO, true);
+        clear_talked_characters();
     }
     if (!get_flag(BEAR_ANNOUNCEMENT) 
         && get_flag(TALKED_TO_BEAR)
@@ -552,6 +557,7 @@ static void update_act2(void)
     }
     if (get_flag(DOG_IN_MASTER_BEDROOM) && !in_dialogue()) {
         act_transition(ACT3);
+        game.current_screen = SCREEN_LIVING_ROOM;
     }
 }
 

@@ -30,5 +30,6 @@
     "dog": "assets/textures/dog.png",
     "snake": "assets/textures/snake.png",
     "pig": "assets/textures/pig.png",
-    "dead_bear": "assets/textures/dead_bear.png"
+    "dead_bear": "assets/textures/dead_bear.png",
+    "book": "assets/textures/book.png"
 }

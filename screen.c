@@ -62,7 +62,15 @@ static void render_guest_bedroom(void)
 
     tex = get_texture_from_config("bookshelf");
     hitbox = draw_texture_def(tex, 1263, 600);
-    if (check_collision_and_valid(mouse_position, hitbox)) {
+    tex = get_texture_from_config("book");
+    hitbox2 = hitbox_from_hitbox(hitbox, 233-11, 185-18, 233+tex.width, 185+tex.height);
+    draw_texture_rect(tex, hitbox2);
+    if (check_collision_and_valid(mouse_position, hitbox2)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            create_dialogue(CROW, get_text_from_config("filler_book2"));
+        }
+    } else if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             create_dialogue(CROW, get_text_from_config("filler_book1"));
@@ -215,7 +223,19 @@ static void render_master_bedroom(void)
 
     tex = get_texture_from_config("bookshelf");
     hitbox = draw_texture_def(tex, 1630, 627);
-    if (check_collision_and_valid(mouse_position, hitbox)) {
+    tex = get_texture_from_config("book");
+    hitbox2 = hitbox_from_hitbox(hitbox, 233-11, 185-18, 233+tex.width, 185+tex.height);
+    if (!get_flag(PICKED_UP_BOOK))
+        draw_texture_rect(tex, hitbox2);
+    tex = get_texture_from_config("bookshelf");
+    if (!get_flag(PICKED_UP_BOOK) && check_collision_and_valid(mouse_position, hitbox2)) {
+        set_cursor(CURSOR_INTERACT);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            give_item(ITEM_BOOK);
+            set_flag(PICKED_UP_BOOK, true);
+            create_dialogue(CROW, get_text_from_config("get_important_book"));
+        }
+    } else if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             create_dialogue(CROW, get_text_from_config("filler_book1"));
@@ -286,7 +306,7 @@ static void render_master_bedroom(void)
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 if (selected_item(ITEM_ATTIC_KEY)) {
                     set_flag(OPENED_ATTIC_DOOR, true);
-                    take_item(ITEM_FOYER);
+                    take_item(ITEM_ATTIC_KEY);
                 } else {
                     create_dialogue(CROW, "I need a key to open this");
                 }
@@ -378,7 +398,7 @@ static void render_kitchen(void)
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_DINING_ROOM);
     }
-    if (!get_flag(PICKED_UP_KNIFE)) {
+    if (!get_flag(PICKED_UP_KNIFE) && game.act != ACT1) {
         hitbox = create_rect2(476, 214, 612, 318);
         DrawRectangleRec(hitbox, MISC_HITBOX_COLOR);
         if (check_collision_and_valid(mouse_position, hitbox)) {
