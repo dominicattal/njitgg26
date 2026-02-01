@@ -20,13 +20,18 @@ typedef enum ScreenEnum {
     SCREEN_GUEST_BEDROOM,
     SCREEN_BATHROOM,
     SCREEN_ATTIC,
-    NUM_SCREENS
+    NUM_SCREENS,
+    NO_SCREEN
 } ScreenEnum;
 
 typedef enum ItemEnum {
     ITEM_FOYER,
     ITEM_BEAR_NOTE,
     ITEM_BEAR_THING,
+    ITEM_KNIFE,
+    ITEM_BOOK,
+    ITEM_DEED,
+    ITEM_ATTIC_KEY,
     NUM_ITEMS,
     ITEM_NONE
 } ItemEnum;
@@ -44,6 +49,9 @@ typedef enum FlagEnum {
 
     // flags related to game state
     PICKED_UP_FOYER_ITEM,
+    PICKED_UP_KNIFE,
+    PICKED_UP_BOOK,
+    PICKED_UP_DEED,
     OPENED_ATTIC_DOOR,
     TALKED_TO_BEAR,
     TALKED_TO_FISH,
@@ -70,6 +78,13 @@ typedef enum FlagEnum {
     FISH_ANNOUNCEMENT,
     FISH_WENT_TO_ROOM,
     DOG_IN_MASTER_BEDROOM,
+
+    // act3 flags
+    CONFRONTATION,
+    DOG_GIVE_ATTIC_KEY,
+    BLAMING,
+    BLAME_CONFIRM,
+    BLAMED,
 
     NUM_FLAGS
 } FlagEnum;
@@ -137,6 +152,7 @@ typedef struct GameState {
     Timer timers[NUM_TIMERS];
     bool flags[NUM_FLAGS];
     Character characters[NUM_CHARACTERS];
+    CharacterEnum blamed_character;
     ScreenEnum current_screen;
     ItemEnum selected_item;
     ItemEnum queried_item;
@@ -190,5 +206,7 @@ void draw_texture(Texture2D tex, float x, float y, float w, float h);
 void draw_texture_rect(Texture2D tex, Rectangle rect);
 Rectangle draw_texture_def(Texture2D tex, float x, float y);
 Rectangle hitbox_from_hitbox(Rectangle hitbox, float x1, float y1, float x2, float y2);
+
+bool check_collision_and_valid(Vector2 pos, Rectangle rect);
 
 #endif
