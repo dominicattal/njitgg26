@@ -40,6 +40,8 @@ void character_init(void)
     game.characters[FISH].display_name = "Fish";
     game.characters[FISH].portrait_texture_name = "fish_portrait";
     game.characters[FISH].texture_name = "fish";
+    game.characters[FISH].width = 220;
+    game.characters[FISH].height = 300;
 
     game.characters[PIG].display_name = "Pig";
     game.characters[PIG].portrait_texture_name = "pig_portrait";
