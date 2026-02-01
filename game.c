@@ -88,24 +88,7 @@ void game_init(void)
 
     screen_init();
     item_init();
-
-    game.characters[PLAYER].display_name = "Player";
-    game.characters[PLAYER].portrait_texture_name = "player_portrait";
-    game.characters[PLAYER].texture_name = "player";
-
-    game.characters[BEARON].display_name = "Bearon";
-    game.characters[BEARON].portrait_texture_name = "bearon_portrait";
-    game.characters[BEARON].texture_name = "bearon";
-
-    for (int i = 0; i < NUM_CHARACTERS; i++) {
-        if (game.characters[i].texture_name == NULL)
-            TraceLog(LOG_FATAL, "missing texture name for character %d", i);
-        if (game.characters[i].portrait_texture_name == NULL)
-            TraceLog(LOG_FATAL, "missing portrait name for character %d", i);
-        if (game.characters[i].display_name == NULL)
-            TraceLog(LOG_FATAL, "missing display name for character %d", i);
-        game.items[i].held = false;
-    }
+    character_init();
 
     // setting game state for testing
     set_flag(FLAG_IN_MENU, false);
@@ -328,7 +311,7 @@ static void key_callback(void)
 void screen_transition(ScreenEnum screen)
 {
     //timer_set(TIMER_SCREEN_TRANSITION, 1.5);
-    play_sound("walk");
+    //play_sound("walk");
     game.current_screen = screen;
 }
 

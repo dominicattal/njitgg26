@@ -7,7 +7,8 @@ SOURCES = main.c \
 		  screen.c \
 		  item.c \
 		  raygui.c \
-		  config.c
+		  config.c \
+		  character.c
 
 OBJS_DEV = $(SOURCES:%.c=build/dev/%.o)
 

@@ -2,6 +2,7 @@
 #include "game.h"
 #include "main.h"
 #include "raygui.h"
+#include "config.h"
 
 #define ROOM_HITBOX_COLOR ((Color){255,255,0,100})
 #define ITEM_HITBOX_COLOR ((Color){255,0,255,100})
@@ -127,7 +128,7 @@ static void render_master_bedroom(void)
                     set_flag(FLAG_OPENED_ATTIC_DOOR, true);
                     take_item(ITEM_FOYER);
                 } else {
-                    create_dialogue(PLAYER, "I need a key to open this");
+                    create_dialogue(CROW, "I need a key to open this");
                 }
             }
         }
@@ -239,16 +240,15 @@ static void render_foyer(void)
             }
         }
     }
-    hitbox = create_rect2(1183, 523, 1400, 825);
     mouse_position = get_scaled_mouse_position();
-    DrawRectangleRec(hitbox, CHARACTER_HITBOX_COLOR);
+    //hitbox = create_rect2(1183, 523, 1400, 825);
+    //DrawRectangleRec(hitbox, CHARACTER_HITBOX_COLOR);
+    hitbox = render_character(BEAR, 1289, 870);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            create_dialogue(BEARON, "hello player will you help me fuck my wife");
-            create_dialogue(PLAYER, "excuse me what");
-            create_dialogue(BEARON, "you fucking hea- wait why is my wife dead");
-            create_dialogue(PLAYER, "oh shi let me help");
+            create_dialogue(BEAR, get_text_from_config("bear_crow_intro_1"));
+            create_dialogue(CROW, get_text_from_config("bear_crow_intro_2"));
         }
     }
 }

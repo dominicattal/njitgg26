@@ -2,10 +2,12 @@
 #define GAME_H
 
 #include <stdbool.h>
+#include "raylib.h"
 
 typedef void (*ScreenRenderFuncPtr)(void);
 typedef void (*ScreenRenderGuiFuncPtr)(void);
 typedef void (*ItemRenderQueryFuncPtr)(void);
+typedef void (*CharacterRenderFuncPtr)(int x, int y);
 
 typedef enum ScreenEnum {
     SCREEN_LIVING_ROOM,
@@ -48,8 +50,14 @@ typedef enum FlagEnum {
 } FlagEnum;
 
 typedef enum CharacterEnum {
-    PLAYER,
-    BEARON,
+    BEAR,
+    CROW,
+    FISH,
+    PIG,
+    DOG,
+    SNAKE,
+    CAT,
+    OWL,
     NUM_CHARACTERS,
     NO_CHARACTER
 } CharacterEnum;
@@ -87,6 +95,7 @@ typedef struct Character {
     char* display_name;
     char* portrait_texture_name;
     char* texture_name;
+    int width, height;
 } Character;
 
 typedef struct DialogueNode DialogueNode;
@@ -123,6 +132,8 @@ void screen_transition(ScreenEnum screen);
 
 void item_init(void);
 
+void character_init(void);
+
 void timer_set(TimerEnum timer, float max_value);
 void timer_unset(TimerEnum timer);
 bool timer_isdone(TimerEnum timer);
@@ -138,6 +149,9 @@ bool has_item(ItemEnum item);
 bool selected_item(ItemEnum item);
 
 char* character_display_name(CharacterEnum character);
+// returns character hitbox
+Rectangle render_character(CharacterEnum character, int x, int y);
+Rectangle character_hitbox(CharacterEnum character, int x, int y);
 
 void create_dialogue(CharacterEnum character, const char* dialogue);
 void advance_dialogue(void);
