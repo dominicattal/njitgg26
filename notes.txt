@@ -1,12 +1,13 @@
 core goals
 moving between screens (done)
-item pickups
-notifications
+item pickups (done)
+notifications (done)
 
 stretch goals
 arrows keys / mouse dual functionality
 tint for screen when menu overlaid
 make item textures pointers instead of searching name
+change cursor color
 
 title: masquerade macabre
 

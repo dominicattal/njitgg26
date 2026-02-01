@@ -177,6 +177,7 @@ static void render_kitchen(void)
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_DINING_ROOM);
     }
+    hitbox = render_character(PIG, 448, 664);
 }
 
 static void render_dining(void)
