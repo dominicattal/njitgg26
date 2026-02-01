@@ -25,7 +25,8 @@ typedef enum ItemEnum {
     ITEM_1,
     ITEM_2,
     ITEM_3,
-    NUM_ITEMS
+    NUM_ITEMS,
+    ITEM_NONE
 } ItemEnum;
 
 typedef enum TimerEnum {
@@ -43,15 +44,22 @@ typedef enum FlagEnum {
     NUM_FLAGS
 } FlagEnum;
 
+typedef enum CharacterEnum {
+    PLAYER,
+    BEARON,
+    NUM_CHARACTERS,
+    NO_CHARACTER
+} CharacterEnum;
+
 typedef struct Screen {
     ScreenRenderFuncPtr render;
     ScreenRenderGuiFuncPtr render_gui;
-    const char* background_texture_name;
+    char* background_texture_name;
 } Screen;
 
 typedef struct Item {
     char* display_name;
-    const char* texture_name;
+    char* texture_name;
     bool held;
 } Item;
 
@@ -63,12 +71,29 @@ typedef struct Timer {
     bool done;
 } Timer;
 
+typedef struct Character {
+    char* display_name;
+    char* portrait_texture_name;
+    char* texture_name;
+} Character;
+
+typedef struct DialogueNode DialogueNode;
+typedef struct DialogueNode {
+    DialogueNode* next;
+    CharacterEnum character;
+    const char* dialogue;
+} DialogueNode;
+
 typedef struct GameState {
     Item items[NUM_ITEMS];
     Screen screens[NUM_SCREENS];
     Timer timers[NUM_TIMERS];
     bool flags[NUM_FLAGS];
+    Character characters[NUM_CHARACTERS];
     ScreenEnum current_screen;
+    ItemEnum selected_item;
+    DialogueNode* dialogue_head;
+    DialogueNode* dialogue_tail;
 } GameState;
 
 extern GameState game;
@@ -90,5 +115,11 @@ bool get_flag(FlagEnum flag);
 
 void give_item(ItemEnum item);
 void take_item(ItemEnum item);
+
+char* character_display_name(CharacterEnum character);
+
+void create_dialogue(CharacterEnum character, const char* dialogue);
+void advance_dialogue(void);
+bool in_dialogue(void);
 
 #endif

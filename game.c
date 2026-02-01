@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "game.h"
 #include "main.h"
@@ -32,10 +33,48 @@ void take_item(ItemEnum item)
     game.items[item].held = false;
 }
 
+char* character_display_name(CharacterEnum character)
+{
+    return game.characters[character].display_name;
+}
+
+void create_dialogue(CharacterEnum character, const char* dialogue)
+{
+    DialogueNode* node = malloc(sizeof(DialogueNode));
+    node->character = character;
+    node->dialogue = dialogue;
+    node->next = NULL;
+    if (game.dialogue_tail == NULL) {
+        game.dialogue_head = node;
+        game.dialogue_tail = node;
+    } else {
+        game.dialogue_tail->next = node;
+        game.dialogue_tail = node;
+    }
+}
+
+void advance_dialogue(void)
+{
+    if (game.dialogue_head == NULL) return;
+    DialogueNode* node = game.dialogue_head;
+    if (node == game.dialogue_tail)
+        game.dialogue_head = game.dialogue_tail = NULL;
+    else
+        game.dialogue_head = node->next;
+    free(node);
+}
+
+bool in_dialogue(void)
+{
+    return game.dialogue_head != NULL;
+}
+
 void game_init(void)
 {
     set_flag(FLAG_IN_MENU, true);
     game.current_screen = SCREEN_FOYER;
+    game.dialogue_head = NULL;
+    game.dialogue_tail = NULL;
 
     game_render_init();
 
@@ -56,8 +95,27 @@ void game_init(void)
         game.items[i].held = false;
     }
 
+    game.characters[PLAYER].display_name = "Player";
+    game.characters[PLAYER].portrait_texture_name = "player_portrait";
+    game.characters[PLAYER].texture_name = "player";
+
+    game.characters[BEARON].display_name = "Bearon";
+    game.characters[BEARON].portrait_texture_name = "bearon_portrait";
+    game.characters[BEARON].texture_name = "bearon";
+
+    for (int i = 0; i < NUM_CHARACTERS; i++) {
+        if (game.characters[i].texture_name == NULL)
+            TraceLog(LOG_FATAL, "missing texture name for character %d", i);
+        if (game.characters[i].portrait_texture_name == NULL)
+            TraceLog(LOG_FATAL, "missing portrait name for character %d", i);
+        if (game.characters[i].display_name == NULL)
+            TraceLog(LOG_FATAL, "missing display name for character %d", i);
+        game.items[i].held = false;
+    }
+
     // setting game state for testing
     set_flag(FLAG_IN_MENU, false);
+    game.selected_item = ITEM_NONE;
 }
 
 static void draw_texture(Texture2D tex, float x, float y, float w, float h)
@@ -79,6 +137,8 @@ static void start_game(void)
 {
     for (int flag = 0; flag < NUM_FLAGS; flag++)
         set_flag(flag, false);
+
+    game.selected_item = ITEM_NONE;
 }
 
 static void end_game(void)
@@ -139,7 +199,7 @@ static void render_menu_overlay(void)
 
 static void render_game_gui(void)
 {
-    int i;
+    ItemEnum i;
     int offset_x = 35;
     int cur_offset_x = offset_x;
     int offset_y = 20;
@@ -150,6 +210,12 @@ static void render_game_gui(void)
     char* item_info = NULL;
     char* item_display_name = NULL;
     int num_held_items = 0;
+    int window_width = GetScreenWidth();
+    int window_height = GetScreenHeight();
+    DialogueNode* node;
+    Character* character;
+    Vector2 mouse_position;
+
     for (i = 0; i < NUM_ITEMS; i++)
         if (game.items[i].held)
             num_held_items++;
@@ -161,13 +227,20 @@ static void render_game_gui(void)
         if (!item->held) continue;
         tex = get_texture_from_config(item->texture_name);
         rect = create_rect(cur_offset_x, offset_y, dim, dim);
-        //draw_texture(tex, window_width-dim-offset, 0, dim, dim);
-        draw_texture_rect(tex, rect);
-        // if hovered, display in textbox
         if (CheckCollisionPointRec(GetMousePosition(), rect)) {
             item_info = get_text_from_config("item_foyer");
             item_display_name = item->display_name;
+            set_cursor(CURSOR_INTERACT);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                if (i == game.selected_item) 
+                    game.selected_item = ITEM_NONE;
+                else
+                    game.selected_item = i;
+            }
         }
+        if (i == game.selected_item)
+            DrawRectangleRec(rect, (Color){255,0,255,120});
+        draw_texture_rect(tex, rect);
         cur_offset_x += 75;
     }
 
@@ -184,6 +257,36 @@ static void render_game_gui(void)
         DrawRectangleRec(rect, PURPLE);
         DrawTextBoxed(get_font_from_config("consolas_16"), item_info, rect, 16, 0, true, WHITE);
         //DrawText(item_info, window_width-300, dim, 20, BLACK);
+    }
+
+    // total width = 960
+    const int TOTAL_WIDTH = 960;
+    if (in_dialogue()) {
+        node = game.dialogue_head;
+        character = &game.characters[node->character];
+
+        tex = get_texture_from_config(character->portrait_texture_name);
+        rect = create_rect((window_width-TOTAL_WIDTH)/2, window_height-220, 200, 200);
+        DrawRectangleRec(rect, ORANGE);
+        draw_texture_rect(tex, rect);
+
+        rect = create_rect((window_width-TOTAL_WIDTH)/2+200, window_height-220, 960-200, 30);
+        DrawRectangleRec(rect, MAROON);
+        DrawTextBoxed(get_font_from_config("consolas_16"), character->display_name, rect, 16, 0, true, WHITE);
+
+        rect = create_rect((window_width-TOTAL_WIDTH)/2+200, window_height-190, 960-200, 170);
+        DrawRectangleRec(rect, DARKGRAY);
+        DrawTextBoxed(get_font_from_config("consolas_16"), node->dialogue, rect, 16, 0, true, WHITE);
+
+        tex = get_texture_from_config("right_arrow");
+        rect = create_rect((window_width-TOTAL_WIDTH)/2+TOTAL_WIDTH-50, window_height-220, 50, 30);
+        draw_texture_rect(tex, rect);
+        mouse_position = GetMousePosition();
+        if (CheckCollisionPointRec(mouse_position, rect)) {
+            set_cursor(CURSOR_INTERACT);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+                advance_dialogue();
+        }
     }
 }
 
@@ -257,4 +360,13 @@ void game_render_gui(void)
 
 void game_cleanup(void)
 {
+    DialogueNode* next;
+    DialogueNode* cur;
+    cur = game.dialogue_head;
+    while (cur != NULL) {
+        next = cur->next;
+        free(cur);
+        cur = next;
+    }
+
 }
