@@ -112,7 +112,15 @@ void game_init(void)
 
     // act2 testing
     game.act = ACT2;
-    game.current_screen = SCREEN_DINING_ROOM;
+    //game.current_screen = SCREEN_HALLWAY;
+    //set_flag(KNOCKED_ON_BATHROOM_DOOR,true);
+    //set_flag(FINISHED_BATHROOM_CONVO,true);
+    //set_flag(FINISHED_POST_BATHROOM_CONVO,true);
+    //set_flag(FINISHED_HALLWAY_CONVO,true);
+    //set_flag(BEAR_ANNOUNCEMENT,true);
+    //set_flag(BEAR_WENT_TO_ROOM,true);
+    //set_flag(FISH_ANNOUNCEMENT,true);
+    //set_flag(FISH_WENT_TO_ROOM, true);
 }
 
 void draw_texture(Texture2D tex, float x, float y, float w, float h)
@@ -411,8 +419,9 @@ static void update_act1(void)
 
 static void update_act2(void)
 {
-    if (!get_flag(FINISHED_BATHROOM_CONVO) && get_flag(KNOCKED_ON_BATHROOM_DOOR) && !in_dialogue()) {
+    if (get_flag(TALKED_TO_FISH) && !get_flag(FINISHED_BATHROOM_CONVO) && get_flag(KNOCKED_ON_BATHROOM_DOOR) && !in_dialogue()) {
         set_flag(FINISHED_BATHROOM_CONVO, true);
+        set_flag(TALKED_TO_FISH, false);
     }
     if (!get_flag(FINISHED_POST_BATHROOM_CONVO) && get_flag(TALKED_TO_BEAR) && !in_dialogue()) {
         set_flag(FINISHED_POST_BATHROOM_CONVO, true);
@@ -422,15 +431,34 @@ static void update_act2(void)
     if (!get_flag(FINISHED_HALLWAY_CONVO) && get_flag(FINISHED_POST_BATHROOM_CONVO) && !in_dialogue()) {
         set_flag(FINISHED_HALLWAY_CONVO, true);
     }
-    if (!get_flag(BEAR_WENT_TO_ROOM) 
+    if (!get_flag(BEAR_ANNOUNCEMENT) 
         && get_flag(TALKED_TO_BEAR)
         && get_flag(TALKED_TO_FISH)
         && get_flag(TALKED_TO_SNAKE)
         && get_flag(TALKED_TO_OWL)
         && get_flag(TALKED_TO_CAT)) {
 
-        set_flag(BEAR_WENT_TO_ROOM, true);
         create_dialogue(BEAR, get_text_from_config("bear_leave_dining"));
+        set_flag(BEAR_ANNOUNCEMENT, true);
+    }
+    if (!get_flag(BEAR_WENT_TO_ROOM) && get_flag(BEAR_ANNOUNCEMENT) && !in_dialogue()) {
+        set_flag(BEAR_WENT_TO_ROOM, true);
+    }
+    if (!get_flag(FISH_ANNOUNCEMENT) && get_flag(BEAR_WENT_TO_ROOM)) {
+        create_dialogue(FISH, get_text_from_config("fish_leave_dining"));
+        set_flag(FISH_ANNOUNCEMENT, true);
+    }
+    if (!get_flag(FISH_WENT_TO_ROOM) && get_flag(FISH_ANNOUNCEMENT) && !in_dialogue()) {
+        set_flag(FISH_WENT_TO_ROOM, true);
+        set_flag(TALKED_TO_BEAR, false);
+        set_flag(TALKED_TO_FISH, false);
+    }
+    if (!get_flag(DOG_IN_MASTER_BEDROOM) && get_flag(FISH_WENT_TO_ROOM) && get_flag(TALKED_TO_FISH) && get_flag(TALKED_TO_BEAR) && !in_dialogue()) {
+        set_flag(DOG_IN_MASTER_BEDROOM, true);
+        create_dialogue(DOG, get_text_from_config("dog_shocked"));
+    }
+    if (get_flag(DOG_IN_MASTER_BEDROOM) && !in_dialogue()) {
+        act_transition(ACT3);
     }
 }
 

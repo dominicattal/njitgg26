@@ -13,6 +13,10 @@ knocking sound for bathroom door in act 2
 move text into text config since i left some around
 act 2 master bedroom rightmost drawer doesnt have text
 
+knife in kitchen in dishrack has dried blood, pig cut themself
+butler has key to attic
+attic has document with land decree from king
+
 title: masquerade macabre
 
 characters:

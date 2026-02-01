@@ -243,10 +243,7 @@ char* get_text_from_config(const char* key)
     }
     return json_value_get_string(value);
 return_placeholder:
-    value = json_object_get_value(ctx.text_config, "placeholder");
-    assert(value);
-    assert(json_value_get_type(value) == JTYPE_STRING);
-    return json_value_get_string(value);
+    return (char*)key;
 }
 
 Sound get_sound_from_config(const char* name)
