@@ -32,6 +32,7 @@ typedef enum ItemEnum {
     ITEM_BOOK,
     ITEM_DEED,
     ITEM_ATTIC_KEY,
+    ITEM_CHEST_KEY,
     NUM_ITEMS,
     ITEM_NONE
 } ItemEnum;
@@ -52,6 +53,7 @@ typedef enum FlagEnum {
     PICKED_UP_KNIFE,
     PICKED_UP_BOOK,
     PICKED_UP_DEED,
+    OPENED_CHEST,
     OPENED_ATTIC_DOOR,
     TALKED_TO_BEAR,
     TALKED_TO_FISH,

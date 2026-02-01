@@ -63,6 +63,10 @@ void item_init(void)
     game.items[ITEM_ATTIC_KEY].display_name = "Attic Key";
     //game.items[ITEM_ATTIC_KEY].render_query = render_item_bear_note;
 
+    game.items[ITEM_CHEST_KEY].texture_name = "item_chest_key";
+    game.items[ITEM_CHEST_KEY].display_name = "Chest Key";
+    //game.items[ITEM_ATTIC_KEY].render_query = render_item_bear_note;
+
     for (int i = 0; i < NUM_ITEMS; i++) {
         if (game.items[i].texture_name == NULL)
             TraceLog(LOG_FATAL, "missing texture name for item %d", i);

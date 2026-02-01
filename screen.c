@@ -23,6 +23,7 @@ static void render_attic(void)
 {
     Rectangle hitbox;
     Vector2 mouse_position;
+    Texture2D tex;
     hitbox = create_rect2(275, 557, 550, 760);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
@@ -30,6 +31,35 @@ static void render_attic(void)
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_MASTER_BEDROOM);
+    }
+    if (!get_flag(OPENED_CHEST)) {
+        tex = get_texture_from_config("closed_chest");
+        hitbox = draw_texture_def(tex, 780, 527);
+        DrawRectangleRec(hitbox, MISC_HITBOX_COLOR);
+        if (check_collision_and_valid(mouse_position, hitbox)) {
+            set_cursor(CURSOR_INTERACT);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                if (selected_item(ITEM_CHEST_KEY)) {
+                    set_flag(OPENED_CHEST, true);
+                } else {
+                    create_dialogue(CROW, "I need a key to open this");
+                }
+            }
+        }
+    } else {
+        tex = get_texture_from_config("open_chest");
+        hitbox = draw_texture_def(tex, 780, 527);
+        DrawRectangleRec(hitbox, MISC_HITBOX_COLOR);
+        if (check_collision_and_valid(mouse_position, hitbox)) {
+            set_cursor(CURSOR_INTERACT);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                if (!get_flag(PICKED_UP_DEED)) {
+                    give_item(ITEM_DEED);
+                    create_dialogue(CROW, "Wow, its the deed to my father's land that my King gifted him!");
+                    set_flag(PICKED_UP_DEED, true);
+                }
+            }
+        }
     }
 }
 

@@ -31,5 +31,7 @@
     "snake": "assets/textures/snake.png",
     "pig": "assets/textures/pig.png",
     "dead_bear": "assets/textures/dead_bear.png",
-    "book": "assets/textures/book.png"
+    "book": "assets/textures/book.png",
+    "closed_chest": "assets/textures/closed_chest.png",
+    "open_chest": "assets/textures/open_chest.png"
 }

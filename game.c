@@ -113,6 +113,7 @@ void game_init(void)
     //act2 testing
     game.act = ACT2;
     game.current_screen = SCREEN_HALLWAY;
+    game.current_screen = SCREEN_ATTIC;
     set_flag(KNOCKED_ON_BATHROOM_DOOR,true);
     set_flag(FINISHED_BATHROOM_CONVO,true);
     set_flag(FINISHED_POST_BATHROOM_CONVO,true);
@@ -122,6 +123,7 @@ void game_init(void)
     set_flag(FISH_ANNOUNCEMENT,true);
     set_flag(FISH_WENT_TO_ROOM, true);
     give_item(ITEM_BEAR_NOTE);
+    give_item(ITEM_CHEST_KEY);
 
     // act3 testing
     // game.act = ACT3;
