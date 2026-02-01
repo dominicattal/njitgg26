@@ -111,24 +111,26 @@ void game_init(void)
     // give_item(ITEM_BEAR_THING);
 
     //act2 testing
-    game.act = ACT2;
-    game.current_screen = SCREEN_HALLWAY;
-    game.current_screen = SCREEN_ATTIC;
-    set_flag(KNOCKED_ON_BATHROOM_DOOR,true);
-    set_flag(FINISHED_BATHROOM_CONVO,true);
-    set_flag(FINISHED_POST_BATHROOM_CONVO,true);
-    set_flag(FINISHED_HALLWAY_CONVO,true);
-    set_flag(BEAR_ANNOUNCEMENT,true);
-    set_flag(BEAR_WENT_TO_ROOM,true);
-    set_flag(FISH_ANNOUNCEMENT,true);
-    set_flag(FISH_WENT_TO_ROOM, true);
-    give_item(ITEM_BEAR_NOTE);
-    give_item(ITEM_CHEST_KEY);
+    // game.act = ACT2;
+    // game.current_screen = SCREEN_HALLWAY;
+    // game.current_screen = SCREEN_ATTIC;
+    // set_flag(KNOCKED_ON_BATHROOM_DOOR,true);
+    // set_flag(FINISHED_BATHROOM_CONVO,true);
+    // set_flag(FINISHED_POST_BATHROOM_CONVO,true);
+    // set_flag(FINISHED_HALLWAY_CONVO,true);
+    // set_flag(BEAR_ANNOUNCEMENT,true);
+    // set_flag(BEAR_WENT_TO_ROOM,true);
+    // set_flag(FISH_ANNOUNCEMENT,true);
+    // set_flag(FISH_WENT_TO_ROOM, true);
+    // give_item(ITEM_BEAR_NOTE);
+    // give_item(ITEM_CHEST_KEY);
 
     // act3 testing
-    // game.act = ACT3;
-    // game.current_screen = SCREEN_LIVING_ROOM;
+    game.act = ACT3;
+    game.current_screen = SCREEN_LIVING_ROOM;
     //game.current_screen = NO_SCREEN;
+    for (int i = 0; i < NUM_ITEMS; i++)
+        give_item(i);
 }
 
 void draw_texture(Texture2D tex, float x, float y, float w, float h)

@@ -11,7 +11,6 @@ Rectangle render_character(CharacterEnum character, int x, int y)
 {
     Rectangle rect = character_hitbox(character, x, y);
     Texture2D tex = get_texture_from_config(game.characters[character].texture_name);
-    DrawRectangleRec(rect, WHITE);
     draw_texture_rect(tex, rect);
     return rect;
 }
@@ -81,8 +80,8 @@ void character_init(void)
     game.characters[OWL].portrait_texture_name = "owl_portrait";
     game.characters[OWL].texture_name = "owl";
     tex = get_texture_from_config(game.characters[OWL].texture_name);
-    game.characters[OWL].width = 220;
-    game.characters[OWL].height = 300;
+    game.characters[OWL].width = tex.width;
+    game.characters[OWL].height = tex.height;
 
     for (int i = 0; i < NUM_CHARACTERS; i++) {
         if (game.characters[i].texture_name == NULL)

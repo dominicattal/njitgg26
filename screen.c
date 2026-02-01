@@ -55,6 +55,7 @@ static void render_attic(void)
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
                 if (!get_flag(PICKED_UP_DEED)) {
                     give_item(ITEM_DEED);
+                    take_item(ITEM_CHEST_KEY);
                     create_dialogue(CROW, "Wow, its the deed to my father's land that my King gifted him!");
                     set_flag(PICKED_UP_DEED, true);
                 }
@@ -585,7 +586,7 @@ static void render_dining_act2(void)
 
 static void render_foyer(void)
 {
-    Rectangle hitbox = create_rect2(636, 428, 945, 862);
+    Rectangle hitbox = create_rect2(424, 642, 688, 982);
     Vector2 mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
     if (check_collision_and_valid(mouse_position, hitbox)) {
@@ -593,7 +594,7 @@ static void render_foyer(void)
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_HALLWAY);
     }
-    hitbox = create_rect2(1800, 519, 1920, 1000);
+    hitbox = create_rect2(1613, 597, 1920, 1024);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
     if (check_collision_and_valid(mouse_position, hitbox)) {
@@ -601,7 +602,7 @@ static void render_foyer(void)
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_KITCHEN);
     }
-    hitbox = create_rect2(427, 990, 800, 1080);
+    hitbox = create_rect2(0, 448, 280, 1020);
     mouse_position = get_scaled_mouse_position();
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
     if (check_collision_and_valid(mouse_position, hitbox)) {
@@ -628,7 +629,7 @@ static void render_foyer_act1(void)
 {
     Rectangle hitbox;
     Vector2 mouse_position = get_scaled_mouse_position();
-    hitbox = render_character(BEAR, 1289, 870);
+    hitbox = render_character(BEAR, 1260, 1015);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -648,7 +649,7 @@ static void render_foyer_act1(void)
             }
         }
     }
-    hitbox = render_character(FISH, 1024, 856);
+    hitbox = render_character(FISH, 909, 1020);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -657,7 +658,7 @@ static void render_foyer_act1(void)
             create_dialogue(CROW, get_text_from_config("crow_fish_intro_2"));
         }
     }
-    hitbox = render_character(OWL, 427, 881);
+    hitbox = render_character(OWL, 332, 1042);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -709,7 +710,7 @@ void render_living_room_act1(void)
             create_dialogue(DOG, get_text_from_config("dog_crow_intro_1"));
         }
     }
-    hitbox = render_character(SNAKE, 728, 571);
+    hitbox = render_character(SNAKE, 728, 750);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {

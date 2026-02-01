@@ -10,6 +10,7 @@ SOURCES = main.c \
 		  config.c \
 		  character.c
 
+OBJS_REL = $(SOURCES:%.c=build/release/%.o)
 OBJS_DEV = $(SOURCES:%.c=build/dev/%.o)
 
 all: dev
@@ -22,6 +23,19 @@ build/dev/%.o: %.c
 	@mkdir -p $(shell dirname $@)
 	@echo $<
 	@$(CC) $(CFLAGS) -D DEBUG_BUILD -g3 -Og -c -o $@ $<
+
+release: $(OBJS_REL)
+	@echo $(SOURCES)
+	@mkdir -p bin
+	@mkdir -p bin/MasqueradeMacabre
+	@echo $(OBJS_REL)
+	@$(CC) $(OBJS_REL) -static $(CFLAGS) -mwindows -O2 -o bin/MasqueradeMacabre/masquerademacabre.exe
+	@cp -r assets config bin/MasqueradeMacabre
+
+build/release/%.o: %.c
+	@echo $<
+	@mkdir -p $(shell dirname $@)
+	@$(CC) $(CFLAGS) -O2 -c -o $@ $<
 
 clean:
 	rm -rf build bin

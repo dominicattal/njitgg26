@@ -33,5 +33,11 @@
     "dead_bear": "assets/textures/dead_bear.png",
     "book": "assets/textures/book.png",
     "closed_chest": "assets/textures/closed_chest.png",
-    "open_chest": "assets/textures/open_chest.png"
+    "open_chest": "assets/textures/open_chest.png",
+    "item_chest_key": "assets/textures/chest_key.png",
+    "item_attic_key": "assets/textures/attic_key.png",
+    "item_knife": "assets/textures/knife.png",
+    "item_deed": "assets/textures/deed.png",
+    "item_book": "assets/textures/item_book.png",
+    "item_deed": "assets/textures/item_deed.png"
 }
