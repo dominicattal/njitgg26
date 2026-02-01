@@ -70,6 +70,7 @@ int main(void)
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT, "njitgg26");
+    ToggleBorderlessWindowed();
     SetExitKey(KEY_NULL);
     HideCursor();
 
