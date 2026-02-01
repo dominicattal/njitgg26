@@ -38,8 +38,8 @@ void character_init(void)
     game.characters[BEAR].height = tex.height;
 
     game.characters[CROW].display_name = "Crow";
-    game.characters[CROW].portrait_texture_name = "player_portrait";
-    game.characters[CROW].texture_name = "player";
+    game.characters[CROW].portrait_texture_name = "crow_portrait";
+    game.characters[CROW].texture_name = "crow";
 
     game.characters[FISH].display_name = "Fish";
     game.characters[FISH].portrait_texture_name = "fish_portrait";

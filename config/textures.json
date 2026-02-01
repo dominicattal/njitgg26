@@ -37,7 +37,14 @@
     "item_chest_key": "assets/textures/chest_key.png",
     "item_attic_key": "assets/textures/attic_key.png",
     "item_knife": "assets/textures/knife.png",
-    "item_deed": "assets/textures/deed.png",
     "item_book": "assets/textures/item_book.png",
-    "item_deed": "assets/textures/item_deed.png"
+    "item_deed": "assets/textures/item_deed.png",
+    "bearon_portrait": "assets/textures/bearon_portrait.png",
+    "crow_portrait": "assets/textures/crow_portrait.png",
+    "fish_portrait": "assets/textures/fish_portrait.png",
+    "pig_portrait": "assets/textures/pig_portrait.png",
+    "dog_portrait": "assets/textures/dog_portrait.png",
+    "snake_portrait": "assets/textures/snake_portrait.png",
+    "cat_portrait": "assets/textures/cat_portrait.png",
+    "owl_portrait": "assets/textures/owl_portrait.png"
 }

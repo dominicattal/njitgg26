@@ -102,7 +102,7 @@ void game_init(void)
 
     // act1 testing
     // setting game state for testing
-    set_flag(IN_MENU, false);
+    //set_flag(IN_MENU, false);
 
     // set_flag(TALKED_TO_ALL, true);
     // set_flag(TALKED_TO_BEAR, true);
@@ -126,11 +126,11 @@ void game_init(void)
     // give_item(ITEM_CHEST_KEY);
 
     // act3 testing
-    game.act = ACT3;
-    game.current_screen = SCREEN_LIVING_ROOM;
+    //game.act = ACT3;
+    //game.current_screen = SCREEN_LIVING_ROOM;
     //game.current_screen = NO_SCREEN;
-    for (int i = 0; i < NUM_ITEMS; i++)
-        give_item(i);
+    //for (int i = 0; i < NUM_ITEMS; i++)
+    //    give_item(i);
 }
 
 void draw_texture(Texture2D tex, float x, float y, float w, float h)
