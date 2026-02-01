@@ -97,7 +97,7 @@ void game_init(void)
     set_flag(TALKED_TO_ALL, true);
 }
 
-static void draw_texture(Texture2D tex, float x, float y, float w, float h)
+void draw_texture(Texture2D tex, float x, float y, float w, float h)
 {
     Rectangle src, dst;
     src = (Rectangle) { 0, 0, tex.width, tex.height };
@@ -105,11 +105,21 @@ static void draw_texture(Texture2D tex, float x, float y, float w, float h)
     DrawTexturePro(tex, src, dst, (Vector2) {0,0}, 0, (Color){255,255,255,255});
 }
 
-static void draw_texture_rect(Texture2D tex, Rectangle rect)
+void draw_texture_rect(Texture2D tex, Rectangle rect)
 {
     Rectangle src;
     src = (Rectangle) { 0, 0, tex.width, tex.height };
     DrawTexturePro(tex, src, rect, (Vector2) {0,0}, 0, (Color){255,255,255,255});
+}
+
+// return hitbox
+Rectangle draw_texture_def(Texture2D tex, float x, float y)
+{
+    Rectangle src, dst;
+    src = (Rectangle) { 0, 0, tex.width, tex.height };
+    dst = (Rectangle) { x-tex.width/2, y-tex.height, tex.width, tex.height };
+    DrawTexturePro(tex, src, dst, (Vector2) {0,0}, 0, (Color){255,255,255,255});
+    return dst;
 }
 
 static void start_game(void)

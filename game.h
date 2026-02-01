@@ -166,4 +166,8 @@ void create_dialogue(CharacterEnum character, const char* dialogue);
 void advance_dialogue(void);
 bool in_dialogue(void);
 
+void draw_texture(Texture2D tex, float x, float y, float w, float h);
+void draw_texture_rect(Texture2D tex, Rectangle rect);
+Rectangle draw_texture_def(Texture2D tex, float x, float y);
+
 #endif

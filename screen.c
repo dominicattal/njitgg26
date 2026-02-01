@@ -325,6 +325,7 @@ static void render_living_room(void)
 {
     Rectangle hitbox;
     Vector2 mouse_position = get_scaled_mouse_position();
+    Texture2D tex;
     hitbox = create_rect2(112, 185, 381, 483);
     DrawRectangleRec(hitbox, ROOM_HITBOX_COLOR);
     if (check_collision_and_valid(mouse_position, hitbox)) {
@@ -339,8 +340,8 @@ static void render_living_room(void)
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             screen_transition(SCREEN_DINING_ROOM);
     }
-    hitbox = create_rect2(371, 133, 666, 520);
-    DrawRectangleRec(hitbox, MISC_HITBOX_COLOR);
+    tex = get_texture_from_config("bookshelf");
+    hitbox = draw_texture_def(tex, 527, 506);
     if (check_collision_and_valid(mouse_position, hitbox)) {
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {

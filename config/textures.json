@@ -18,5 +18,6 @@
     "car": "assets/textures/car.png",
     "item_foyer": "assets/textures/item_foyer.png",
     "bear_portrait": "assets/textures/bearon_portrait.png",
-    "right_arrow": "assets/textures/right_arrow.png"
+    "right_arrow": "assets/textures/right_arrow.png",
+    "bookshelf": "assets/textures/bookshelf.png"
 }
