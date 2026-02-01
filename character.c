@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "raylib.h"
 #include "main.h"
+#include "config.h"
 #include "game.h"
 
 #define CHARACTER_HITBOX_COLOR ((Color){0,255,255,100})
@@ -9,7 +10,9 @@
 Rectangle render_character(CharacterEnum character, int x, int y)
 {
     Rectangle rect = character_hitbox(character, x, y);
-    DrawRectangleRec(rect, CHARACTER_HITBOX_COLOR);
+    Texture2D tex = get_texture_from_config(game.characters[character].texture_name);
+    //DrawRectangleRec(rect, CHARACTER_HITBOX_COLOR);
+    draw_texture_rect(tex, rect);
     return rect;
 }
 
@@ -27,11 +30,13 @@ Rectangle character_hitbox(CharacterEnum character, int x, int y)
 
 void character_init(void)
 {
+    Texture2D tex;
     game.characters[BEAR].display_name = "Bearon";
     game.characters[BEAR].portrait_texture_name = "bearon_portrait";
     game.characters[BEAR].texture_name = "bearon";
-    game.characters[BEAR].width = 220;
-    game.characters[BEAR].height = 300;
+    tex = get_texture_from_config(game.characters[BEAR].texture_name);
+    game.characters[BEAR].width = tex.width;
+    game.characters[BEAR].height = tex.height;
 
     game.characters[CROW].display_name = "Crow";
     game.characters[CROW].portrait_texture_name = "player_portrait";
@@ -40,8 +45,9 @@ void character_init(void)
     game.characters[FISH].display_name = "Fish";
     game.characters[FISH].portrait_texture_name = "fish_portrait";
     game.characters[FISH].texture_name = "fish";
-    game.characters[FISH].width = 220;
-    game.characters[FISH].height = 300;
+    tex = get_texture_from_config(game.characters[FISH].texture_name);
+    game.characters[FISH].width = tex.width;
+    game.characters[FISH].height = tex.height;
 
     game.characters[PIG].display_name = "Pig";
     game.characters[PIG].portrait_texture_name = "pig_portrait";

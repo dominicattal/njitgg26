@@ -22,5 +22,7 @@
     "bookshelf": "assets/textures/bookshelf.png",
     "desk_with_drawers": "assets/textures/desk_with_drawers.png",
     "item_bear_note": "assets/textures/bear_note.png",
-    "item_bear_thing": "assets/textures/bear_thing.png"
+    "item_bear_thing": "assets/textures/bear_thing.png",
+    "bearon": "assets/textures/bearon.png",
+    "fish": "assets/textures/fish.png"
 }
