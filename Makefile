@@ -29,7 +29,7 @@ release: $(OBJS_REL)
 	@mkdir -p bin
 	@mkdir -p bin/MasqueradeMacabre
 	@echo $(OBJS_REL)
-	@$(CC) $(OBJS_REL) -static $(CFLAGS) -mwindows -O2 -o bin/MasqueradeMacabre/masquerademacabre.exe
+	@$(CC) $(OBJS_REL) $(CFLAGS) -mwindows -O2 -o bin/MasqueradeMacabre/masquerademacabre.exe
 	@cp -r assets config bin/MasqueradeMacabre
 
 build/release/%.o: %.c

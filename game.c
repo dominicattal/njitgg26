@@ -102,7 +102,7 @@ void game_init(void)
 
     // act1 testing
     // setting game state for testing
-    //set_flag(IN_MENU, false);
+    set_flag(IN_MENU, false);
 
     // set_flag(TALKED_TO_ALL, true);
     // set_flag(TALKED_TO_BEAR, true);
