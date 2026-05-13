@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "raylib.h"
 #include "main.h"
 #include "config.h"
@@ -91,5 +92,25 @@ void character_init(void)
         if (game.characters[i].display_name == NULL)
             TraceLog(LOG_FATAL, "missing display name for character %d", i);
     }
+}
 
+CharacterEnum character_from_name(const char* name)
+{
+    if (strcmp(name, "crow") == 0)
+        return CROW;
+    if (strcmp(name, "bear") == 0)
+        return BEAR;
+    if (strcmp(name, "fish") == 0)
+        return FISH;
+    if (strcmp(name, "pig") == 0)
+        return PIG;
+    if (strcmp(name, "dog") == 0)
+        return DOG;
+    if (strcmp(name, "snake") == 0)
+        return SNAKE;
+    if (strcmp(name, "cat") == 0)
+        return CAT;
+    if (strcmp(name, "owl") == 0)
+        return OWL;
+    return NO_CHARACTER;
 }

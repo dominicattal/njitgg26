@@ -130,6 +130,10 @@ void config_init(void)
     if (ctx.texture_config == NULL)
         TraceLog(LOG_FATAL, "could not read texture config file, probably because of a syntax error");
 
+    ctx.dialogue_config = json_read("config/dialogue.json");
+    if (ctx.dialogue_config == NULL)
+        TraceLog(LOG_FATAL, "could not read dialogue config file, probably because of a syntax error");
+
     ctx.text_config = json_read("config/text.json");
     if (ctx.text_config == NULL)
         TraceLog(LOG_FATAL, "could not read text config file, probably because of a syntax error");
@@ -230,6 +234,24 @@ Font get_font_from_config(const char* name)
     return GetFontDefault();
 }
 
+JsonArray* get_dialogue_from_config(const char* key)
+{
+    JsonValue* value = json_object_get_value(ctx.text_config, key);
+    if (value == NULL) {
+        TraceLog(LOG_WARNING, "Missing dialogue %s, using default", key);
+        goto return_placeholder;
+    }
+    if (json_value_get_type(value) != JTYPE_ARRAY) {
+        TraceLog(LOG_WARNING, "Incorrect json value for dialogue %s, using default", key);
+        goto return_placeholder;
+    }
+    return json_value_get_array(value);
+return_placeholder:
+    if (strcmp(key, "placeholder") == 0)
+        return NULL;
+    return get_dialogue_from_config("placeholder");
+}
+
 char* get_text_from_config(const char* key)
 {
     JsonValue* value = json_object_get_value(ctx.text_config, key);
@@ -281,6 +303,7 @@ void config_cleanup(void)
     //free(ctx.sound_names);
     //free(ctx.sounds);
     json_object_destroy(ctx.texture_config);
+    json_object_destroy(ctx.dialogue_config);
     json_object_destroy(ctx.text_config);
     json_object_destroy(ctx.font_config);
     json_object_destroy(ctx.sound_config);

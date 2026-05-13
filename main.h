@@ -14,6 +14,7 @@ typedef enum CursorEnum {
 typedef struct GlobalContext {
     GameState* game_state;
 
+    JsonObject* dialogue_config;
     JsonObject* text_config;
 
     JsonObject* font_config;

@@ -63,6 +63,68 @@ void create_dialogue(CharacterEnum character, const char* dialogue)
     }
 }
 
+static void push_dialogue(CharacterEnum character, const char* dialogue)
+{
+    DialogueNode* node = malloc(sizeof(DialogueNode));
+    node->character = character;
+    node->dialogue = dialogue;
+    node->next = NULL;
+    if (game.dialogue_tail == NULL) {
+        game.dialogue_head = node;
+        game.dialogue_tail = node;
+    } else {
+        game.dialogue_tail->next = node;
+        game.dialogue_tail = node;
+    }
+}
+
+void create_dialogue_new(const char* dialogue_key)
+{
+    JsonValue* value;
+    JsonArray* text_pair;
+    const char* character_name;
+    const char* text_key;
+    const char* text;
+    CharacterEnum character;
+    JsonArray* dialogue_array = get_dialogue_from_config(dialogue_key);
+    if (dialogue_array == NULL) {
+        TraceLog(LOG_WARNING, "dialogue %s does not exist", dialogue_key);
+        return;
+    }
+    int length = json_array_length(dialogue_array);
+    for (int i = 0; i < length; i++) {
+        value = json_array_get(dialogue_array, i);
+        if (json_value_get_type(value) != JTYPE_ARRAY) {
+            TraceLog(LOG_WARNING, "dialogue %s has improper type, ignoring", dialogue_key);
+            continue;
+        }
+        text_pair = json_value_get_array(value);
+        if (json_array_length(text_pair) != 2) {
+            TraceLog(LOG_WARNING, "dialogue %s array length must equal 2", dialogue_key);
+            continue;
+        }
+        value = json_array_get(text_pair, 0);
+        if (json_value_get_type(value) != JTYPE_STRING) {
+            TraceLog(LOG_WARNING, "dialogue %s character name is not a string", dialogue_key);
+            continue;
+        }
+        character_name = json_value_get_string(value);
+        character = character_from_name(character_name);
+        if (character == NO_CHARACTER) {
+            TraceLog(LOG_WARNING, "dialogue %s character name is invalid", dialogue_key);
+            continue;
+        }
+        value = json_array_get(text_pair, 1);
+        if (json_value_get_type(value) != JTYPE_STRING) {
+            TraceLog(LOG_WARNING, "dialogue %s text key is not a string", dialogue_key);
+            continue;
+        }
+        text_key = json_value_get_string(value);
+        text = get_text_from_config(text_key);
+        push_dialogue(character, text);
+    }
+}
+
 void advance_dialogue(void)
 {
     if (game.dialogue_head == NULL) return;

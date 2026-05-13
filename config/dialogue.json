@@ -1,0 +1,9 @@
+{
+    "placeholder": [
+        ["crow", "missing dialogue"]
+    ],
+    "crow_owl_intro": [
+        ["crow", "crow_owl_intro_1"],
+        ["owl", "crow_owl_intro_2"]
+    ]
+}

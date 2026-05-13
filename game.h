@@ -181,6 +181,9 @@ void item_init(void);
 
 void character_init(void);
 
+// returns NO_CHARACTER if name is invalid
+CharacterEnum character_from_name(const char* name);
+
 void timer_set(TimerEnum timer, float max_value);
 void timer_unset(TimerEnum timer);
 bool timer_isdone(TimerEnum timer);
@@ -200,6 +203,7 @@ char* character_display_name(CharacterEnum character);
 Rectangle render_character(CharacterEnum character, int x, int y);
 Rectangle character_hitbox(CharacterEnum character, int x, int y);
 
+void create_dialogue_new(const char* dialogue_key);
 void create_dialogue(CharacterEnum character, const char* dialogue);
 void advance_dialogue(void);
 bool in_dialogue(void);

@@ -102,10 +102,13 @@ int main(void)
         UpdateMusicStream(music);
         game_update(GetFrameTime());
         BeginTextureMode(framebuffer);
+        {
             ClearBackground(RAYWHITE);
             game_render();
+        }
         EndTextureMode();
         BeginDrawing();
+        {
             ClearBackground(BLUE);
 
             Rectangle src, dst;
@@ -116,7 +119,7 @@ int main(void)
             game_render_gui();
 
             DrawTextureV(ctx.cursor_textures[ctx.current_cursor], GetMousePosition(), (Color){255,255,255,255});
-
+        }
         EndDrawing();
 
         if (WindowShouldClose())

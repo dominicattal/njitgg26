@@ -4,6 +4,7 @@
 #include <raylib.h>
 
 Texture2D get_texture_from_config(const char* name);
+JsonArray* get_dialogue_from_config(const char* key);
 char* get_text_from_config(const char* key);
 Font get_font_from_config(const char* key);
 Sound get_sound_from_config(const char* key);

@@ -663,6 +663,7 @@ static void render_foyer_act1(void)
         set_cursor(CURSOR_INTERACT);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             set_flag(TALKED_TO_OWL, true);
+            create_dialogue_new("crow_owl_intro");
             create_dialogue(CROW, get_text_from_config("crow_owl_intro_1"));
             create_dialogue(OWL, get_text_from_config("owl_crow_intro_2"));
         }
