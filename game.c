@@ -68,7 +68,6 @@ void create_dialogue(const char* dialogue_key)
     JsonValue* value;
     JsonArray* text_pair;
     const char* character_name;
-    const char* text_key;
     const char* text;
     CharacterEnum character;
     JsonArray* dialogue_array = get_dialogue_from_config(dialogue_key);
@@ -104,8 +103,7 @@ void create_dialogue(const char* dialogue_key)
             TraceLog(LOG_WARNING, "dialogue %s text key is not a string", dialogue_key);
             continue;
         }
-        text_key = json_value_get_string(value);
-        text = get_text_from_config(text_key);
+        text= json_value_get_string(value);
         create_text(character, text);
     }
 }

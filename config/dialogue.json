@@ -30,30 +30,30 @@
         ["pig", "crow_pig_intro_2"]
     ],
     "crow_bear_get_note": [
-        ["bear", "crow_bear_get_note_1"],
-        ["crow", "crow_bear_get_note_2"]
+        ["bear", "Can you get me the thing from my bedroom?"],
+        ["crow", "Of course I can"]
     ],
     "crow_should_give_thing": [
-        ["crow", "crow_should_give_thing_1"]
+        ["crow", "I should give my father the thing he asked for"]
     ],
     "bear_receive_thing": [
-        ["bear", "bear_receive_thing"]
+        ["bear", "Thanks"]
     ],
     "filler_book_1": [
         ["crow", "This book is about blah blah blah"]
     ],
     "filler_book_2": [
-        ["crow", "filler_book_2"]
+        ["crow", "Wow what a great book"]
     ],
     "knocked_on_bathroom_door": [
-        ["crow", "knocked_on_bathroom_door_1"],
-        ["bear", "knocked_on_bathroom_door_2"]
+        ["crow", "Is someone in there?"],
+        ["bear", "Be right out"]
     ],
     "crow_try_bathroom": [
         ["crow", "crow_try_bathroom"]
     ],
     "crow_try_parents_room": [
-        ["crow", "crow_try_parents_room"]
+        ["crow", "I probably shouldn't go into my parent's room"]
     ],
     "crow_find_father": [
         ["crow", "I should go find my father"]
@@ -62,9 +62,9 @@
         ["crow", "I should ask my father if he's okay, he doesn't look well"]
     ],
     "crow_bear_hallway": [
-        ["crow", "crow_bear_bathroom_1"],
-        ["bear", "crow_bear_bathroom_2"],
-        ["crow", "crow_bear_bathroom_3"]
+        ["crow", "Are you okay father?"],
+        ["bear", "Im feeling quite dizzy, but I think I can come out for dinner"],
+        ["crow", "I see. Anyways, father, when I was in your room, I fou-"]
     ],
     "crow_fish_hallway": [
         ["crow", "crow_fish_bathroom_1"],
@@ -72,7 +72,7 @@
         ["crow", "crow_bear_bathroom_3"]
     ],
     "crow_try_to_leave_master_bedroom": [
-        ["crow", "crow_try_leave_master_bedroom"]
+        ["crow", "I need to get the thing for my father first"]
     ],
     "crow_try_to_leave_master_after_death": [
         ["crow", "crow_try_to_leave_master_after_death"]
@@ -87,7 +87,7 @@
         ["crow", "What's this?"]
     ],
     "should_examine_note": [
-        ["crow", "should_examine_note"]
+        ["crow", "I should read the note I picked up"]
     ],
     "under_master_bed": [
         ["crow", "under_master_bed"]
@@ -102,11 +102,11 @@
         ["crow", "omg father is dead what"]
     ],
     "crow_pig_alcohol": [
-        ["pig", "pig_crow_alcohol_1"],
-        ["crow", "crow_pig_alcohol_2"]
+        ["pig", "I'm getting wine for the party"],
+        ["crow", "sounds good"]
     ],
     "crow_find_knife": [
-        ["crow", "crow_find_knife"]
+        ["crow", "There's a knife in the sink with some blood at the tip."]
     ],
     "shouldnt_exit_dining": [
         ["crow", "shouldnt_exit_dining"]
@@ -166,17 +166,17 @@
         ["crow", "Wow, its the deed to my father's land that my King gifted him!"]
     ],
     "fish_wonder_about_bear": [
-        ["fish", "fish wonder about bear"]
+        ["fish", "Dinner will start soon, I wonder where your father is"]
     ],
     "crow_should_talk_to_father": [
         ["crow", "I should talk to my father"]
     ],
     "bear_note_crow_response": [
-        ["crow", "Bear note crow response"]
+        ["crow", "OMG this crazy"]
     ],
     "post_bathroom_convo": [
-        ["fish", "fish_hallway_1"],
-        ["bear", "bear_hallway_2"]
+        ["fish", "There you are! Our guests our waiting, come"],
+        ["bear", "Coming"]
     ],
     "bear_leave_dining": [
         ["bear", "bear_leave_dining"]
@@ -188,7 +188,7 @@
         ["dog", "dog is shocked"]
     ],
     "confrontation": [
-        ["crow", "confrontation_1"]
+        ["crow", "One of you killed my father, and no one can leave until I figure out who did"]
     ],
     "dog_give_key": [
         ["dog", "dog_give_key"]
