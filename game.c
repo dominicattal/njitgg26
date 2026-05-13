@@ -48,7 +48,7 @@ char* character_display_name(CharacterEnum character)
     return game.characters[character].display_name;
 }
 
-void create_dialogue(CharacterEnum character, const char* dialogue)
+void create_text(CharacterEnum character, const char* dialogue)
 {
     DialogueNode* node = malloc(sizeof(DialogueNode));
     node->character = character;
@@ -63,22 +63,7 @@ void create_dialogue(CharacterEnum character, const char* dialogue)
     }
 }
 
-static void push_dialogue(CharacterEnum character, const char* dialogue)
-{
-    DialogueNode* node = malloc(sizeof(DialogueNode));
-    node->character = character;
-    node->dialogue = dialogue;
-    node->next = NULL;
-    if (game.dialogue_tail == NULL) {
-        game.dialogue_head = node;
-        game.dialogue_tail = node;
-    } else {
-        game.dialogue_tail->next = node;
-        game.dialogue_tail = node;
-    }
-}
-
-void create_dialogue_new(const char* dialogue_key)
+void create_dialogue(const char* dialogue_key)
 {
     JsonValue* value;
     JsonArray* text_pair;
@@ -121,7 +106,7 @@ void create_dialogue_new(const char* dialogue_key)
         }
         text_key = json_value_get_string(value);
         text = get_text_from_config(text_key);
-        push_dialogue(character, text);
+        create_text(character, text);
     }
 }
 
@@ -162,9 +147,10 @@ void game_init(void)
     item_init();
     character_init();
 
+    set_flag(IN_MENU, false);
+
     // act1 testing
     // setting game state for testing
-    set_flag(IN_MENU, false);
 
     // set_flag(TALKED_TO_ALL, true);
     // set_flag(TALKED_TO_BEAR, true);
@@ -173,7 +159,7 @@ void game_init(void)
     // give_item(ITEM_BEAR_THING);
 
     //act2 testing
-    // game.act = ACT2;
+    game.act = ACT2;
     // game.current_screen = SCREEN_HALLWAY;
     // game.current_screen = SCREEN_ATTIC;
     // set_flag(KNOCKED_ON_BATHROOM_DOOR,true);
@@ -567,7 +553,7 @@ static void update_act1(void)
 {
     if (!get_flag(TALKED_TO_ALL) && talked_to_all_characters()) {
         set_flag(TALKED_TO_ALL, true);
-        create_dialogue(CROW, "I should talk to my father");
+        create_dialogue("crow_should_talk_to_father");
         clear_talked_characters();
     }
 
@@ -576,7 +562,7 @@ static void update_act1(void)
     }
     if (!get_flag(BEAR_NOTE_RESPONSE) && get_flag(EXAMINED_BEAR_NOTE) && game.queried_item != ITEM_BEAR_NOTE) {
         set_flag(BEAR_NOTE_RESPONSE, true);
-        create_dialogue(CROW, get_text_from_config("bear_note_crow_response"));
+        create_dialogue("bear_note_crow_response");
     }
 }
 
@@ -588,8 +574,7 @@ static void update_act2(void)
     }
     if (!get_flag(FINISHED_POST_BATHROOM_CONVO) && get_flag(TALKED_TO_BEAR) && !in_dialogue()) {
         set_flag(FINISHED_POST_BATHROOM_CONVO, true);
-        create_dialogue(FISH, get_text_from_config("fish_hallway_1"));
-        create_dialogue(BEAR, get_text_from_config("bear_hallway_2"));
+        create_dialogue("post_bathroom_convo");
     }
     if (!get_flag(FINISHED_HALLWAY_CONVO) && get_flag(FINISHED_POST_BATHROOM_CONVO) && !in_dialogue()) {
         set_flag(FINISHED_HALLWAY_CONVO, true);
@@ -602,14 +587,14 @@ static void update_act2(void)
         && get_flag(TALKED_TO_OWL)
         && get_flag(TALKED_TO_CAT)) {
 
-        create_dialogue(BEAR, get_text_from_config("bear_leave_dining"));
+        create_dialogue("bear_leave_dining");
         set_flag(BEAR_ANNOUNCEMENT, true);
     }
     if (!get_flag(BEAR_WENT_TO_ROOM) && get_flag(BEAR_ANNOUNCEMENT) && !in_dialogue()) {
         set_flag(BEAR_WENT_TO_ROOM, true);
     }
     if (!get_flag(FISH_ANNOUNCEMENT) && get_flag(BEAR_WENT_TO_ROOM)) {
-        create_dialogue(FISH, get_text_from_config("fish_leave_dining"));
+        create_dialogue("fish_leave_dining");
         set_flag(FISH_ANNOUNCEMENT, true);
     }
     if (!get_flag(FISH_WENT_TO_ROOM) && get_flag(FISH_ANNOUNCEMENT) && !in_dialogue()) {
@@ -619,7 +604,7 @@ static void update_act2(void)
     }
     if (!get_flag(DOG_IN_MASTER_BEDROOM) && get_flag(FISH_WENT_TO_ROOM) && get_flag(TALKED_TO_FISH) && get_flag(TALKED_TO_BEAR) && !in_dialogue()) {
         set_flag(DOG_IN_MASTER_BEDROOM, true);
-        create_dialogue(DOG, get_text_from_config("dog_shocked"));
+        create_dialogue("dog shocked");
     }
     if (get_flag(DOG_IN_MASTER_BEDROOM) && !in_dialogue()) {
         act_transition(ACT3);
@@ -631,10 +616,10 @@ static void update_act3(void)
 {
     if (!get_flag(CONFRONTATION)) {
         set_flag(CONFRONTATION, true);
-        create_dialogue(CROW, get_text_from_config("confrontation_1"));
+        create_dialogue("confrontation_1");
     }
     if (!get_flag(DOG_GIVE_ATTIC_KEY) && get_flag(CONFRONTATION) && !in_dialogue()) {
-        create_dialogue(DOG, get_text_from_config("dog_give_key"));
+        create_dialogue("dog_give_key");
         give_item(ITEM_ATTIC_KEY);
         set_flag(DOG_GIVE_ATTIC_KEY, true);
     }

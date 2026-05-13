@@ -3,7 +3,194 @@
         ["crow", "missing dialogue"]
     ],
     "crow_owl_intro": [
-        ["crow", "crow_owl_intro_1"],
-        ["owl", "crow_owl_intro_2"]
+        ["crow", "placeholder"],
+        ["owl", "placeholder"]
+    ],
+    "crow_fish_intro": [
+        ["fish", "crow_fish_intro_1"],
+        ["crow", "crow_fish_intro_2"]
+    ],
+    "crow_bear_intro": [
+        ["bear", "crow_bear_intro_1"],
+        ["crow", "crow_bear_intro_2"]
+    ],
+    "crow_dog_intro": [
+        ["dog", "crow_dog_intro_1"]
+    ],
+    "crow_snake_intro": [
+        ["crow", "crow_snake_intro_1"],
+        ["snake", "crow_snake_intro_2"]
+    ],
+    "crow_cat_intro": [
+        ["crow", "crow_cat_intro_1"],
+        ["cat", "crow_cat_intro_2"]
+    ],
+    "crow_pig_intro": [
+        ["crow", "crow_pig_intro_1"],
+        ["pig", "crow_pig_intro_2"]
+    ],
+    "crow_bear_get_note": [
+        ["bear", "crow_bear_get_note_1"],
+        ["crow", "crow_bear_get_note_2"]
+    ],
+    "crow_should_give_thing": [
+        ["crow", "crow_should_give_thing_1"]
+    ],
+    "bear_receive_thing": [
+        ["bear", "bear_receive_thing"]
+    ],
+    "filler_book_1": [
+        ["crow", "This book is about blah blah blah"]
+    ],
+    "filler_book_2": [
+        ["crow", "filler_book_2"]
+    ],
+    "knocked_on_bathroom_door": [
+        ["crow", "knocked_on_bathroom_door_1"],
+        ["bear", "knocked_on_bathroom_door_2"]
+    ],
+    "crow_try_bathroom": [
+        ["crow", "crow_try_bathroom"]
+    ],
+    "crow_try_parents_room": [
+        ["crow", "crow_try_parents_room"]
+    ],
+    "crow_find_father": [
+        ["crow", "I should go find my father"]
+    ],
+    "crow_ask_father_if_okay": [
+        ["crow", "I should ask my father if he's okay, he doesn't look well"]
+    ],
+    "crow_bear_hallway": [
+        ["crow", "crow_bear_bathroom_1"],
+        ["bear", "crow_bear_bathroom_2"],
+        ["crow", "crow_bear_bathroom_3"]
+    ],
+    "crow_fish_hallway": [
+        ["crow", "crow_fish_bathroom_1"],
+        ["bear", "crow_fish_bathroom_2"],
+        ["crow", "crow_bear_bathroom_3"]
+    ],
+    "crow_try_to_leave_master_bedroom": [
+        ["crow", "crow_try_leave_master_bedroom"]
+    ],
+    "crow_try_to_leave_master_after_death": [
+        ["crow", "crow_try_to_leave_master_after_death"]
+    ],
+    "get_important_book": [
+        ["crow", "get_important_book"]
+    ],
+    "filler_desk_1": [
+        ["crow", "filler_desk1"]
+    ],
+    "pickup_note": [
+        ["crow", "What's this?"]
+    ],
+    "should_examine_note": [
+        ["crow", "should_examine_note"]
+    ],
+    "under_master_bed": [
+        ["crow", "under_master_bed"]
+    ],
+    "need_key": [
+        ["crow", "I need a key to open this"]
+    ],
+    "fish_master_bedroom": [
+        ["fish", "fish_master_bedroom_1"]
+    ],
+    "crow_dead_father": [
+        ["crow", "omg father is dead what"]
+    ],
+    "crow_pig_alcohol": [
+        ["pig", "pig_crow_alcohol_1"],
+        ["crow", "crow_pig_alcohol_2"]
+    ],
+    "crow_find_knife": [
+        ["crow", "crow_find_knife"]
+    ],
+    "shouldnt_exit_dining": [
+        ["crow", "shouldnt_exit_dining"]
+    ],
+    "snake_dining_1": [
+        ["snake", "snake_dining_1"]
+    ],
+    "snake_dining_2": [
+        ["snake", "snake_dining_2"]
+    ],
+    "cat_dining_1": [
+        ["cat", "cat_dining_1"]
+    ],
+    "cat_dining_2": [
+        ["cat", "cat_dining_2"]
+    ],
+    "owl_dining_1": [
+        ["owl", "owl_dining_1"]
+    ],
+    "owl_dining_2": [
+        ["owl", "owl_dining_2"]
+    ],
+    "dog_dining_1": [
+        ["dog", "dog_dining_1"]
+    ],
+    "dog_dining_2": [
+        ["dog", "dog_dining_2"]
+    ],
+    "fish_dining_1": [
+        ["fish", "fish_dining_1"]
+    ],
+    "bear_dining_1": [
+        ["bear", "bear_dining_1"]
+    ],
+    "dog_act3": [
+        ["dog", "dog act 3"]
+    ],
+    "snake_act3": [
+        ["snake", "snake act 3"]
+    ],
+    "cat_act3": [
+        ["cat", "cat act 3"]
+    ],
+    "fish_act3": [
+        ["fish", "fish act 3"]
+    ],
+    "pig_act3": [
+        ["pig", "pig act 3"]
+    ],
+    "owl_act3": [
+        ["owl", "owl act 3"]
+    ],
+    "crow_need_key": [
+        ["crow", "I need a key to open this"]
+    ],
+    "pick_up_deed": [
+        ["crow", "Wow, its the deed to my father's land that my King gifted him!"]
+    ],
+    "fish_wonder_about_bear": [
+        ["fish", "fish wonder about bear"]
+    ],
+    "crow_should_talk_to_father": [
+        ["crow", "I should talk to my father"]
+    ],
+    "bear_note_crow_response": [
+        ["crow", "Bear note crow response"]
+    ],
+    "post_bathroom_convo": [
+        ["fish", "fish_hallway_1"],
+        ["bear", "bear_hallway_2"]
+    ],
+    "bear_leave_dining": [
+        ["bear", "bear_leave_dining"]
+    ],
+    "fish_leave_dining": [
+        ["fish", "fish_leave_dining"]
+    ],
+    "dog_shocked": [
+        ["dog", "dog is shocked"]
+    ],
+    "confrontation": [
+        ["crow", "confrontation_1"]
+    ],
+    "dog_give_key": [
+        ["dog", "dog_give_key"]
     ]
 }

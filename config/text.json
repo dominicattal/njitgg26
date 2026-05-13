@@ -1,17 +1,13 @@
 {
     "placeholder": "Missing text lol",
-    "item_foyer": "The quick brown fox jumps over the lazy dog",
-    "missing_desk": "There's nothing in here",
-    "bear_crow_intro_1": "hello i like your costume",
-    "crow_bear_intro_2": "thank you father",
-    "filler_book1": "This book is about blah blah blah",
-    "pickup_note": "What's this?",
+    "filler_book1": "",
+    "pickup_note": "",
     "bear_note_crow_response": "OMG this crazy",
     "crow_try_leave_master_bedroom": "I need to get the thing for my father first",
     "should_examine_note": "I should read the note I picked up",
     "bear_crow_get_note_1": "Can you get me the thing from my bedroom?",
     "crow_bear_get_note_2": "Of course I can",
-    "crow_should_give_thing": "I should give my father the thing he asked for",
+    "crow_should_give_thing_1": "I should give my father the thing he asked for",
     "bear_receive_thing": "Thanks",
     "pig_crow_alcohol_1": "I'm getting wine for the party",
     "crow_pig_alcohol_2": "sounds good",
@@ -25,5 +21,8 @@
     "crow_find_knife": "There's a knife in the sink with some blood at the tip.",
     "bear_note_content": "I cannot live with the guilt of our affair any longer. I will tell my wife and your husband of our affair next week at the masquerade party, so be prepared.",
     "filler_book2": "Wow what a great book",
-    "book_content": "I prepared a gift of land for you, my most loyal servant"
+    "book_content": "I prepared a gift of land for you, my most loyal servant",
+    "knocked_on_bathroom_door_1": "Is someone in there?",
+    "knocked_on_bathroom_door_2": "Be right out",
+    "crow_try_parents_room": "I probably shouldn't go into my parent's room"
 }

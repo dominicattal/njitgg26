@@ -236,7 +236,7 @@ Font get_font_from_config(const char* name)
 
 JsonArray* get_dialogue_from_config(const char* key)
 {
-    JsonValue* value = json_object_get_value(ctx.text_config, key);
+    JsonValue* value = json_object_get_value(ctx.dialogue_config, key);
     if (value == NULL) {
         TraceLog(LOG_WARNING, "Missing dialogue %s, using default", key);
         goto return_placeholder;
